@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --paper: #FAFAF8;
+  --ink: #0A0A0A;
+}
+
+html,
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.serif {
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+}
+
+.mono {
+  font-family: "JetBrains Mono", monospace;
+}
