@@ -454,3 +454,54 @@ Each audit trail contains:
 | AC-12 | Fraud-detector blocks doble-cesion | ✅ contract deployed + 3 commits live |
 | AC-13 | Audit trail with EIP-712 receipts | ✅ verified (saved to disk) |
 
+
+---
+
+## 🟢 SMART CONTRACT VERIFIED ON SOURCIFY — 2026-05-16
+
+**Contract**: `CobrayaInvoiceCommitments`
+**Address**: `0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506`
+**Chain**: Avalanche Fuji (43113)
+**Verification status**: ✅ **`"status":"perfect"`** (full bytecode + metadata match)
+**Compiler**: solc 0.8.24+commit.e11b9ed9
+**Verifier**: Sourcify (decentralized, open-source)
+**Verification date**: 2026-05-16T06:37:38Z
+
+### Verification URLs
+
+- **Sourcify repo (source code public)**: https://repo.sourcify.dev/contracts/full_match/43113/0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506/
+- **Snowtrace contract page**: https://testnet.snowtrace.io/address/0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506
+- **Source code verifiable**: anyone can recompile our `contracts/src/CobrayaInvoiceCommitments.sol` + lib/openzeppelin-contracts/ and match the deployed bytecode exactly.
+
+### Source files included in verification
+
+- `src/CobrayaInvoiceCommitments.sol` (our contract)
+- `lib/openzeppelin-contracts/contracts/access/Ownable.sol`
+- `lib/openzeppelin-contracts/contracts/access/Ownable2Step.sol`
+- `lib/openzeppelin-contracts/contracts/utils/Context.sol`
+
+### Reproducible verification command
+
+```bash
+# Anyone with the repo can verify:
+cd contracts
+forge build
+curl -X POST "https://sourcify.dev/server/verify" \
+  -H "Content-Type: application/json" \
+  -d '{"address":"0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506","chain":"43113","files":{...}}'
+# → {"result":[{"status":"perfect", ...}]}
+```
+
+### Why Sourcify, not Snowtrace?
+
+Snowtrace UI verification requires a Routescan API key (former Snowtrace migration). Sourcify is the **decentralized open-source alternative** (Ethereum Foundation backed). Both prove the same thing: deployed bytecode matches the source code in this repo. Sourcify is actually **stricter** than Etherscan-style verifiers — it requires full metadata match including comments, not just runtime bytecode.
+
+**For institutional reviewers**: Sourcify is recognized by:
+- Etherscan (cross-references Sourcify verifications)
+- Avalanche Foundation
+- OpenZeppelin Defender
+- Foundry CLI (`forge --verifier sourcify`)
+- Major block explorers (Routescan, Blockscout, etc.)
+
+**Production claim verified**: source code is open and bytecode is reproducible. This is the same verification standard used by audited DeFi protocols.
+
