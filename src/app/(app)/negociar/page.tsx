@@ -165,6 +165,20 @@ export default function NegociarPage() {
   const [trail, setTrail] = useState<AuditTrail | null>(null);
   const [trailBlobUrl, setTrailBlobUrl] = useState<string | null>(null);
 
+  // Auto-select the recommended lender when the auction lands. The matcher
+  // already picks the winner via `recommendedLender` — without this effect
+  // the panel showed the "Recomendado" badge but `selectedMatch` stayed null,
+  // so the Settlement CTA was hidden until the user clicked. Reverse-engineered
+  // from user feedback: "el primer lender sale seleccionado por defecto" — that
+  // was the visual illusion of selection; now it's a real selection.
+  useEffect(() => {
+    if (!auction || selectedMatch) return;
+    const winner = auction.auction.find(
+      (l) => l.lenderId === auction.recommendedLender && l.qualifies,
+    );
+    if (winner) setSelectedMatch(winner);
+  }, [auction, selectedMatch]);
+
   useEffect(() => {
     if (trail === null) {
       setTrailBlobUrl(null);
