@@ -52,7 +52,7 @@ describe("HistorialPage — WKH-COBRAYA-DAPP-SHELL W9 (AC-12, AC-13)", () => {
     const ui = await HistorialPage();
     render(ui);
     expect(
-      screen.getByText(/aún no has negociado ninguna factura/i),
+      screen.getByText(/todavía no has vendido ninguna factura/i),
     ).toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe("HistorialPage — WKH-COBRAYA-DAPP-SHELL W9 (AC-12, AC-13)", () => {
     expect(screen.getByText("Lender B")).toBeInTheDocument();
     expect(screen.getByText("Lender A")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /ver en snowtrace/i }),
+      screen.getByRole("link", { name: /ver comprobante en blockchain/i }),
     ).toHaveAttribute("href", "https://testnet.snowtrace.io/tx/0xb");
   });
 });

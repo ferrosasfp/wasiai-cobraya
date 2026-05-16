@@ -7,9 +7,9 @@ export function Step4Form({ defaults }: { defaults: ProfileRow | null }) {
   return (
     <div className="space-y-4">
       <header>
-        <h2 className="h1-serif text-luma-700 text-2xl mb-1">Monto típico</h2>
+        <h2 className="h1-serif text-luma-700 text-2xl mb-1">¿Cuánto cobras por factura?</h2>
         <p className="text-sm text-luma-450">
-          Aproximadamente, ¿cuánto facturas por evento típico?
+          Más o menos. Sirve para mostrarte ofertas relevantes.
         </p>
       </header>
       <StepFormShell action={saveStep4}>

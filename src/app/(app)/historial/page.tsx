@@ -32,11 +32,14 @@ export default async function HistorialPage() {
 
   return (
     <section className="max-w-3xl mx-auto p-4">
-      <h1 className="h1-serif text-luma-700 mb-4">Historial</h1>
+      <h1 className="h1-serif text-luma-700 mb-4">Tus facturas vendidas</h1>
       {!rows || rows.length === 0 ? (
-        <p className="text-luma-450">Aún no has negociado ninguna factura.</p>
+        <p className="text-luma-450">
+          Todavía no has vendido ninguna factura. Andá a la pestaña Negociar
+          para empezar.
+        </p>
       ) : (
-        <ul className="space-y-3" aria-label="Facturas settled">
+        <ul className="space-y-3" aria-label="Tus facturas vendidas">
           {rows.map((r) => (
             <li key={r.id} className="bb-card p-4">
               <div className="flex justify-between items-baseline">
@@ -56,7 +59,7 @@ export default async function HistorialPage() {
                   rel="noreferrer"
                   className="text-xs text-luma-600 underline mt-1 inline-block"
                 >
-                  Ver en Snowtrace
+                  Ver comprobante en blockchain
                 </a>
               )}
             </li>

@@ -9,7 +9,7 @@ export function Step2Form({ defaults }: { defaults: ProfileRow | null }) {
       <header>
         <h2 className="h1-serif text-luma-700 text-2xl mb-1">¿En qué sector estás?</h2>
         <p className="text-sm text-luma-450">
-          Esto ayuda a los lenders a entender tu negocio.
+          Esto ayuda a que las empresas compradoras entiendan tu negocio.
         </p>
       </header>
       <StepFormShell action={saveStep2}>

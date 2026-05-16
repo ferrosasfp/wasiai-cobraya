@@ -50,7 +50,7 @@ export function EditForm({ defaults }: { defaults: ProfileRow | null }) {
         />
       </label>
       <label className="auth-label">
-        Compradores ancla (separados por coma)
+        Empresas que te compran (separadas por coma)
         <input
           name="anchor_buyers_csv"
           value={buyersCsv}
@@ -60,7 +60,7 @@ export function EditForm({ defaults }: { defaults: ProfileRow | null }) {
         />
       </label>
       <label className="auth-label">
-        Monto típico (MXN)
+        Monto típico que cobras (MXN)
         <input
           type="number"
           name="monto_tipico_mxn"
@@ -70,7 +70,7 @@ export function EditForm({ defaults }: { defaults: ProfileRow | null }) {
         />
       </label>
       <label className="auth-label">
-        Mayor frustración cobrando
+        Lo más complicado de cobrar
         <textarea
           name="mayor_frustracion"
           maxLength={500}

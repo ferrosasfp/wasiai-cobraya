@@ -27,11 +27,11 @@ describe("<EditForm /> — WKH-COBRAYA-DAPP-SHELL W10 (AC-14)", () => {
     render(<EditForm defaults={defaults} />);
     expect(screen.getByLabelText(/^rfc/i)).toHaveValue("AAAA010101AAA");
     expect(screen.getByLabelText(/^sector/i)).toHaveValue("Logística");
-    expect(screen.getByLabelText(/compradores ancla/i)).toHaveValue(
+    expect(screen.getByLabelText(/empresas que te compran/i)).toHaveValue(
       "Walmart, Bimbo",
     );
     expect(screen.getByLabelText(/monto típico/i)).toHaveValue(48500);
-    expect(screen.getByLabelText(/mayor frustración/i)).toHaveValue(
+    expect(screen.getByLabelText(/lo más complicado de cobrar/i)).toHaveValue(
       "Pago tarda 60 días",
     );
   });
@@ -46,6 +46,6 @@ describe("<EditForm /> — WKH-COBRAYA-DAPP-SHELL W10 (AC-14)", () => {
   it("accepts a null defaults gracefully (new profile path)", () => {
     render(<EditForm defaults={null} />);
     expect(screen.getByLabelText(/^rfc/i)).toHaveValue("");
-    expect(screen.getByLabelText(/compradores ancla/i)).toHaveValue("");
+    expect(screen.getByLabelText(/empresas que te compran/i)).toHaveValue("");
   });
 });

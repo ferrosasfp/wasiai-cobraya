@@ -19,6 +19,27 @@ interface Props {
   selectedId: string | null;
 }
 
+// Engine returns rejection reasons in English ("sector not in allowlist",
+// "only bands A"). Engine is intocable per CD-30, so we translate at the
+// presentation layer. Any unmapped reason falls back to a generic Spanish
+// message that won't expose the raw English to Lupita.
+function translateRejection(reason: string | undefined): string | null {
+  if (!reason) return null;
+  const map: Record<string, string> = {
+    "sector not in allowlist":
+      "Este comprador no financia tu sector",
+    "only bands A":
+      "Necesitas mejor calificación crediticia",
+    "only bands A and B":
+      "Necesitas mejor calificación crediticia",
+    "amount below minimum":
+      "Tu factura está por debajo del monto mínimo",
+    "amount above maximum":
+      "Tu factura supera el monto máximo",
+  };
+  return map[reason] ?? "No financia este tipo de factura";
+}
+
 export function LenderAuctionPanel({ auction, onSelect, selectedId }: Props) {
   return (
     <div className="grid grid-cols-1 gap-3">
@@ -60,7 +81,7 @@ export function LenderAuctionPanel({ auction, onSelect, selectedId }: Props) {
             </div>
             <div className="mt-1 text-sm">USDC {l.netAmountUSDC.toFixed(4)}</div>
             {disabled && l.rejectionReason && (
-              <div className="text-xs text-luma-450 mt-1">{l.rejectionReason}</div>
+              <div className="text-xs text-luma-450 mt-1">{translateRejection(l.rejectionReason)}</div>
             )}
           </button>
         );
