@@ -96,6 +96,31 @@ describe("PitchPage (v3 — design-source aligned)", () => {
     expect(block.textContent).toContain("agentes");
   });
 
+  it("renders the Cobraya logo SVG inside the nav brand-mark", () => {
+    const { container } = render(<PitchPage />);
+    // The nav <a.brand> wraps a .brand-mark span which should now contain
+    // a real Cobraya SVG (role=img + aria-label="Cobraya"), not the letter "C".
+    const navBrandMark = container.querySelector(
+      'header.nav a.brand .brand-mark svg[aria-label="Cobraya"]',
+    );
+    expect(navBrandMark, "expected Cobraya logo SVG in nav brand-mark").not.toBeNull();
+    expect(navBrandMark?.getAttribute("role")).toBe("img");
+  });
+
+  it("renders at least 4 distinct brand logos in the stack-grid .ico slots", () => {
+    const { container } = render(<PitchPage />);
+    // Each scard now has an inline <svg> inside .ico. Collect the aria-labels
+    // and verify diversity — at least 4 different brand marks are present.
+    const icoSvgs = container.querySelectorAll(".stack-grid .scard .ico svg[aria-label]");
+    expect(icoSvgs.length).toBeGreaterThanOrEqual(4);
+    const labels = new Set<string>();
+    icoSvgs.forEach((el) => {
+      const label = el.getAttribute("aria-label");
+      if (label) labels.add(label);
+    });
+    expect(labels.size).toBeGreaterThanOrEqual(4);
+  });
+
   it("footer has 4 columns (brand + producto + stack + hackathon)", () => {
     const { container } = render(<PitchPage />);
     const footGrid = container.querySelector("footer.footer .foot-grid");

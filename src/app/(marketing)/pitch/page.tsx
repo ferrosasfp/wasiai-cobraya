@@ -19,6 +19,18 @@ import "./pitch.css";
 import { PhoneCycle } from "./PhoneCycle";
 import { ThemeToggle } from "./ThemeToggle";
 import { ScrollReveal } from "./ScrollReveal";
+import {
+  LogoCobraya,
+  LogoAvalanche,
+  LogoUSDC,
+  LogoFoundry,
+  LogoAnthropic,
+  LogoA2A,
+  LogoFacilitator,
+  LogoNextjs,
+  LogoSupabase,
+  LogoCNBV,
+} from "./logos";
 
 const FUJI_COMMITMENTS_FALLBACK = "0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506";
 
@@ -48,7 +60,9 @@ export default function PitchPage() {
       <header className="nav">
         <div className="wrap nav-row">
           <a href="#" className="brand">
-            <span className="brand-mark">C</span>
+            <span className="brand-mark" aria-hidden="true">
+              <LogoCobraya size={18} />
+            </span>
             <span>Cobraya</span>
             <span className="sep">·</span>
             <span className="sub">Avalanche LATAM 2026</span>
@@ -512,63 +526,81 @@ export default function PitchPage() {
 
           <div className="stack-grid">
             <div className="scard" data-rev>
-              <div className="ico">▲</div>
+              <div className="ico">
+                <LogoAvalanche size={22} />
+              </div>
               <div className="nm">Avalanche Fuji</div>
               <div className="desc">
                 Smart contract verificado · ChainID 43113 · gas &lt; 80K
               </div>
             </div>
             <div className="scard" data-rev data-d="1">
-              <div className="ico">$</div>
+              <div className="ico">
+                <LogoUSDC size={22} />
+              </div>
               <div className="nm">USDC + EIP-3009</div>
               <div className="desc">
                 Settlement gasless. La PyME no necesita nativos.
               </div>
             </div>
             <div className="scard" data-rev data-d="2">
-              <div className="ico">FD</div>
+              <div className="ico">
+                <LogoFoundry size={22} />
+              </div>
               <div className="nm">Foundry + OpenZeppelin</div>
               <div className="desc">
                 Ownable2Step, gas optimized, 100% coverage.
               </div>
             </div>
             <div className="scard" data-rev data-d="1">
-              <div className="ico">A</div>
+              <div className="ico">
+                <LogoAnthropic size={22} />
+              </div>
               <div className="nm">Anthropic Claude</div>
               <div className="desc">
                 Rationale IA firmado, provenance trackeado.
               </div>
             </div>
             <div className="scard" data-rev data-d="2">
-              <div className="ico">A2</div>
+              <div className="ico">
+                <LogoA2A size={22} />
+              </div>
               <div className="nm">wasiai-a2a</div>
               <div className="desc">
                 Marketplace de agentes · 1660+ tests · Railway prod.
               </div>
             </div>
             <div className="scard" data-rev data-d="3">
-              <div className="ico">FX</div>
+              <div className="ico">
+                <LogoFacilitator size={22} />
+              </div>
               <div className="nm">wasiai-facilitator</div>
               <div className="desc">
                 Settlement service multi-chain · Railway prod.
               </div>
             </div>
             <div className="scard" data-rev data-d="2">
-              <div className="ico">▲</div>
+              <div className="ico">
+                <LogoNextjs size={22} />
+              </div>
               <div className="nm">Next.js 14 PWA</div>
               <div className="desc">
                 Mobile-first, installable, offline-ready.
               </div>
             </div>
             <div className="scard" data-rev data-d="3">
-              <div className="ico">SB</div>
+              <div className="ico">
+                <LogoSupabase size={22} />
+              </div>
               <div className="nm">Supabase</div>
               <div className="desc">
                 Postgres con RLS app-layer, snapshots firmados.
               </div>
             </div>
             <div className="scard" data-rev data-d="4">
-              <div className="ico">CN</div>
+              <div className="ico">
+                <LogoCNBV size={22} />
+              </div>
               <div className="nm">CNBV ready</div>
               <div className="desc">
                 Circular 4/2024 · audit trail listo para regulador.
@@ -736,7 +768,9 @@ export default function PitchPage() {
           <div className="foot-grid">
             <div>
               <div className="brand" style={{ marginBottom: 14 }}>
-                <span className="brand-mark">C</span>
+                <span className="brand-mark" aria-hidden="true">
+                  <LogoCobraya size={18} />
+                </span>
                 <span>Cobraya</span>
               </div>
               <p>
