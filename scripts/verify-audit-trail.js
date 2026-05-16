@@ -32,6 +32,17 @@ async function main() {
 
   // 2) Recover EIP-712 signer per step
   for (const step of trail.steps) {
+    // BLQ-BAJO-3 (post-AR fix-pack): handle `receipt: null` gracefully instead
+    // of throwing TypeError. A null receipt means the agent route caught a
+    // signer failure (hot key missing / RPC blip) and degraded the step
+    // without crashing the response. Surface a clean FAIL with the cause.
+    if (step.receipt === null || step.receipt === undefined) {
+      console.error(
+        `FAIL step ${step.stepIndex} ${step.agentSlug}: missing receipt (signer failed at write time — see server warn logs)`,
+      );
+      failures++;
+      continue;
+    }
     try {
       const r = step.receipt;
       const message = {

@@ -165,6 +165,40 @@ describe("/api/agents/cobraya-cfdi-validator/invoke (W2)", () => {
     expect(setCookie).toContain("SameSite=Strict");
   });
 
+  it("T-AGENT-RECEIPT-FAIL hot key missing → 200 with receipt:null + warn log (BLQ-BAJO-3)", async () => {
+    // Hot key not stubbed → signReceipt throws → catch sets receipt=null +
+    // emits a structured console.warn. Response stays 200.
+    vi.unstubAllEnvs();
+    vi.stubEnv("AUDIT_AUTH_SECRET", "test-audit-secret-fix-pack");
+    // VALIDATOR_HOT_KEY deliberately NOT set.
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const res = await POST(
+      makeReq({
+        uuidCfdi: "44444444-4444-4444-4444-444444444444",
+        rfcEmisor: "TLE850120ABC",
+        amountMXN: 48500,
+        anchorBuyer: "Walmart México",
+      }),
+    );
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { receipt: unknown };
+    expect(json.receipt).toBeNull();
+    // Warn was emitted with structured fields — no stack, no err.message.
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[cobraya-agent-receipt] signing failed:",
+      expect.objectContaining({
+        agentSlug: "cobraya-cfdi-validator",
+        errorName: expect.any(String),
+      }),
+    );
+    // Verify the warn payload does NOT include `stack` or `message`.
+    const payload = warnSpy.mock.calls[0]?.[1] as Record<string, unknown> | undefined;
+    expect(payload).toBeDefined();
+    expect(payload!.stack).toBeUndefined();
+    expect(payload!.message).toBeUndefined();
+    warnSpy.mockRestore();
+  });
+
   it("T-CFDI-MASK response masks rfcEmisor (CD-23)", async () => {
     const res = await POST(
       makeReq({

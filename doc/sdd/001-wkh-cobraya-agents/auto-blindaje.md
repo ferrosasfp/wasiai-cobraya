@@ -20,6 +20,15 @@ Catálogo de errores reales encontrados durante F3 + fix aplicado, para que futu
 - **Fix**: mover el state + helper a `src/lib/agent-state/validator-store.ts` (módulo separado). El route importa `isUuidSeen` / `markUuidSeen`. El test importa el reset helper directamente del módulo de state.
 - **Aplicar en**: cualquier futuro route handler que necesite state o test hooks → SIEMPRE colocar el state en `src/lib/agent-state/` o `src/infra/`. NO exportar nada extra desde `route.ts`.
 
+### [2026-05-16 00:06] FIX-PACK post-AR — BLQ-BAJO-3 silent signer failures + TypeError on null receipt
+- **Error**: cuando `signReceipt` fallaba (hot key missing, RPC blip, viem version mismatch), los 4 agent routes catcheaban silenciosamente y devolvían `receipt: null`. Sin log, imposible debuggear por qué los signers stoppeaban en prod. Y el `scripts/verify-audit-trail.js` crasheaba con TypeError "Cannot read property 'message' of null" al encontrarlo — UX terrible para el verifier offline.
+- **Causa raíz**: durante W5.5 priorizamos "respond agent even if audit fails" → catch silencioso. Pero "silently degrade" ≠ "silently degrade without observability". Y el verify script asumió `step.receipt` siempre presente.
+- **Fix**:
+  - Cada catch en los 4 agent routes ahora emite `console.warn("[cobraya-agent-receipt] signing failed:", { agentSlug, requestId, errorName })`. CD-9 compliant: NO stack trace (puede contener path local), NO `err.message` (puede contener privkey si la lib lo formattea mal — viem actually does include it).
+  - `scripts/verify-audit-trail.js` ahora chequea `step.receipt === null` antes del `r.message` access, y emite `FAIL step <i>: missing receipt (signer failed at write time)`. Exit code sigue siendo 2 (verify-failed), nunca 3 (uncaught).
+  - Tests T-AGENT-RECEIPT-FAIL (cfdi-validator emite el warn + receipt:null) y T-VERIFY-NULL-RECEIPT (script CLI con audit JSON con null receipt → exit 2 + "missing receipt" + sin TypeError).
+- **Aplicar en**: cualquier try/catch que silencia un error de un componente "best effort" (audit logs, métricas, telemetría) — SIEMPRE meter un `console.warn` estructurado con identificadores (agent, request id, error name). Sin que sea verbose-enough para leakear stack o message. Pattern: `{agentSlug, requestId, errorName}` está bien; agregar `err.message` o `err.stack` es bug de seguridad.
+
 ### [2026-05-16 00:00] FIX-PACK post-AR — BLQ-MED-2 metadataPointer cross-anchor
 - **Error**: el route `cobraya-fraud-detector/invoke` llamaba a `commitInvoice(commitmentHash, ZERO_BYTES32)` desperdiciando el segundo argumento `metadataPointer` del contrato. Resultado: el log onchain del commit no tenía manera de cross-referenciar el audit trail off-chain.
 - **Causa raíz**: durante W2.5 se priorizó "deployar el contrato + lograr el primer commit" — el `metadataPointer` quedó como TODO documentado y nadie lo retomó en W5.5 cuando aparecieron los `requestId`s.
