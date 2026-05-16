@@ -60,31 +60,20 @@ export function LogoCobraya({ size = 28, className }: LogoProps) {
 }
 
 /**
- * Avalanche official mark — inlined from /public/logos/avalanche.svg.
- * The red "AVAX" geometry is preserved exactly (viewBox 0 0 2500 2500).
- * Background fill is the brand red #E84142; the inner negative-space "A"
- * is forced to the wine-soft tone so it sits cleanly on the dark .ico bg.
+ * Avalanche official mark — served from /public/logos/avalanche.svg.
+ * Original asset is the official Avalanche brand SVG with the white inner
+ * "A" rect (so the red circle reads correctly on any background).
  */
 export function LogoAvalanche({ size = 22, className }: LogoProps) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 2500 2500"
-      role="img"
-      aria-label="Avalanche"
+    <img
+      src="/logos/avalanche.svg"
+      alt="Avalanche"
       width={size}
       height={size}
       className={className}
-    >
-      <title>Avalanche</title>
-      {/* Inner white rectangle from the source SVG — kept transparent so
-          the surrounding .ico background shows through the negative-space "A" */}
-      <rect x="476.9" y="427.8" width="1544.6" height="1404.8" fill="transparent" />
-      <path
-        fill="#E84142"
-        d="M2500,1250c0,690.4-559.6,1250-1250,1250S0,1940.4,0,1250S559.6,0,1250,0S2500,559.6,2500,1250z M895.8,1747.4H653.2c-51,0-76.2,0-91.5-9.8c-16.6-10.8-26.7-28.6-28-48.2c-0.9-18.1,11.7-40.2,36.8-84.4l599-1055.8c25.5-44.8,38.4-67.2,54.7-75.5c17.5-8.9,38.4-8.9,55.9,0c16.3,8.3,29.2,30.7,54.7,75.5l123.1,215l0.6,1.1c27.5,48.1,41.5,72.5,47.6,98.1c6.8,27.9,6.8,57.4,0,85.4c-6.1,25.8-20,50.4-47.9,99.2L1143.6,1604l-0.8,1.4c-27.7,48.5-41.8,73.1-61.2,91.6c-21.2,20.3-46.7,35-74.6,43.3C981.5,1747.4,952.9,1747.4,895.8,1747.4L895.8,1747.4z M1508.4,1747.4H1856c51.3,0,77.1,0,92.4-10.1c16.6-10.8,27-28.9,27.9-48.5c0.9-17.5-11.4-38.8-35.6-80.4c-0.8-1.4-1.7-2.9-2.5-4.3l-174.1-297.9l-2-3.4c-24.5-41.4-36.8-62.3-52.7-70.3c-17.5-8.9-38.1-8.9-55.6,0c-16,8.3-28.9,30.1-54.3,74l-173.5,297.9l-0.6,1c-25.4,43.8-38.1,65.8-37.2,83.7c1.2,19.7,11.4,37.8,27.9,48.5C1431.3,1747.4,1457.1,1747.4,1508.4,1747.4L1508.4,1747.4z"
-      />
-    </svg>
+      style={{ display: "block", objectFit: "contain" }}
+    />
   );
 }
 
@@ -193,40 +182,20 @@ export function LogoAnthropic({ size = 22, className }: LogoProps) {
 }
 
 /**
- * Next.js wordmark — inlined from /public/logos/nextjs.svg.
- * Override fill so the black wordmark adapts to whatever color the
- * parent .ico passes via currentColor (wine-soft in dark, wine in light).
+ * Next.js wordmark — served from /public/logos/nextjs.svg.
+ * Wide aspect ratio (~6:1). To read inside the 38×38 .ico container, the
+ * page.tsx renders this with a wider override style on its wrapper.
+ * Default `size` is just the height; the img keeps proportional width.
  */
 export function LogoNextjs({ size = 22, className }: LogoProps) {
-  // Original SVG viewBox is 0 0 394 80 (a wide wordmark). We keep the
-  // wordmark intact instead of cropping to just the "N" — at size=22 px
-  // the wordmark renders ~110 px wide and reads cleanly inside the .ico
-  // 38×38 if we scale the svg width appropriately. We expose a width that
-  // preserves aspect ratio (size * 394/80 ≈ size * 4.925) and keep the
-  // height = size. Layout note: .ico uses place-items:center so overflow
-  // is acceptable; but at this card it's better to render a square crop
-  // showing only the "N" glyph. We use viewBox 0 0 80 80 to crop.
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 80 80"
-      role="img"
-      aria-label="Next.js"
-      width={size}
+    <img
+      src="/logos/nextjs.svg"
+      alt="Next.js"
       height={size}
       className={className}
-      fill="none"
-    >
-      <title>Next.js</title>
-      {/* "N" glyph extracted from the inlined Next.js wordmark SVG.
-          Original path "M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Z" sits
-          at the right of the wordmark; offsetting it left by 1 px keeps
-          it centered in the 80×80 viewBox. */}
-      <path
-        fill="currentColor"
-        d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Z"
-      />
-    </svg>
+      style={{ display: "block", height: size, width: "auto", objectFit: "contain" }}
+    />
   );
 }
 

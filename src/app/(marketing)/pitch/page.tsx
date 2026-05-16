@@ -580,8 +580,8 @@ export default function PitchPage() {
               </div>
             </div>
             <div className="scard" data-rev data-d="2">
-              <div className="ico">
-                <LogoNextjs size={22} />
+              <div className="ico" style={{ width: "auto", minWidth: 38, padding: "0 8px" }}>
+                <LogoNextjs size={20} />
               </div>
               <div className="nm">Next.js 14 PWA</div>
               <div className="desc">
