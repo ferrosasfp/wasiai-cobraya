@@ -3,9 +3,9 @@
 > Índice de todas las Story Design Docs del proyecto.
 > Actualizado por nexus-analyst / nexus-docs en cada pipeline.
 
-| # | ID | Título | Estado | Branch | Archivos |
-|---|---|---|---|---|---|
-| 001 | WKH-COBRAYA-AGENTS | Cobraya agentic invoice factoring marketplace | **in progress** | `feat/wkh-cobraya-agents` | [work-item.md](001-wkh-cobraya-agents/work-item.md) |
+| # | ID | Título | Estado | Branch | Archivos | Cerrado |
+|---|---|---|---|---|---|---|
+| 001 | WKH-COBRAYA-AGENTS | Cobraya agentic invoice factoring marketplace | **DONE** | `feat/wkh-cobraya-agents` | [done-report.md](001-wkh-cobraya-agents/done-report.md) | 2026-05-16 |
 
 ---
 
