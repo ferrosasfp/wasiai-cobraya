@@ -26,15 +26,14 @@ export function AuditPanel({ steps, auditDownloadHref, auditDownloadFilename }: 
     <details
       open={open}
       onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)}
-      className="fixed bottom-0 left-0 right-0 bg-paper border-t border-ink z-10"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="relative mt-6 border-t border-luma-200 pt-4 bg-luma-50"
     >
-      <summary className="px-4 py-3 mono text-xs uppercase tracking-widest cursor-pointer min-h-[44px] flex items-center">
+      <summary className="px-4 py-3 mono text-xs uppercase tracking-widest cursor-pointer min-h-[44px] flex items-center text-luma-700">
         Audit trail · {steps.length} step{steps.length === 1 ? "" : "s"}
       </summary>
       <ul className="px-4 py-3 max-h-[60vh] overflow-y-auto">
         {steps.map((s) => (
-          <li key={s.stepIndex} className="py-2 border-b border-ink/10 text-sm">
+          <li key={s.stepIndex} className="py-2 border-b border-luma-200 text-sm text-luma-700">
             <span className="mono">{s.agentSlug}</span> · {s.success ? "OK" : "FAIL"} ·{" "}
             {s.latencyMs}ms
           </li>
@@ -44,7 +43,7 @@ export function AuditPanel({ steps, auditDownloadHref, auditDownloadFilename }: 
         <a
           href={auditDownloadHref}
           download={auditDownloadFilename ?? "cobraya-audit.json"}
-          className="block px-4 py-3 bg-ink text-paper text-center mono text-xs uppercase tracking-widest min-h-[44px]"
+          className="block px-4 py-3 bg-luma-700 text-luma-50 text-center mono text-xs uppercase tracking-widest min-h-[44px]"
         >
           Descargar audit trail JSON
         </a>

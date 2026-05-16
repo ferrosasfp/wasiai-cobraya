@@ -24,10 +24,10 @@ export function LenderAuctionPanel({ auction, onSelect, selectedId }: Props) {
             type="button"
             disabled={disabled}
             onClick={() => onSelect(l)}
-            className={`text-left p-4 border min-h-[48px] transition-colors ${
+            className={`text-left p-4 border min-h-[48px] rounded-2xl bg-luma-50 text-luma-700 transition-colors ${
               disabled ? "opacity-40" : ""
-            } ${isSelected ? "border-ink bg-ink/5" : "border-ink/30"} ${
-              isWinner ? "border-2 border-ink" : ""
+            } ${isSelected ? "border-luma-700 bg-luma-100/40" : "border-luma-200"} ${
+              isWinner ? "border-2 border-luma-700" : ""
             }`}
             aria-pressed={isSelected}
             title={l.rejectionReason}
@@ -44,7 +44,7 @@ export function LenderAuctionPanel({ auction, onSelect, selectedId }: Props) {
             </div>
             <div className="mt-1 text-sm">USDC {l.netAmountUSDC.toFixed(4)}</div>
             {disabled && l.rejectionReason && (
-              <div className="text-xs text-muted mt-1">{l.rejectionReason}</div>
+              <div className="text-xs text-luma-450 mt-1">{l.rejectionReason}</div>
             )}
           </button>
         );

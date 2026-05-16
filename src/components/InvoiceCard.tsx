@@ -36,7 +36,7 @@ function maskRfc(rfc: string): string {
 
 function StateBadge({ state }: { state: InvoiceCardState }) {
   const map: Record<InvoiceCardState, { label: string; cls: string }> = {
-    pending: { label: "Pendiente", cls: "bg-ink/10 text-ink" },
+    pending: { label: "Pendiente", cls: "bg-luma-100/60 text-luma-700" },
     negotiating: {
       label: "Negociando",
       cls: "bg-amber-100 text-amber-700 animate-pulse",
@@ -67,18 +67,18 @@ export function InvoiceCard({
       ? "border-2 border-emerald-600"
       : state === "failed"
         ? "border-2 border-red-500"
-        : "border border-ink/30";
+        : "border border-luma-200";
 
   return (
     <article
-      className={`${borderClass} p-4 bg-paper`}
+      className={`${borderClass} p-4 bg-luma-50 rounded-2xl text-luma-700`}
       data-state={state}
       aria-label={`Factura ${state}`}
     >
       <header className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
           <div className="font-semibold truncate">{invoice.personaName}</div>
-          <div className="text-xs text-muted truncate">
+          <div className="text-xs text-luma-450 truncate">
             → {invoice.anchorBuyer}
           </div>
         </div>
@@ -87,25 +87,25 @@ export function InvoiceCard({
 
       <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs mono mb-2">
         <div>
-          <dt className="text-muted text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
             Monto
           </dt>
           <dd>${invoice.amountMXN.toLocaleString("es-MX")} MXN</dd>
         </div>
         <div>
-          <dt className="text-muted text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
             Vence
           </dt>
           <dd>{invoice.paymentTermsDays} días</dd>
         </div>
         <div>
-          <dt className="text-muted text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
             RFC
           </dt>
           <dd>{maskRfc(invoice.rfcEmisor)}</dd>
         </div>
         <div>
-          <dt className="text-muted text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
             Sector
           </dt>
           <dd className="truncate">{invoice.sector}</dd>
@@ -128,11 +128,11 @@ export function InvoiceCard({
             ${sold.netAmountUSDC.toFixed(4)} USDC
           </div>
           <div className="space-y-1 text-xs mono">
-            <div className="text-muted">
-              comprador · <span className="text-ink">{sold.lenderName}</span>
+            <div className="text-luma-450">
+              comprador · <span className="text-luma-700">{sold.lenderName}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-muted">tx ·</span>
+              <span className="text-luma-450">tx ·</span>
               <a
                 href={
                   sold.snowtraceUrl ??
@@ -151,7 +151,7 @@ export function InvoiceCard({
             <a
               href={sold.auditDownloadHref}
               download={sold.auditDownloadFilename ?? "cobraya-audit.json"}
-              className="mt-3 block text-center px-4 py-3 border border-ink mono text-[11px] uppercase tracking-widest min-h-[44px]"
+              className="mt-3 block text-center px-4 py-3 border border-luma-300 mono text-[11px] uppercase tracking-widest min-h-[44px] text-luma-700"
             >
               Descargar audit trail JSON
             </a>
@@ -168,7 +168,7 @@ export function InvoiceCard({
             <button
               type="button"
               onClick={onScanAnother}
-              className="w-full px-4 py-3 border border-ink mono text-xs uppercase tracking-widest min-h-[44px]"
+              className="w-full px-4 py-3 border border-luma-300 mono text-xs uppercase tracking-widest min-h-[44px] text-luma-700"
             >
               Escanear otra
             </button>
