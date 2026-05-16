@@ -28,7 +28,8 @@ interface ValidatorResponse {
   isCompliant: boolean;
   anchorBuyerTier: 1 | "unknown";
   policyId: string;
-  duplicateCheck: "clean" | "duplicate";
+  // BLQ-BAJO-2 rename: scope = process-local. Authoritative dup is fraud-detector onchain.
+  duplicateCheckInstance: "clean" | "duplicate";
   rfcEmisorMasked: string;
 }
 

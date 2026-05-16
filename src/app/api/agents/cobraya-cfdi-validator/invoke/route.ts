@@ -56,10 +56,14 @@ export async function POST(req: NextRequest) {
   const anchorBuyerTier: 1 | "unknown" = buyer ? 1 : "unknown";
   const isDuplicate = isUuidSeen(uuidCfdi);
   if (!isDuplicate) markUuidSeen(uuidCfdi);
-  const duplicateCheck: "clean" | "duplicate" = isDuplicate ? "duplicate" : "clean";
+  // BLQ-BAJO-2 rename: `duplicateCheckInstance` makes it explicit that this is
+  // a process-scoped check (validator-store is in-memory). The authoritative
+  // cross-instance/global dup check is performed by the fraud-detector via the
+  // onchain `CobrayaInvoiceCommitments` contract — see W2.5.
+  const duplicateCheckInstance: "clean" | "duplicate" = isDuplicate ? "duplicate" : "clean";
 
   const isCompliant =
-    amountMXN > 0 && anchorBuyerTier === 1 && duplicateCheck === "clean";
+    amountMXN > 0 && anchorBuyerTier === 1 && duplicateCheckInstance === "clean";
   const sector = buyer?.sector ?? "any";
   const policyId = `cobraya-tier-${anchorBuyerTier === 1 ? "1" : "unknown"}-${sector}-2026`;
 
@@ -67,7 +71,7 @@ export async function POST(req: NextRequest) {
     isCompliant,
     anchorBuyerTier,
     policyId,
-    duplicateCheck,
+    duplicateCheckInstance,
     rfcEmisorMasked: rfcEmisor.length >= 6 ? `${rfcEmisor.slice(0, 4)}***` : "***",
     signedAt: new Date().toISOString(),
   };

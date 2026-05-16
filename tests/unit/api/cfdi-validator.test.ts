@@ -14,7 +14,7 @@ function makeReq(body: unknown, headers: Record<string, string> = {}): NextReque
 interface ValidatorResponse {
   isCompliant?: boolean;
   anchorBuyerTier?: 1 | "unknown";
-  duplicateCheck?: "clean" | "duplicate";
+  duplicateCheckInstance?: "clean" | "duplicate";
   rfcEmisorMasked?: string;
   error?: string;
 }
@@ -46,7 +46,7 @@ describe("/api/agents/cobraya-cfdi-validator/invoke (W2)", () => {
     const json = (await res.json()) as ValidatorResponse;
     expect(json.isCompliant).toBe(true);
     expect(json.anchorBuyerTier).toBe(1);
-    expect(json.duplicateCheck).toBe("clean");
+    expect(json.duplicateCheckInstance).toBe("clean");
   });
 
   it("T-CFDI-2 unknown buyer 'AcmeCorp' → isCompliant:false, tier 'unknown'", async () => {
@@ -101,7 +101,7 @@ describe("/api/agents/cobraya-cfdi-validator/invoke (W2)", () => {
     await POST(makeReq(body));
     const res2 = await POST(makeReq(body));
     const json2 = (await res2.json()) as ValidatorResponse;
-    expect(json2.duplicateCheck).toBe("duplicate");
+    expect(json2.duplicateCheckInstance).toBe("duplicate");
     expect(json2.isCompliant).toBe(false);
   });
 
