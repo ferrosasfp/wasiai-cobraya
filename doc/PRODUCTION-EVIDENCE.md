@@ -46,8 +46,8 @@
 | Tx Hash | Tipo | Fecha | Amount | Snowtrace link |
 |---|---|---|---|---|
 | TBD durante hack | Smoke test WKH-MULTICHAIN | 2026-05-13 | varios | (compilar durante hack) |
-| TBD durante hack | CobrayaInvoiceCommitments deploy | 2026-05-15 (hack-day) | - | (post-deploy) |
-| TBD durante hack | First fraud-detector commit | 2026-05-15 (hack-day) | - | (post-W2.5) |
+| `0x495ddeee819572c2cc364d30bf516d7f9965d1f14868bf8d1e580a5165c69f9a` | **CobrayaInvoiceCommitments deploy** | 2026-05-15 hack-day | - | [view](https://testnet.snowtrace.io/tx/0x495ddeee819572c2cc364d30bf516d7f9965d1f14868bf8d1e580a5165c69f9a) |
+| `0x7af3bb4f0352711868ae827ebc0c875261a65c21b55bde0fbabb1b64531c481d` | **First fraud-detector commit (smoke W2.5f)** | 2026-05-15 hack-day | gas 58407 | [view](https://testnet.snowtrace.io/tx/0x7af3bb4f0352711868ae827ebc0c875261a65c21b55bde0fbabb1b64531c481d) |
 | TBD durante hack | First Cobraya USDC settle | 2026-05-16 (hack-day) | 0.05 USDC | (post-W7 smoke) |
 
 > Durante el hack-day, ir actualizando esta sección con cada tx hash nueva. Source of truth para el video Scene 5.
@@ -58,18 +58,19 @@
 
 | Contract | Address | Deploy tx | Snowtrace verified | Gas used | Compiler | Pattern |
 |---|---|---|---|---|---|---|
-| `CobrayaInvoiceCommitments` | TBD post-W2.5d | TBD | TBD (forge --verify auto) | ~700K | solc 0.8.24 | Foundry + OZ Ownable2Step |
+| `CobrayaInvoiceCommitments` | `0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506` | `0x495ddee...69f9a` | manual-verify pending (SNOWTRACE_API_KEY unavailable hack-day; sourcify endpoint moved — documentado en F3 deviations) | 832K deploy | solc 0.8.24 + optimizer 200 | Foundry + OZ v5.6.1 Ownable2Step |
 
 **Source code public** at: `wasiai-lendable/contracts/src/CobrayaInvoiceCommitments.sol`
-**Tests passing**: `forge test` → TBD (target 100% coverage)
-**Gas report**: `forge test --gas-report` → `commitInvoice` < 80K (CD-11)
+**Tests passing**: `forge test` → 16/16 PASS
+**Gas report**: `forge test` → `commitInvoice` 58,407 gas (CD-11 target <80K — passing)
 **Reference pattern**: alineado con `wasiai-v2/contracts/src/WasiEscrow.sol` (production-grade)
+**Snowtrace contract URL**: https://testnet.snowtrace.io/address/0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506
 
-### Foundry test coverage report (post-W2.5c)
+### Foundry test coverage report (W2.5c)
 
 ```
 | File                                       | % Lines | % Statements | % Branches | % Funcs |
-| src/CobrayaInvoiceCommitments.sol         | TBD     | TBD          | TBD        | TBD     |
+| src/CobrayaInvoiceCommitments.sol         | 100%    | 100%         | 100%       | 100%    |
 ```
 
 Target: 100% en todas las dimensiones (contract pequeño, completamente coverable).

@@ -25,3 +25,10 @@ public/workbox-*.js.map
 public/fallback-*.js
 public/swe-worker-*.js
 
+# Foundry artifacts (W2.5)
+contracts/out/
+contracts/cache/
+contracts/broadcast/*/[0-9]*/dry-run/
+contracts/lib/
+lcov.info
+
