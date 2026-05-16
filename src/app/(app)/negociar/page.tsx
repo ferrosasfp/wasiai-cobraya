@@ -36,6 +36,7 @@ import type {
   AuditTrail,
 } from "@/types/audit-trail";
 import { composeAuditTrail } from "@/lib/audit-trail-composer";
+import { recordSettlement } from "@/actions/settlement";
 
 interface ValidatorResponse {
   isCompliant: boolean;
@@ -451,6 +452,25 @@ export default function NegociarPage() {
           snowtraceUrl: receipt.snowtraceUrl,
           requestId,
         };
+        // W9: persist to cobraya_settled_invoices via Server Action. Best-effort:
+        // the tx is already onchain, so a DB write failure must NOT block the UX.
+        const persistResult = await recordSettlement({
+          requestId,
+          uuidCfdi: scanned.uuidCfdi,
+          amountMxn: scanned.amountMXN,
+          netAmountUsdc:
+            receipt.deliveredAmountUSDC ?? selectedMatch.netAmountUSDC,
+          lenderName: selectedMatch.lenderName,
+          txHash: receipt.txHash,
+          snowtraceUrl: receipt.snowtraceUrl,
+        });
+        if (!persistResult.ok) {
+          // R-9: tx is onchain, history sync is best-effort.
+          console.warn(
+            "[cobraya-ui] recordSettlement failed; tx onchain OK",
+            persistResult.error,
+          );
+        }
         setSoldHistory((prev) => [sold, ...prev]);
         setCardState("sold");
         // After a successful settle the success-state UI (InvoiceCard "sold"
