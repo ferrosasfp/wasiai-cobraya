@@ -121,6 +121,7 @@ export async function updateProfile(
     });
     return { error: 'No se pudo actualizar.' };
   }
-  revalidatePath('/(app)/perfil', 'page');
+  // CR-MNR-1: route groups like `(app)` are NOT in the public URL — pass `/perfil`.
+  revalidatePath('/perfil', 'page');
   return {};
 }

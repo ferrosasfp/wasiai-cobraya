@@ -10,8 +10,19 @@ const desktopTabs = [
   { href: '/perfil', label: 'Perfil' },
 ];
 
+// AR-BLQ-BAJO-1: TopNav must self-hide on auth/onboarding routes (and the
+// splash `/`) so the navigation doesn't render where it cannot be used. Nested
+// layouts don't replace ancestor layouts in Next.js, so the parent `(app)`
+// layout's <TopNav /> renders inside `(app)/onboarding/*` too. This prefix
+// list mirrors `BottomTabs.tsx` and matches the DD-D / Story §10 wireframe
+// ("no TopNav, no BottomTabs" on onboarding screens).
+const HIDE_PREFIXES = ['/login', '/signup', '/auth', '/onboarding', '/~offline'];
+
 export function TopNav() {
   const pathname = usePathname() ?? '';
+  if (pathname === '/' || HIDE_PREFIXES.some((p) => pathname.startsWith(p))) {
+    return null;
+  }
   return (
     <header
       className="w-full text-luma-50"

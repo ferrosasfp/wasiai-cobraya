@@ -24,4 +24,27 @@ describe("<TopNav /> — WKH-COBRAYA-DAPP-SHELL W5", () => {
       screen.getByRole("link", { name: /negociar/i }),
     ).toHaveAttribute("aria-current", "page");
   });
+
+  // AR-BLQ-BAJO-1: self-hide on routes where TopNav doesn't belong (DD-D + Story §10).
+  it.each([
+    ["/", "splash"],
+    ["/login", "auth login"],
+    ["/signup", "auth signup"],
+    ["/onboarding/step/1", "onboarding step 1"],
+    ["/onboarding/step/5", "onboarding step 5"],
+    ["/~offline", "offline"],
+  ])("hides TopNav on %s (%s)", (path) => {
+    pathMock.mockReturnValue(path);
+    const { container } = render(<TopNav />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("renders TopNav on app routes (/dashboard, /historial, /perfil)", () => {
+    for (const path of ["/dashboard", "/historial", "/perfil", "/negociar"]) {
+      pathMock.mockReturnValue(path);
+      const { container, unmount } = render(<TopNav />);
+      expect(container.firstChild).not.toBeNull();
+      unmount();
+    }
+  });
 });

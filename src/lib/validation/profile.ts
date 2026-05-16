@@ -17,11 +17,16 @@ export const step3Schema = z.object({
     .min(1, 'Agrega al menos un comprador'),
 });
 
+// CR-MNR-2: align Zod max with the SQL column `NUMERIC(12,2)` (max value
+// 9_999_999_999.99 = 10 integer digits + 2 decimals). The prior literal
+// `9_999_999_999_99` parsed as 999_999_999_999 (12 integer digits), letting
+// values pass Zod that would then overflow at INSERT/UPDATE and surface as
+// generic "No se pudo guardar" — confusing UX in an extreme edge case.
 export const step4Schema = z.object({
   monto_tipico_mxn: z.coerce
     .number()
     .positive('El monto debe ser mayor a 0')
-    .max(9_999_999_999_99),
+    .max(9_999_999_999.99, 'El monto excede el máximo permitido'),
 });
 
 export const step5Schema = z.object({
