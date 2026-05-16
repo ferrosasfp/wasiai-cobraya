@@ -24,30 +24,25 @@ describe("<BottomTabs /> — WKH-COBRAYA-DAPP-SHELL W5 (AC-15)", () => {
     });
   });
 
-  it("CD-23 touch targets: 3 regular tabs have min-h-[48px], FAB has w-14/h-14 (56px)", () => {
-    // After the FAB-central rewrite, "Negociar" became a raised circle FAB
-    // (Cash App / Mercado Pago pattern). The FAB's hit area is the inner
-    // 56×56 disc (w-14 h-14), not min-h-[48px] on the <Link> wrapper. We
-    // assert the three regular tabs keep the 48px floor and the FAB keeps a
-    // ≥48px disc — both satisfy CD-23.
+  it("CD-23 touch targets: all 4 tabs have min-h-[48px]", () => {
+    // Flat Apple Wallet / Spotify pattern — 4 equal-weight tabs, no FAB.
+    // The FAB Cash-App pattern was discarded as too e-commerce for the
+    // institutional fintech tone Cobraya targets (CNBV, Bankaool audience).
     pathMock.mockReturnValue("/dashboard");
     render(<BottomTabs />);
-    ["Inicio", "Historial", "Perfil"].forEach((label) => {
+    ["Inicio", "Negociar", "Historial", "Perfil"].forEach((label) => {
       const link = screen.getByRole("link", { name: new RegExp(label, "i") });
       expect(link.className).toContain("min-h-[48px]");
     });
-    const fab = screen.getByRole("link", { name: /negociar.*acci[oó]n principal/i });
-    // FAB's button-shaped child carries the size class; ensure it exists.
-    // Post-rebalance the FAB disc is w-12/h-12 (48px) so it sits inside its
-    // grid column without breaking the row baseline; CD-23 still satisfied
-    // (48px = floor). Lift comes from `-mt-4` + ring + shadow, not size.
-    const disc = fab.querySelector("div");
-    expect(disc).not.toBeNull();
-    expect(disc!.className).toContain("w-12");
-    expect(disc!.className).toContain("h-12");
-    // FAB Link itself also keeps a 48px touch baseline (the disc + label
-    // stack add up to ≥48px even with -mt-4 lift).
-    expect(fab.className).toContain("min-h-[48px]");
+  });
+
+  it("active tab gets the bg-luma-100 pill on the inner stack", () => {
+    pathMock.mockReturnValue("/negociar");
+    render(<BottomTabs />);
+    const link = screen.getByRole("link", { name: /negociar/i });
+    const pill = link.querySelector("span");
+    expect(pill).not.toBeNull();
+    expect(pill!.className).toContain("bg-luma-100");
   });
 
   it("self-hides on /", () => {
