@@ -1,11 +1,12 @@
-// src/app/demo/page.tsx — W6 REPLACE
-// Mobile-first 4-phase orchestration.
-//  1) cobraya-cfdi-validator (serial)
-//  2) cobraya-fraud-detector + cobraya-credit-scorer (parallel — DT-J)
-//  3) cobraya-lender-matcher (serial — needs score.band)
-//  4) /api/settle on user pick.
-// requestId is generated once per pipeline run and forwarded as
-// x-cobraya-request-id so each agent step is attached to the same audit trail.
+// src/app/demo/page.tsx — Cobraya dynamic invoices flow
+// Phase 0  marketplace /discover (mantenido a través de AuditPanel/TraceConsole
+//          que muestran resultados de pipeline previo).
+// Phase 1  InvoiceScanner — el usuario "escanea" la factura, se genera un CFDI
+//          fresh con UUID v4 único, y aparece la InvoiceCard en state "pending".
+// Phase 2  User taps "Negociar esta factura" → 4-step compose pipeline.
+// Phase 3  Sign & Settle.
+// Phase 4  InvoiceCard morph a state "sold" + botón "Escanear otra factura"
+//          reinicia el flow manteniendo histórico de sesión.
 "use client";
 
 import { useMemo, useState } from "react";
@@ -16,8 +17,10 @@ import type {
   AuctionResult,
   AuctionLender,
 } from "@/types/invoice";
+import type { ScannedInvoicePayload } from "@/app/api/scan-invoice/route";
 import { BrandIcon } from "@/components/BrandIcon";
-import { InvoicePicker } from "@/components/InvoicePicker";
+import { InvoiceScanner } from "@/components/InvoiceScanner";
+import { InvoiceCard, type InvoiceCardState } from "@/components/InvoiceCard";
 import { PipelineProgress } from "@/components/PipelineProgress";
 import { LenderAuctionPanel } from "@/components/LenderAuctionPanel";
 import { Settlement } from "@/components/Settlement";
@@ -28,7 +31,6 @@ interface ValidatorResponse {
   isCompliant: boolean;
   anchorBuyerTier: 1 | "unknown";
   policyId: string;
-  // BLQ-BAJO-2 rename: scope = process-local. Authoritative dup is fraud-detector onchain.
   duplicateCheckInstance: "clean" | "duplicate";
   rfcEmisorMasked: string;
 }
@@ -39,9 +41,64 @@ interface FraudResponse {
   commitTxHash?: `0x${string}`;
 }
 
+interface SettlementReceiptShape {
+  txHash?: `0x${string}`;
+  snowtraceUrl?: string;
+  deliveredAmountUSDC?: number;
+}
+
+interface SoldInvoice {
+  scanned: ScannedInvoicePayload;
+  lenderName: string;
+  netAmountUSDC: number;
+  txHash: `0x${string}`;
+  snowtraceUrl?: string;
+  requestId: string;
+}
+
+function scannedToInvoice(s: ScannedInvoicePayload): Invoice {
+  return {
+    id: `inv-${s.uuidCfdi}`,
+    uuid: s.uuidCfdi,
+    uuidSat: s.uuidCfdi,
+    issuer: { name: s.personaName, rfc: s.rfcEmisor },
+    receiver: { name: s.anchorBuyer, rfc: "" },
+    amount: s.amountMXN,
+    currency: "MXN",
+    issueDate: s.issueDate,
+    dueDate: s.dueDate,
+    anchorBuyer: s.anchorBuyer,
+    paymentTermsDays: s.paymentTermsDays,
+    sector: s.sector,
+    status: "issued",
+  };
+}
+
+function parseSettleReceipt(s: unknown): SettlementReceiptShape | null {
+  if (!s || typeof s !== "object") return null;
+  const obj = s as Record<string, unknown>;
+  const candidate =
+    obj.receipt && typeof obj.receipt === "object"
+      ? (obj.receipt as Record<string, unknown>)
+      : obj;
+  if (typeof candidate.txHash !== "string") return null;
+  return {
+    txHash: candidate.txHash as `0x${string}`,
+    snowtraceUrl:
+      typeof candidate.snowtraceUrl === "string" ? candidate.snowtraceUrl : undefined,
+    deliveredAmountUSDC:
+      typeof candidate.deliveredAmountUSDC === "number"
+        ? candidate.deliveredAmountUSDC
+        : undefined,
+  };
+}
+
 export default function DemoPage() {
   const [requestId, setRequestId] = useState<string | null>(null);
-  const [invoice, setInvoice] = useState<Invoice | null>(null);
+  const [scanned, setScanned] = useState<ScannedInvoicePayload | null>(null);
+  const [cardState, setCardState] = useState<InvoiceCardState>("pending");
+  const [cardError, setCardError] = useState<string | null>(null);
+
   const [validator, setValidator] = useState<ValidatorResponse | null>(null);
   const [fraud, setFraud] = useState<FraudResponse | null>(null);
   const [score, setScore] = useState<ScoreResult | null>(null);
@@ -53,9 +110,14 @@ export default function DemoPage() {
   const [error, setError] = useState<string | null>(null);
   const [latencies, setLatencies] = useState<Record<number, number>>({});
 
-  async function runPipeline(inv: Invoice) {
-    if (isRunning) return; // CD anti double-trigger
-    setInvoice(inv);
+  // Session histórico — facturas vendidas en esta sesión.
+  const [soldHistory, setSoldHistory] = useState<SoldInvoice[]>([]);
+
+  function resetForNextScan() {
+    setRequestId(null);
+    setScanned(null);
+    setCardState("pending");
+    setCardError(null);
     setValidator(null);
     setFraud(null);
     setScore(null);
@@ -64,7 +126,28 @@ export default function DemoPage() {
     setSettlement(null);
     setError(null);
     setLatencies({});
+  }
+
+  function handleScanConfirm(payload: ScannedInvoicePayload) {
+    setScanned(payload);
+    setCardState("pending");
+    setCardError(null);
+  }
+
+  async function runPipeline() {
+    if (!scanned || isRunning) return;
+    const inv = scannedToInvoice(scanned);
+    setValidator(null);
+    setFraud(null);
+    setScore(null);
+    setAuction(null);
+    setSelectedMatch(null);
+    setSettlement(null);
+    setError(null);
+    setCardError(null);
+    setLatencies({});
     setIsRunning(true);
+    setCardState("negotiating");
     const id = crypto.randomUUID();
     setRequestId(id);
 
@@ -91,6 +174,8 @@ export default function DemoPage() {
       setLatencies((m) => ({ ...m, 0: Date.now() - t0 }));
       if (!vJson.isCompliant) {
         setError("CFDI no compliant — pipeline stopped");
+        setCardState("failed");
+        setCardError("CFDI no compliant");
         return;
       }
 
@@ -125,6 +210,8 @@ export default function DemoPage() {
       setLatencies((m) => ({ ...m, 1: parallelLatency, 2: parallelLatency }));
       if (!fJson.isUnique) {
         setError("Invoice already committed onchain");
+        setCardState("failed");
+        setCardError("Factura ya cedida onchain");
         return;
       }
 
@@ -144,14 +231,17 @@ export default function DemoPage() {
       setAuction(aJson);
       setLatencies((m) => ({ ...m, 3: Date.now() - t3 }));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Pipeline failed");
+      const msg = err instanceof Error ? err.message : "Pipeline failed";
+      setError(msg);
+      setCardState("failed");
+      setCardError(msg);
     } finally {
       setIsRunning(false);
     }
   }
 
   async function signAndSettle() {
-    if (!selectedMatch || !requestId || isSigning) return;
+    if (!selectedMatch || !requestId || isSigning || !scanned) return;
     setIsSigning(true);
     setError(null);
     try {
@@ -171,15 +261,33 @@ export default function DemoPage() {
       });
       const json = (await res.json()) as unknown;
       setSettlement(json);
+      const receipt = parseSettleReceipt(json);
+      if (receipt && receipt.txHash) {
+        const sold: SoldInvoice = {
+          scanned,
+          lenderName: selectedMatch.lenderName,
+          netAmountUSDC: receipt.deliveredAmountUSDC ?? selectedMatch.netAmountUSDC,
+          txHash: receipt.txHash,
+          snowtraceUrl: receipt.snowtraceUrl,
+          requestId,
+        };
+        setSoldHistory((prev) => [sold, ...prev]);
+        setCardState("sold");
+      } else {
+        setCardState("failed");
+        setCardError("Settlement sin tx hash");
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Settle failed");
+      const msg = err instanceof Error ? err.message : "Settle failed";
+      setError(msg);
+      setCardState("failed");
+      setCardError(msg);
     } finally {
       setIsSigning(false);
     }
   }
 
-  // Derive AuditPanel rows from in-flight state (best-effort; canonical trail is
-  // server-side in agent-signer.ts and the JSON download).
+  // Derive AuditPanel rows from in-flight state.
   const auditSteps = useMemo<AuditStepDisplay[]>(() => {
     const rows: AuditStepDisplay[] = [];
     if (validator) {
@@ -217,6 +325,9 @@ export default function DemoPage() {
     return rows;
   }, [validator, fraud, score, auction, latencies]);
 
+  const settleReceipt = parseSettleReceipt(settlement);
+  const isSettled = settleReceipt !== null && cardState === "sold";
+
   return (
     <main className="min-h-screen pb-32 px-4 pt-6 max-w-3xl mx-auto">
       <header className="flex items-center justify-between mb-6">
@@ -229,36 +340,81 @@ export default function DemoPage() {
         </span>
       </header>
 
-      {!invoice && (
+      {soldHistory.length > 0 && (
+        <div className="mb-4 border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs mono text-emerald-800">
+          Has vendido {soldHistory.length}{" "}
+          {soldHistory.length === 1 ? "factura" : "facturas"} hoy
+        </div>
+      )}
+
+      {/* Phase 1 — scan factura (only when there's no active invoice). */}
+      {!scanned && (
         <section>
-          <h2 className="serif text-lg mb-3">Elegí una factura</h2>
-          <InvoicePicker selected={invoice} onSelect={(inv) => void runPipeline(inv)} />
+          <h2 className="serif text-lg mb-3">Escaneá tu factura</h2>
+          <InvoiceScanner
+            onConfirm={handleScanConfirm}
+            ctaLabel={
+              soldHistory.length > 0
+                ? "Escanear otra factura"
+                : "Escanear factura"
+            }
+          />
         </section>
       )}
 
-      {invoice && (
+      {scanned && (
         <>
           <section className="mb-6">
             <div className="mono text-[11px] uppercase tracking-widest text-muted mb-2">
-              01 · Factura seleccionada
+              01 · Factura escaneada
             </div>
-            <div className="border border-ink/30 p-4">
-              <div className="font-semibold">{invoice.issuer.name}</div>
-              <div className="text-xs text-muted">→ {invoice.anchorBuyer}</div>
-              <div className="mono text-sm mt-2">
-                ${invoice.amount.toLocaleString("es-MX")} MXN ·{" "}
-                {invoice.paymentTermsDays}d
-              </div>
-            </div>
+            <InvoiceCard
+              invoice={scanned}
+              state={cardState}
+              sold={
+                cardState === "sold" && settleReceipt && requestId
+                  ? {
+                      lenderName: selectedMatch?.lenderName ?? "—",
+                      netAmountUSDC:
+                        settleReceipt.deliveredAmountUSDC ??
+                        selectedMatch?.netAmountUSDC ??
+                        0,
+                      txHash: settleReceipt.txHash as `0x${string}`,
+                      snowtraceUrl: settleReceipt.snowtraceUrl,
+                      requestId,
+                    }
+                  : undefined
+              }
+              errorMessage={cardError ?? undefined}
+              onScanAnother={
+                cardState === "failed" ? resetForNextScan : undefined
+              }
+            />
           </section>
 
-          <PipelineProgress
-            validator={validator}
-            fraud={fraud}
-            score={score}
-            auction={auction}
-            isRunning={isRunning}
-          />
+          {/* Phase 2 — pre-negotiation CTA (only while we have a scanned invoice
+              and haven't started the pipeline yet). */}
+          {cardState === "pending" && !isRunning && !validator && (
+            <div className="mb-6">
+              <button
+                type="button"
+                onClick={() => void runPipeline()}
+                className="w-full bg-ink text-paper px-4 py-4 mono text-xs uppercase tracking-widest min-h-[48px]"
+              >
+                Negociar esta factura
+              </button>
+            </div>
+          )}
+
+          {(isRunning || validator) && (
+            <PipelineProgress
+              validator={validator}
+              fraud={fraud}
+              score={score}
+              auction={auction}
+              isRunning={isRunning}
+            />
+          )}
 
           {auction && (
             <section className="mt-6">
@@ -271,7 +427,7 @@ export default function DemoPage() {
             </section>
           )}
 
-          {selectedMatch && (
+          {selectedMatch && !isSettled && (
             <Settlement
               match={selectedMatch}
               settlement={settlement}
@@ -279,6 +435,18 @@ export default function DemoPage() {
               onSign={signAndSettle}
               isSigning={isSigning}
             />
+          )}
+
+          {isSettled && (
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={resetForNextScan}
+                className="w-full bg-ink text-paper px-4 py-4 mono text-xs uppercase tracking-widest min-h-[48px]"
+              >
+                Escanear otra factura
+              </button>
+            </div>
           )}
 
           {error && (

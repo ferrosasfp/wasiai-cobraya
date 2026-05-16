@@ -24,6 +24,16 @@ export const BUYERS_TIER_1: BuyerTier1[] = [
   { name: "Bimbo", rfc: "BIM450316L92", sector: "apparel", sectorAdjustment: 3 },
   { name: "Cemex", rfc: "CEM880101HNB", sector: "construction", sectorAdjustment: -8 },
   { name: "OXXO", rfc: "OXX901016JA1", sector: "retail", sectorAdjustment: 0 },
+  // Extended pool — sectorAdjustment based on payment reliability heuristic (anchor buyer tier-1).
+  { name: "Soriana", rfc: "SOR810911P49", sector: "food retail", sectorAdjustment: 4 },
+  { name: "Coppel", rfc: "COP690513TQ7", sector: "apparel", sectorAdjustment: 2 },
+  { name: "Liverpool", rfc: "LIV930721EE0", sector: "apparel", sectorAdjustment: 3 },
+  { name: "Holcim", rfc: "HOL850622HX3", sector: "construction", sectorAdjustment: -6 },
+  { name: "Home Depot", rfc: "HDM010101AAA", sector: "construction", sectorAdjustment: 1 },
+  { name: "PEMEX", rfc: "PEP970716XYZ", sector: "services", sectorAdjustment: -2 },
+  { name: "Costco", rfc: "COS911022PD4", sector: "retail", sectorAdjustment: 4 },
+  { name: "Sears", rfc: "SEA710204LM8", sector: "apparel", sectorAdjustment: 1 },
+  { name: "La Comer", rfc: "LCO150825CC9", sector: "food retail", sectorAdjustment: 2 },
 ];
 
 export const LENDERS_CATALOG: LenderEntry[] = [
@@ -33,53 +43,176 @@ export const LENDERS_CATALOG: LenderEntry[] = [
   { id: "lender-konfio", name: "Konfío Express", bandAllowlist: ["B", "C", "D"], sectorAllowlist: "all", minAmountMXN: 1000, maxAmountMXN: 200000, aprPct: 22.0, advanceRatePct: 85, speedMinutes: 15 },
 ];
 
-export const MOCK_INVOICES: Invoice[] = [
+// ──────────────────────────────────────────────────────────────────────────────
+// Dynamic invoice generation pool (replaces hardcoded MOCK_INVOICES).
+// Each persona ships with its semantically-coherent buyer pool so we never
+// pair a tortillería with Liverpool.
+// ──────────────────────────────────────────────────────────────────────────────
+
+export type InvoiceSector =
+  | "food retail"
+  | "apparel"
+  | "construction"
+  | "services"
+  | "retail";
+
+export interface PersonaTemplate {
+  rfcEmisor: string;
+  personaName: string;       // "Lupita · Tortillería La Esperanza"
+  businessName: string;      // "Tortillería La Esperanza" (used as issuer.name)
+  defaultSector: InvoiceSector;
+  defaultBuyerPool: string[]; // matches BUYERS_TIER_1[].name entries
+}
+
+export const MOCK_PERSONAS: PersonaTemplate[] = [
   {
-    id: "inv-tortilleria-la-esperanza",
-    uuid: "11111111-1111-1111-1111-111111111111",
-    uuidSat: "11111111-1111-1111-1111-111111111111",
-    issuer: { name: "Tortillería La Esperanza", rfc: "TLE850120ABC" },
-    receiver: { name: "Walmart México", rfc: "WAL9709244WS" },
-    amount: 48500,
-    currency: "MXN",
-    issueDate: "2026-05-01",
-    dueDate: "2026-06-30",
-    anchorBuyer: "Walmart México",
-    paymentTermsDays: 60,
-    sector: "food retail",
-    status: "issued",
+    rfcEmisor: "TLE850315ABC",
+    personaName: "Lupita · Tortillería La Esperanza",
+    businessName: "Tortillería La Esperanza",
+    defaultSector: "food retail",
+    defaultBuyerPool: ["Walmart México", "OXXO", "Soriana"],
   },
   {
-    id: "inv-confecciones-nayeli",
-    uuid: "22222222-2222-2222-2222-222222222222",
-    uuidSat: "22222222-2222-2222-2222-222222222222",
-    issuer: { name: "Confecciones Nayeli", rfc: "CNA920315XYZ" },
-    receiver: { name: "Bimbo", rfc: "BIM450316L92" },
-    amount: 28200,
-    currency: "MXN",
-    issueDate: "2026-05-05",
-    dueDate: "2026-06-04",
-    anchorBuyer: "Bimbo",
-    paymentTermsDays: 30,
-    sector: "apparel",
-    status: "issued",
+    rfcEmisor: "CNA920514XYZ",
+    personaName: "Carmen · Confecciones Nayeli",
+    businessName: "Confecciones Nayeli",
+    defaultSector: "apparel",
+    defaultBuyerPool: ["Bimbo", "Coppel", "Liverpool"],
   },
   {
-    id: "inv-construcciones-hermanos-ruiz",
-    uuid: "33333333-3333-3333-3333-333333333333",
-    uuidSat: "33333333-3333-3333-3333-333333333333",
-    issuer: { name: "Construcciones Hermanos Ruiz", rfc: "CHR880210QWE" },
-    receiver: { name: "Cemex", rfc: "CEM880101HNB" },
-    amount: 156800,
-    currency: "MXN",
-    issueDate: "2026-04-15",
-    dueDate: "2026-07-14",
-    anchorBuyer: "Cemex",
-    paymentTermsDays: 90,
-    sector: "construction",
-    status: "issued",
+    rfcEmisor: "CHR770822QRS",
+    personaName: "Roberto · Construcciones Hermanos Ruiz",
+    businessName: "Construcciones Hermanos Ruiz",
+    defaultSector: "construction",
+    defaultBuyerPool: ["Cemex", "Holcim"],
+  },
+  {
+    rfcEmisor: "MPC880520DEF",
+    personaName: "María · Panadería del Centro",
+    businessName: "Panadería del Centro",
+    defaultSector: "food retail",
+    defaultBuyerPool: ["Walmart México", "Bimbo"],
+  },
+  {
+    rfcEmisor: "JCR760412GHI",
+    personaName: "Juan · Carpintería La Roble",
+    businessName: "Carpintería La Roble",
+    defaultSector: "construction",
+    defaultBuyerPool: ["Home Depot", "Cemex"],
+  },
+  {
+    rfcEmisor: "PMA850301JKL",
+    personaName: "Pedro · Mecánica Autopro",
+    businessName: "Mecánica Autopro",
+    defaultSector: "services",
+    defaultBuyerPool: ["PEMEX", "Costco"],
+  },
+  {
+    rfcEmisor: "ABE910718MNO",
+    personaName: "Ana · Boutique Elegancia",
+    businessName: "Boutique Elegancia",
+    defaultSector: "apparel",
+    defaultBuyerPool: ["Liverpool", "Sears"],
+  },
+  {
+    rfcEmisor: "DCE890605PQR",
+    personaName: "Diego · Cafetería La Esquina",
+    businessName: "Cafetería La Esquina",
+    defaultSector: "food retail",
+    defaultBuyerPool: ["Costco", "La Comer"],
   },
 ];
+
+const PAYMENT_TERMS: ReadonlyArray<30 | 45 | 60 | 90> = [30, 45, 60, 90];
+const AMOUNT_MIN_MXN = 15000;
+const AMOUNT_MAX_MXN = 200000;
+const AMOUNT_STEP_MXN = 100; // round to nearest 100 for realism.
+
+function pickRandom<T>(arr: ReadonlyArray<T>): T {
+  if (arr.length === 0) throw new Error("pickRandom: empty array");
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function randomAmountMXN(): number {
+  const span = AMOUNT_MAX_MXN - AMOUNT_MIN_MXN;
+  const raw = AMOUNT_MIN_MXN + Math.floor(Math.random() * span);
+  return Math.round(raw / AMOUNT_STEP_MXN) * AMOUNT_STEP_MXN;
+}
+
+function isoDateOffset(days: number, base: Date = new Date()): string {
+  const d = new Date(base.getTime() + days * 86400_000);
+  return d.toISOString().slice(0, 10);
+}
+
+export interface GenerateOptions {
+  /** Persona to use; defaults to random pick from MOCK_PERSONAS. */
+  persona?: PersonaTemplate;
+  /** Buyer to use; must be ∈ persona.defaultBuyerPool. Defaults to random pick from that pool. */
+  anchorBuyer?: string;
+  /** Amount override (MXN). Defaults to random ∈ [15K, 200K]. */
+  amountMXN?: number;
+  /** Payment terms override. Defaults to random ∈ {30, 45, 60, 90}. */
+  paymentTermsDays?: 30 | 45 | 60 | 90;
+}
+
+/**
+ * Generate a fresh Invoice with a unique UUID v4. Persona-buyer pairing is
+ * guaranteed semantically coherent: the buyer is always picked from the
+ * persona's `defaultBuyerPool`, so a boutique never invoices Cemex.
+ *
+ * The generated id is `inv-<uuid>` (stable for the lifetime of the invoice)
+ * and the uuid/uuidSat fields are the same v4 string (mirrors CFDI 4.0 SAT
+ * folio fiscal semantics for the demo).
+ */
+export function generateRandomInvoice(opts: GenerateOptions = {}): Invoice {
+  const persona = opts.persona ?? pickRandom(MOCK_PERSONAS);
+  const anchorBuyer = opts.anchorBuyer ?? pickRandom(persona.defaultBuyerPool);
+  if (!persona.defaultBuyerPool.includes(anchorBuyer)) {
+    throw new Error(
+      `generateRandomInvoice: anchorBuyer "${anchorBuyer}" not in persona "${persona.businessName}" pool`,
+    );
+  }
+  const buyer = BUYERS_TIER_1.find((b) => b.name === anchorBuyer);
+  if (!buyer) {
+    throw new Error(
+      `generateRandomInvoice: anchorBuyer "${anchorBuyer}" missing from BUYERS_TIER_1 catalog`,
+    );
+  }
+  const amount = opts.amountMXN ?? randomAmountMXN();
+  const paymentTermsDays = opts.paymentTermsDays ?? pickRandom(PAYMENT_TERMS);
+  const uuid = crypto.randomUUID();
+  const issueDate = isoDateOffset(0);
+  const dueDate = isoDateOffset(paymentTermsDays);
+
+  return {
+    id: `inv-${uuid}`,
+    uuid,
+    uuidSat: uuid,
+    issuer: { name: persona.businessName, rfc: persona.rfcEmisor },
+    receiver: { name: buyer.name, rfc: buyer.rfc },
+    amount,
+    currency: "MXN",
+    issueDate,
+    dueDate,
+    anchorBuyer: buyer.name,
+    paymentTermsDays,
+    sector: persona.defaultSector,
+    status: "issued",
+  };
+}
+
+// Backwards compat — `MOCK_INVOICES` is materialized at module load from the
+// dynamic generator so the `npm run seed` dev script keeps working. New
+// runtime code paths MUST use `generateRandomInvoice()` so each scan emits a
+// fresh UUID (no onchain "INVOICE_ALREADY_COMMITTED" collisions during demos).
+// @deprecated use generateRandomInvoice()
+export const MOCK_INVOICES: Invoice[] = MOCK_PERSONAS.slice(0, 3).map(
+  (persona) =>
+    generateRandomInvoice({
+      persona,
+      anchorBuyer: persona.defaultBuyerPool[0],
+    }),
+);
 
 // Backwards compat — preserved for any consumer still using the legacy demo Lender shape.
 // @deprecated use LENDERS_CATALOG.
