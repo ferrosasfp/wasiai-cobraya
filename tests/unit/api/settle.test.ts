@@ -89,6 +89,32 @@ describe("/api/settle (W5)", () => {
     expect(json.error).toBe("settle_failed");
   });
 
+  it("T-SETTLE-NO-OVERRIDE attacker sends smeWalletOverride → field ignored, settles to OWNER", async () => {
+    // DT-Q (post-AR fix-pack BLQ-ALTO-1): `smeWalletOverride` must not redirect
+    // the settle destination. The endpoint must silently drop the field and
+    // resolve `to` from `OWNER_ADDRESS` server-side.
+    vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "true");
+    vi.stubEnv("ONCHAIN_AMOUNT_CAP_USDC", "0.05");
+    vi.stubEnv("OWNER_ADDRESS", "0x1234567890123456789012345678901234567890");
+    const attackerWallet = "0xDEADBEEFcafebabe0000000000000000000000ad";
+
+    const { POST } = await import("@/app/api/settle/route");
+    const res = await POST(
+      makeReq({
+        match: { lenderId: "lender-konfio", lenderName: "Konfío Express", netAmountUSDC: 0.04 },
+        smeWalletOverride: attackerWallet, // attacker-controlled — must be ignored
+      }),
+    );
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as SettleResponse;
+    // Sanity: receipt is built even though override was supplied.
+    expect(json.receipt?.txHash).toMatch(/^0x[0-9a-f]+$/);
+    // The attacker wallet must NEVER appear anywhere in the response (which
+    // includes the demo authorization echo).
+    const raw = JSON.stringify(json);
+    expect(raw.toLowerCase()).not.toContain(attackerWallet.toLowerCase());
+  });
+
   it("T-SETTLE-4 missing TREASURY_PRIVATE_KEY → 502 with no key leak", async () => {
     vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "false");
     vi.stubEnv("ONCHAIN_AMOUNT_CAP_USDC", "0.05");

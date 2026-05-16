@@ -15,9 +15,13 @@ const MatchSchema = z.object({
   netAmountUSDC: z.number().nonnegative(),
 });
 
+// DT-Q (fix-pack post-AR): `smeWalletOverride` removed from the input schema.
+// Demo invariant: the SME wallet is always the OWNER (Lupita). Allowing the
+// caller to override `to` is a treasury-drain vector. The destination is now
+// resolved server-side from `OWNER_ADDRESS`. Strict object — any extra key in
+// the payload is silently dropped by zod's default behaviour.
 const InputSchema = z.object({
   match: MatchSchema,
-  smeWalletOverride: z.string().optional(),
 });
 
 function isDemoMode(): boolean {
@@ -32,7 +36,7 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const { match, smeWalletOverride } = parsed.data;
+  const { match } = parsed.data;
   const amountUSDC = match.netAmountUSDC;
   const requestId = req.headers.get("x-cobraya-request-id");
 
@@ -50,7 +54,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (isDemoMode()) {
-    const to = (smeWalletOverride ?? OWNER_ADDRESS ?? "0x0000000000000000000000000000000000000000") as `0x${string}`;
+    const to = (OWNER_ADDRESS ?? "0x0000000000000000000000000000000000000000") as `0x${string}`;
     const fake = mockSettle(
       {
         lenderId: match.lenderId,
@@ -102,7 +106,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const to = (smeWalletOverride ?? OWNER_ADDRESS) as `0x${string}`;
+    const to = OWNER_ADDRESS as `0x${string}`;
     const valueOnchain = parseUnits(amountUSDC.toString(), 6);
     const auth = await signTransferAuthorization({ to, valueOnchain });
     const settlement = await settleOnFacilitator({

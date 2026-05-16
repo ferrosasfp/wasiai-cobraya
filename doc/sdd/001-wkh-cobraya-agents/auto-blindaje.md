@@ -20,6 +20,12 @@ Catálogo de errores reales encontrados durante F3 + fix aplicado, para que futu
 - **Fix**: mover el state + helper a `src/lib/agent-state/validator-store.ts` (módulo separado). El route importa `isUuidSeen` / `markUuidSeen`. El test importa el reset helper directamente del módulo de state.
 - **Aplicar en**: cualquier futuro route handler que necesite state o test hooks → SIEMPRE colocar el state en `src/lib/agent-state/` o `src/infra/`. NO exportar nada extra desde `route.ts`.
 
+### [2026-05-15 23:50] FIX-PACK post-AR — DT-Q `smeWalletOverride` was an attack surface
+- **Error**: `/api/settle` aceptaba `smeWalletOverride` arbitrario del request body y lo usaba como `to` de la authorization EIP-3009. Sin auth de caller, cualquiera podía drenar la treasury enviando N requests con `to=ATTACKER_WALLET`. AR lo levantó como **BLQ-ALTO-1**.
+- **Causa raíz**: durante W5 se introdujo `smeWalletOverride` "por flexibilidad" para tests onchain, pero el demo siempre opera con `SME == OWNER` (Lupita). El override nunca se usó en producción y quedó como input no-validado, sin verificación de ownership ni allowlist.
+- **Fix**: campo eliminado del `InputSchema`. zod por default hace strip de keys extras, así que un attacker que mande `smeWalletOverride` ve su valor silenciosamente descartado. `to` se resuelve server-side desde `OWNER_ADDRESS` (env var, single source of truth). Documentado como **DT-Q** en este auto-blindaje + cubierto por test `T-SETTLE-NO-OVERRIDE`.
+- **Aplicar en**: cualquier endpoint que reciba una address en el body — si la address controla destination of funds, NO debe venir del caller. Pattern: lookup determinístico desde un identifier auth-bound (owner_id, invoice_id, etc.) → resolved server-side. Si fuera Opción B (varias invoices con distintos destinations), introducir `MOCK_INVOICES`/`getInvoiceById()` que mapea `invoiceId → borrowerAddress` server-side.
+
 ### [2026-05-15 22:08] Wave W7 — smoke E2E dependencies fuera de scope F3
 - **Error**: W7 requiere `vercel deploy --prod` (sin credenciales `vercel login` en este entorno) + `INSERT INTO agents` en Supabase de wasiai-v2 (sin `SUPABASE_SERVICE_ROLE_KEY` para v2 en `.env.local` de lendable).
 - **Causa raíz**: la story file documenta W7 como "deploy + SQL + smoke E2E", pero la story §16 también recuerda que CD-4 prohíbe modificar wasiai-v2 — sólo se permite el INSERT remoto, que es una operación de DBA que requiere credenciales que no están provistas a F3.
