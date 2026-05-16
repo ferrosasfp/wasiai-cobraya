@@ -5,7 +5,7 @@ export default function Home() {
     <main className="min-h-screen px-6 py-16 md:px-16 md:py-24 max-w-5xl mx-auto">
       <div className="mb-16">
         <div className="text-xs mono uppercase tracking-widest text-muted mb-4">
-          Lendable · SmartFactoring agéntico · Avalanche
+          Cobraya · SmartFactoring agéntico · Avalanche
         </div>
         <h1 className="serif text-5xl md:text-7xl leading-none">
           Tu factura entra. <br />

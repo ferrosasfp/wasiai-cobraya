@@ -1,8 +1,8 @@
-# Lendable — SmartFactoring agéntico para PyMEs
+# Cobraya — Tu factura, líquida en 30 segundos
 
-> Marketplace agent-native de factoraje de facturas. Validación, scoring y matching los hacen 3 agentes IA componibles vía WasiAI A2A. Settlement en USDC sobre Avalanche.
+> **¿Ya cobraste? Cobraya.** Marketplace agéntico para que PyMEs mexicanas conviertan sus facturas en USDC en menos de un minuto. Validación, anti-fraude on-chain, scoring crediticio, y subasta entre 4 inversores — todo en 3 taps desde el celular. Settlement en USDC sobre Avalanche.
 
-**Hackathon Build LATAM Fintech** · Avalanche · Mayo 15-17 2026 · Solo · Sponsors: Bankaool / Arkangeles
+**Hackathon Build LATAM Fintech** · Avalanche · Mayo 15-17 2026 · Solo · Sponsors: Avalanche / Bankaool / Arkangeles
 
 ---
 
@@ -14,9 +14,9 @@ PyMEs mexicanas con facturas a 30/60/90 días no tienen capital de trabajo. Fact
 
 Una factura entra. Tres agentes la procesan en paralelo y entregan veredicto en <60s:
 
-1. **lendable-cfdi-validator** — verifica shape del CFDI, anchor buyer en registry tier-1, detecta duplicados.
-2. **lendable-credit-scorer** — score determinístico en base a anchor buyer tier + monto + plazo + sector. Rationale narrativa generado por LLM (Claude Haiku) con fallback local determinista — score auditable, narrativa opcional.
-3. **lendable-lender-matcher** — busca el inversor con mejor tasa para ese perfil de riesgo en el pool de lenders activos.
+1. **cobraya-cfdi-validator** — verifica shape del CFDI, anchor buyer en registry tier-1, detecta duplicados.
+2. **cobraya-credit-scorer** — score determinístico en base a anchor buyer tier + monto + plazo + sector. Rationale narrativa generado por LLM (Claude Haiku) con fallback local determinista — score auditable, narrativa opcional.
+3. **cobraya-lender-matcher** — busca el inversor con mejor tasa para ese perfil de riesgo en el pool de lenders activos.
 
 Si hay match, el inversor firma una autorización gasless (EIP-3009) y nuestro facilitator settlement en USDC sobre Avalanche mainnet. La PyME recibe el cash en su wallet en segundos.
 
@@ -31,16 +31,16 @@ Si hay match, el inversor firma una autorización gasless (EIP-3009) y nuestro f
 
 | Sponsor | Encaje |
 |---------|--------|
-| **Avalanche** | Chain primaria de settlement. USDC nativo + sub-segundo finality + subnet-ready para banca corporativa. Lendable es agentic fintech building on Avalanche infra. |
-| **Bankaool** | PyMEs son su core de clientes. Lendable les abre canal agéntico nuevo sin mover su core bancario. El banco puede listar su pool de capital aquí y los agentes hacen el matching. |
-| **Arkangeles** | Plataforma de matching para PyMEs con inversores. Lendable es la capa de settlement onchain que les faltaba. El matching humano se vuelve agéntico, settlement en segundos vs días. |
+| **Avalanche** | Chain primaria de settlement. USDC nativo + sub-segundo finality + subnet-ready para banca corporativa. Cobraya es agentic fintech building on Avalanche infra. |
+| **Bankaool** | PyMEs son su core de clientes. Cobraya les abre canal agéntico nuevo sin mover su core bancario. El banco puede listar su pool de capital aquí y los agentes hacen el matching. |
+| **Arkangeles** | Plataforma de matching para PyMEs con inversores. Cobraya es la capa de settlement onchain que les faltaba. El matching humano se vuelve agéntico, settlement en segundos vs días. |
 
 > **Note sobre AI providers**: el credit-scorer usa una arquitectura de "deterministic scoring + LLM narrative" — el score se computa con reglas auditables (importante para fintech regulada), y la explicación textual se genera con LLM. La implementación actual usa Anthropic Claude vía API; es drop-in compatible con Oracle GenAI, OpenAI, o cualquier provider para deploy enterprise.
 
 ## Arquitectura
 
 ```
-[ PyME sube CFDI ] ─→ [ Lendable UI ]
+[ PyME sube CFDI ] ─→ [ Cobraya UI ]
                           │
                           ▼
                   [ WasiAI A2A: /compose ]
@@ -92,7 +92,7 @@ La regla de dependencia es concéntrica: `app → application → infra → core
 
 Para evitar confusión común en pitches/demos agénticos:
 
-| Concepto | ¿Aplica a Lendable? | Cómo se ve hoy |
+| Concepto | ¿Aplica a Cobraya? | Cómo se ve hoy |
 |----------|--------------------|----------------|
 | **Agent-native** (agentes discoverable + componible) | Sí | 3 agentes vía WasiAI A2A `/discover` + `/compose` |
 | **Sovereign agents** (cada uno corre en su servicio) | Sí | Validator, scorer, matcher son endpoints separados |
@@ -108,7 +108,7 @@ Para evitar confusión común en pitches/demos agénticos:
 2. **Narrativa enfocada.** El pitch es "settlement onchain agéntico componible", no "razonamiento agéntico". Agregar ReAct dispersa la atención sin sumar al hilo de Avalanche/sponsors.
 3. **Cost de iteración.** Un loop ReAct serio toma 6-10h de trabajo más QA. Esas horas las invertimos en la integración con Oracle GenAI + Bankaool, que son sponsors directos.
 
-**Cuándo sí tiene sentido.** Post-hackathon, cuando Lendable v2 necesite:
+**Cuándo sí tiene sentido.** Post-hackathon, cuando Cobraya v2 necesite:
 - Ramificación condicional (banda D → llamar `fraud-detector` antes de `matcher`)
 - Retry inteligente (si Oracle GenAI devuelve incertidumbre, consultar segunda fuente)
 - Negociación entre agentes (lender propone tasa → matcher contra-propone)
@@ -141,7 +141,7 @@ Ver `doc/PITCH.md` para el texto del pitch.
 
 ## Built on WasiAI
 
-Lendable corre sobre infraestructura WasiAI que **ya está en producción**:
+Cobraya corre sobre infraestructura WasiAI que **ya está en producción**:
 
 - **wasiai-a2a** — gateway A2A protocol — github.com/ferrosasfp/wasiai-a2a
 - **wasiai-v2** — marketplace de agentes — github.com/ferrosasfp/wasiai-v2
@@ -157,10 +157,10 @@ Esto no es un MVP de fin de semana. Es una capa nueva sobre rails productivos co
 
 ## Honestidad: starting point pre-hackathon (declaración pública)
 
-> Lendable se implementa durante el **Avalanche LATAM Fintech Build hackathon (15-17 mayo 2026)** siguiendo un patrón arquitectónico ya probado en [`wasiai-agentshop`](https://github.com/ferrosasfp/wasiai-agentshop) (proyecto open source previo del mismo equipo, sometido al Kite Hackathon 2026). El patrón incluye: pipeline de 3 agentes vía WasiAI A2A, settlement EIP-3009 server-side, arquitectura hexagonal-light, demo UI con 4 phases.
+> Cobraya se implementa durante el **Avalanche LATAM Fintech Build hackathon (15-17 mayo 2026)** siguiendo un patrón arquitectónico ya probado en [`wasiai-agentshop`](https://github.com/ferrosasfp/wasiai-agentshop) (proyecto open source previo del mismo equipo, sometido al Kite Hackathon 2026). El patrón incluye: pipeline de 3 agentes vía WasiAI A2A, settlement EIP-3009 server-side, arquitectura hexagonal-light, demo UI con 4 phases.
 >
-> **Estado pre-hack (antes del 15 mayo 18:00 hora MX)**: scaffold Next.js + arquitectura hexagonal-light + planning docs (este README, `BACKLOG.md`, `doc/TRANSLATION-MATRIX.md`, `doc/PITCH.md`, `doc/DEMO-FLOW.md`, `doc/HACK-PLAN.md`). Cero código de business logic de Lendable.
+> **Estado pre-hack (antes del 15 mayo 18:00 hora MX)**: scaffold Next.js + arquitectura hexagonal-light + planning docs (este README, `BACKLOG.md`, `doc/TRANSLATION-MATRIX.md`, `doc/PITCH.md`, `doc/DEMO-FLOW.md`, `doc/HACK-PLAN.md`). Cero código de business logic de Cobraya.
 >
-> **Implementación durante el hack**: 3 agentes específicos (cfdi-validator, credit-scorer, lender-matcher), EIP-3009 signing server-side con TREASURY wallet, demo UI con narrativa Lendable, registry en wasiai-v2 marketplace, integración con Anthropic Claude API para rationale narrativo.
+> **Implementación durante el hack**: 3 agentes específicos (cfdi-validator, credit-scorer, lender-matcher), EIP-3009 signing server-side con TREASURY wallet, demo UI con narrativa Cobraya, registry en wasiai-v2 marketplace, integración con Anthropic Claude API para rationale narrativo.
 >
-> El **git history** del branch `feat/wkh-lendable-agents` es evidencia pública verificable de qué se construyó durante las 39h del hackathon.
+> El **git history** del branch `feat/wkh-cobraya-agents` es evidencia pública verificable de qué se construyó durante las 39h del hackathon.

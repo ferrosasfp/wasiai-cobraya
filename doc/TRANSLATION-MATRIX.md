@@ -5,13 +5,13 @@
 > **Status**: planning doc — el código se escribe durante el hack. Este documento define el qué; no contiene implementación.
 >
 > **Source repo**: https://github.com/ferrosasfp/wasiai-agentshop · branch `main`
-> **Target repo**: https://github.com/ferrosasfp/wasiai-lendable · branch `feat/wkh-lendable-agents`
+> **Target repo**: https://github.com/ferrosasfp/wasiai-cobraya · branch `feat/wkh-cobraya-agents`
 
 ---
 
 ## High-level mapping
 
-| WasiAgentShop (Kite) | Lendable (Avalanche) |
+| WasiAgentShop (Kite) | Cobraya (Avalanche) |
 |---|---|
 | Use case: cross-border remittances LATAM | Use case: factoraje agéntico PyMEs MX |
 | Persona protagonista: Luis Quispe → Rosa (mama, Peru) | Persona protagonista: Tortillería La Esperanza → Walmart MX |
@@ -22,7 +22,7 @@
 | Header chain | `x-payment-chain: kite-ozone-testnet` → `x-payment-chain: avalanche-fuji` |
 | Cap safety env | `ONCHAIN_AMOUNT_CAP_PYUSD=0.05` → `ONCHAIN_AMOUNT_CAP_USDC=0.05` |
 | FX integration | open.er-api.com (USD→MXN/COP/PEN/ARS) → **no FX needed** (MXN→USDC vía spot rate fijo del demo, o solo USDC) |
-| Branded agents (3) | `agentshop-kyc-validator` $0.001 / `agentshop-corridor-discoverer` $0.05 / `agentshop-cashout-matcher` $0.01 | `lendable-cfdi-validator` $0.001 / `lendable-credit-scorer` $0.05 / `lendable-lender-matcher` $0.01 |
+| Branded agents (3) | `agentshop-kyc-validator` $0.001 / `agentshop-corridor-discoverer` $0.05 / `agentshop-cashout-matcher` $0.01 | `cobraya-cfdi-validator` $0.001 / `cobraya-credit-scorer` $0.05 / `cobraya-lender-matcher` $0.01 |
 | Total fees per demo | $0.061 → **$0.061** (mismos precios) |
 | AI in scorer | N/A (corridor-discoverer es deterministic) → **Hybrid: heurística + Claude API opcional para rationale** |
 | Demo phases | 4 phases visible (00 marketplace, 01 picker, 02 compose×3, 03 settle) → **Mismas 4 phases** |
@@ -34,39 +34,39 @@
 
 ### Translate (copy + customize)
 
-| agentshop file | lendable target | Tipo de cambio | Notas |
+| agentshop file | cobraya target | Tipo de cambio | Notas |
 |---|---|---|---|
 | `src/components/TraceConsole.tsx` | `src/components/TraceConsole.tsx` | **COPY exacto** | Componente puro, sin business logic. Sirve idéntico. |
-| `src/components/PipelineProgress.tsx` | `src/components/PipelineProgress.tsx` (ya existe scaffold) | Rename agent labels | Cambiar nombres de "Section 02 step N" → mismo pattern con agents lendable-* |
+| `src/components/PipelineProgress.tsx` | `src/components/PipelineProgress.tsx` (ya existe scaffold) | Rename agent labels | Cambiar nombres de "Section 02 step N" → mismo pattern con agents cobraya-* |
 | `src/components/Settlement.tsx` | `src/components/Settlement.tsx` (ya existe scaffold) | Rename labels MXN/USDC | Mostrar amount delivered en USDC + tx hash + Snowtrace link |
 | `src/components/CopyButton.tsx` | `src/components/CopyButton.tsx` | **COPY exacto** | UI helper, no business logic |
 | `src/components/InfoTooltip.tsx` | `src/components/InfoTooltip.tsx` | **COPY exacto** | UI helper |
-| `src/components/MarketplacePanel.tsx` | `src/components/MarketplacePanel.tsx` | Rename: 3 lendable-* agents en lugar de agentshop-* | Lee de `/api/marketplace` → muestra cards |
-| `src/components/BrandIcon.tsx` | `src/components/BrandIcon.tsx` | **Nuevo SVG** (logo Lendable) | El componente es trivial; solo cambia el contenido SVG |
+| `src/components/MarketplacePanel.tsx` | `src/components/MarketplacePanel.tsx` | Rename: 3 cobraya-* agents en lugar de agentshop-* | Lee de `/api/marketplace` → muestra cards |
+| `src/components/BrandIcon.tsx` | `src/components/BrandIcon.tsx` | **Nuevo SVG** (logo Cobraya) | El componente es trivial; solo cambia el contenido SVG |
 | `src/components/RemittancePicker.tsx` | `src/components/InvoicePicker.tsx` (rename) | Adapt fields: 3 invoices en lugar de 3 remesas | Mismo card pattern: 3 tarjetas pre-loadeadas, click selecciona |
 | `src/infra/eip3009-signer.ts` | `src/infra/eip3009-signer.ts` | Swap chain/asset constants | EIP-712 domain: chainId 43113, USDC contract address Fuji |
 | `src/infra/a2a-client.ts` | `src/infra/a2a-client.ts` (ya existe) | Swap chain header constant | `x-payment-chain: avalanche-fuji` |
 | `src/infra/facilitator-client.ts` | `src/infra/facilitator-client.ts` (ya existe) | **COPY exacto** | Same facilitator, same /verify and /settle endpoints |
 | `src/infra/env.ts` | `src/infra/env.ts` (ya existe) | Add `ANTHROPIC_API_KEY?`, `AVALANCHE_CHAIN_ID`, `USDC_ADDRESS_FUJI`, `TREASURY_PRIVATE_KEY`, `OWNER_ADDRESS` | Env schema con Zod |
-| `src/app/api/marketplace/route.ts` | `src/app/api/marketplace/route.ts` | Adapt: filter agents `lendable-*` slug | Call wasiai-a2a `/discover` con Lendable A2A_KEY |
+| `src/app/api/marketplace/route.ts` | `src/app/api/marketplace/route.ts` | Adapt: filter agents `cobraya-*` slug | Call wasiai-a2a `/discover` con Cobraya A2A_KEY |
 | `src/app/api/settle/route.ts` | `src/app/api/settle/route.ts` | Swap chain/asset, cap env var name | Server-side EIP-3009 sign + facilitator /settle call |
-| `src/app/api/kyc/route.ts` | `src/app/api/validate/route.ts` (rename) | Adapt to call `lendable-cfdi-validator` via /compose | El nombre route ≠ agent slug, route es el wrapper Lendable |
-| `src/app/api/discover/route.ts` | `src/app/api/score/route.ts` (rename) | Adapt to call `lendable-credit-scorer` via /compose | Wrapper |
-| `src/app/api/match/route.ts` | `src/app/api/match/route.ts` | Adapt to call `lendable-lender-matcher` via /compose | Wrapper |
+| `src/app/api/kyc/route.ts` | `src/app/api/validate/route.ts` (rename) | Adapt to call `cobraya-cfdi-validator` via /compose | El nombre route ≠ agent slug, route es el wrapper Cobraya |
+| `src/app/api/discover/route.ts` | `src/app/api/score/route.ts` (rename) | Adapt to call `cobraya-credit-scorer` via /compose | Wrapper |
+| `src/app/api/match/route.ts` | `src/app/api/match/route.ts` | Adapt to call `cobraya-lender-matcher` via /compose | Wrapper |
 | `src/app/page.tsx` | `src/app/page.tsx` (ya existe) | Rewrite narrative: PyME → Walmart | Landing dark theme, story stage, animated hero |
 | `src/app/demo/page.tsx` | `src/app/demo/page.tsx` (ya existe) | Wire al nuevo flow + UI components | 4 phases, mismo pattern |
 | `src/app/globals.css` | `src/app/globals.css` | **COPY exacto** | Same Tailwind + Claude Design vars |
 | `src/types/remittance.ts` | `src/types/invoice.ts` (ya existe) | Adapt domain types | Invoice, Buyer, Lender, ScoreResult, MatchResult |
 | `src/types/trace.ts` | `src/types/trace.ts` | **COPY exacto** | TraceEvent type |
 | `src/core/corridor.ts` | `src/core/scoring.ts` (ya existe) + `src/core/matching.ts` (ya existe) | Replace remittance logic with scoring + matching | Scoring bands, matching algo |
-| `src/core/compliance.ts` | (inline en validator route) | Lendable validator es simpler: solo CFDI shape check | No necesita módulo separado |
-| `src/core/payout.ts` | (inline en matcher route) | Lendable matcher es simpler: lender catalog + filter | No necesita módulo separado |
+| `src/core/compliance.ts` | (inline en validator route) | Cobraya validator es simpler: solo CFDI shape check | No necesita módulo separado |
+| `src/core/payout.ts` | (inline en matcher route) | Cobraya matcher es simpler: lender catalog + filter | No necesita módulo separado |
 | `src/core/settlement.ts` | `src/core/settlement.ts` (ya existe) | Swap PYUSD → USDC math | 18 dec → 6 dec calculation difference |
 | `src/lib/mock-data.ts` | `src/lib/mock-data.ts` (ya existe) | **Replace contents**: 3 CFDIs + 4 buyers + 4 lenders | Ver BACKLOG.md §6 |
 
 ### Translate (refactor existing scaffold)
 
-| Lendable scaffold ya existe | Acción durante hack |
+| Cobraya scaffold ya existe | Acción durante hack |
 |---|---|
 | `src/application/validate-invoice.ts` | Wire al nuevo agent endpoint + dispatch isDemoMode() |
 | `src/application/score-invoice.ts` | Wire + dispatch isDemoMode() |
@@ -76,17 +76,17 @@
 | `src/infra/oracle-client.ts` | **DELETE** o renombrar a `llm-client.ts` con Claude integration |
 | `src/infra/mock-adapter.ts` | Mantener — mock implementations para isDemoMode() path |
 
-### New files (no equivalent en agentshop, Lendable-specific)
+### New files (no equivalent en agentshop, Cobraya-specific)
 
 | New file | Propósito |
 |---|---|
 | `src/infra/llm-client.ts` | Wrapper Claude API con fallback. Genera rationale para credit-scorer. |
-| `src/app/api/agents/lendable-cfdi-validator/invoke/route.ts` | Agent endpoint #1 (Lendable lo expone, wasiai-a2a `/discover` lo lista) |
-| `src/app/api/agents/lendable-credit-scorer/invoke/route.ts` | Agent endpoint #2 |
-| `src/app/api/agents/lendable-lender-matcher/invoke/route.ts` | Agent endpoint #3 |
+| `src/app/api/agents/cobraya-cfdi-validator/invoke/route.ts` | Agent endpoint #1 (Cobraya lo expone, wasiai-a2a `/discover` lo lista) |
+| `src/app/api/agents/cobraya-credit-scorer/invoke/route.ts` | Agent endpoint #2 |
+| `src/app/api/agents/cobraya-lender-matcher/invoke/route.ts` | Agent endpoint #3 |
 | `doc/EVIDENCE.md` | Captura tx hashes reales + screenshots + links Snowtrace (post-hack) |
 
-### Files to DELETE en Lendable scaffold
+### Files to DELETE en Cobraya scaffold
 
 | Path | Razón |
 |---|---|
@@ -104,16 +104,16 @@ WasiAgentShop establece el patrón:
 - `src/app/api/settle/route.ts` lee `SENDER_PRIVATE_KEY` server-side, llama signer, POST al facilitator
 - El private key **NUNCA** llega al browser. UI solo ve el tx hash.
 
-Lendable adopta el mismo pattern:
+Cobraya adopta el mismo pattern:
 - `src/infra/eip3009-signer.ts` con USDC Fuji contract + chainId 43113
 - `src/app/api/settle/route.ts` lee `TREASURY_PRIVATE_KEY` server-side
 - Sender = TREASURY (lender), receiver = OWNER (SME)
 
-### 2. Hybrid Claude API (Lendable-specific)
+### 2. Hybrid Claude API (Cobraya-specific)
 
 WasiAgentShop NO usa LLMs (corridor-discoverer es deterministic con FX rates).
 
-Lendable agrega esta pieza nueva:
+Cobraya agrega esta pieza nueva:
 - `src/infra/llm-client.ts` con función `async generateRationale(scoreContext): Promise<string>`
 - Si `ANTHROPIC_API_KEY` está seteada → fetch a `https://api.anthropic.com/v1/messages` con model `claude-haiku-4-5-20251001` (rápido + barato), timeout 5s
 - Si no o falla → fallback determinista con templates:
@@ -130,7 +130,7 @@ Lendable agrega esta pieza nueva:
 
 WasiAgentShop tiene FX rates "live" pero con 5-min cache para que el demo no se contradiga entre invocaciones.
 
-Lendable es más estricto:
+Cobraya es más estricto:
 - Scoring 100% determinista (mismo input → mismo score+band siempre)
 - Matching 100% determinista (mismo score+band+amount → mismo lender)
 - Solo el `rationale` text varía si Claude API está activa (pero el `band` no cambia)
@@ -161,7 +161,7 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
 
 ## PWA pattern — adaptado de `luma-ai`
 
-> Nuevo en v2 + PWA: Lendable es **mobile-first PWA installable**.
+> Nuevo en v2 + PWA: Cobraya es **mobile-first PWA installable**.
 > Pattern reusado de `luma-ai` (otro proyecto open source del mismo equipo).
 
 ### Stack PWA (idéntico a luma-ai)
@@ -177,9 +177,9 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
 
 | luma-ai file | wasiai-lendable target | Tipo de cambio |
 |---|---|---|
-| `next.config.mjs withPWA wrapper` | `next.config.js withPWA wrapper` | Copy estructura + adapt runtimeCaching rules a `/api/*` Lendable + wasiai-a2a |
-| `public/manifest.json` | `public/manifest.json` | Customize: name "Lendable", theme_color verde, lang "es", categories ["finance", "productivity"] |
-| `public/icons/icon-192.png` | `public/icons/icon-192.png` | Generate from Lendable logo PNG source |
+| `next.config.mjs withPWA wrapper` | `next.config.js withPWA wrapper` | Copy estructura + adapt runtimeCaching rules a `/api/*` Cobraya + wasiai-a2a |
+| `public/manifest.json` | `public/manifest.json` | Customize: name "Cobraya", theme_color verde, lang "es", categories ["finance", "productivity"] |
+| `public/icons/icon-192.png` | `public/icons/icon-192.png` | Generate from Cobraya logo PNG source |
 | `public/icons/icon-512.png` | `public/icons/icon-512.png` | Same generate |
 | `public/icons/icon-maskable-512.png` | `public/icons/icon-maskable-512.png` | Same generate, padding 10% para safe zone Android |
 | `public/icons/apple-touch-icon-{120,152,180}.png` | `public/icons/apple-touch-icon-{120,152,180}.png` | iOS home screen icons |
@@ -187,16 +187,16 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
 | `scripts/generate-pwa-assets.mjs` | `scripts/generate-pwa-assets.mjs` | Generator script — takes logo PNG source, outputs all icon/splash variants |
 | `src/app/~offline/page.tsx` | `src/app/~offline/page.tsx` | Offline fallback page — adapt copy: "Sin conexión. Demo determinístico sigue funcionando." + reload button |
 | `src/components/pwa/register-sw.tsx` | `src/components/pwa/register-sw.tsx` | Client component que registra service worker on mount |
-| `src/components/pwa/install-prompt.tsx` | `src/components/pwa/install-prompt.tsx` | Handles `beforeinstallprompt` event, muestra "Instalar Lendable" UI dismissible |
-| `src/app/layout.tsx metadata` | `src/app/layout.tsx metadata` | Add `manifest: '/manifest.json'` + `icons` + `appleWebApp: { capable: true, title: 'Lendable', statusBarStyle: 'default' }` |
-| `src/app/layout.tsx viewport` | `src/app/layout.tsx viewport` | Add `themeColor: '#0F8B4A'` (verde Lendable) |
+| `src/components/pwa/install-prompt.tsx` | `src/components/pwa/install-prompt.tsx` | Handles `beforeinstallprompt` event, muestra "Instalar Cobraya" UI dismissible |
+| `src/app/layout.tsx metadata` | `src/app/layout.tsx metadata` | Add `manifest: '/manifest.json'` + `icons` + `appleWebApp: { capable: true, title: 'Cobraya', statusBarStyle: 'default' }` |
+| `src/app/layout.tsx viewport` | `src/app/layout.tsx viewport` | Add `themeColor: '#0F8B4A'` (verde Cobraya) |
 
 ### Runtime caching strategy (copy de luma-ai)
 
 ```js
 // next.config.js withPWA runtimeCaching
 {
-  // CRITICAL: Lendable agents debit USDC budget on every call.
+  // CRITICAL: Cobraya agents debit USDC budget on every call.
   // Caching == financial fraud. NetworkOnly enforced.
   urlPattern: /^https:\/\/wasiai-a2a-production\.up\.railway\.app\//,
   handler: 'NetworkOnly',
@@ -211,7 +211,7 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
   // Same-origin /api/* (proxies a wasiai-a2a) — never cache
   urlPattern: /\/(api)\//,
   handler: 'NetworkOnly',
-  options: { cacheName: 'lendable-api-networkonly' }
+  options: { cacheName: 'cobraya-api-networkonly' }
 },
 // UI shell + static assets — cache with stale-while-revalidate (default plugin behavior)
 ```
@@ -254,6 +254,6 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
 
 Antes de las 18:00, push a `wasiai-lendable/README.md` declarando explícitamente:
 
-> "Lendable will be implemented during the Avalanche LATAM Fintech Build hackathon (May 15-17, 2026) following the architecture pattern already proven in [wasiai-agentshop](https://github.com/ferrosasfp/wasiai-agentshop) (a previous open-source project by the same team, submitted to Kite Hackathon). The pattern includes 3-agent pipeline, EIP-3009 settlement, hexagonal-light architecture. Implementation of Lendable-specific business logic (CFDI validation, credit scoring, lender matching) begins May 15, 18:00 hora MX. Pre-hack state is limited to scaffold + planning docs (this BACKLOG, TRANSLATION-MATRIX, README, PITCH, DEMO-FLOW, HACK-PLAN)."
+> "Cobraya will be implemented during the Avalanche LATAM Fintech Build hackathon (May 15-17, 2026) following the architecture pattern already proven in [wasiai-agentshop](https://github.com/ferrosasfp/wasiai-agentshop) (a previous open-source project by the same team, submitted to Kite Hackathon). The pattern includes 3-agent pipeline, EIP-3009 settlement, hexagonal-light architecture. Implementation of Cobraya-specific business logic (CFDI validation, credit scoring, lender matching) begins May 15, 18:00 hora MX. Pre-hack state is limited to scaffold + planning docs (this BACKLOG, TRANSLATION-MATRIX, README, PITCH, DEMO-FLOW, HACK-PLAN)."
 
 Esto es proof-of-honesty verificable contra git history.

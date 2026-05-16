@@ -26,7 +26,7 @@
 | wasiai-facilitator | https://github.com/ferrosasfp/wasiai-facilitator | ? | 2026-05-12 |
 | wasiai-v2 | https://github.com/ferrosasfp/wasiai-v2 | ? | 2026-05-12 |
 | wasiai-agentshop | https://github.com/ferrosasfp/wasiai-agentshop | ? | 2026-05-12 |
-| wasiai-lendable | https://github.com/ferrosasfp/wasiai-lendable | scaffold | 2026-05-15 (pre-hack docs) |
+| wasiai-lendable | https://github.com/ferrosasfp/wasiai-cobraya | scaffold | 2026-05-15 (pre-hack docs) |
 
 **Test count aggregate**: **1,660+** across stack (wasiai-a2a 941 + facilitator + v2 + agentshop). Para video: dejar el número "1,660+" como round número, no detallar.
 
@@ -46,9 +46,9 @@
 | Tx Hash | Tipo | Fecha | Amount | Snowtrace link |
 |---|---|---|---|---|
 | TBD durante hack | Smoke test WKH-MULTICHAIN | 2026-05-13 | varios | (compilar durante hack) |
-| TBD durante hack | LendableInvoiceCommitments deploy | 2026-05-15 (hack-day) | - | (post-deploy) |
+| TBD durante hack | CobrayaInvoiceCommitments deploy | 2026-05-15 (hack-day) | - | (post-deploy) |
 | TBD durante hack | First fraud-detector commit | 2026-05-15 (hack-day) | - | (post-W2.5) |
-| TBD durante hack | First Lendable USDC settle | 2026-05-16 (hack-day) | 0.05 USDC | (post-W7 smoke) |
+| TBD durante hack | First Cobraya USDC settle | 2026-05-16 (hack-day) | 0.05 USDC | (post-W7 smoke) |
 
 > Durante el hack-day, ir actualizando esta sección con cada tx hash nueva. Source of truth para el video Scene 5.
 
@@ -58,9 +58,9 @@
 
 | Contract | Address | Deploy tx | Snowtrace verified | Gas used | Compiler | Pattern |
 |---|---|---|---|---|---|---|
-| `LendableInvoiceCommitments` | TBD post-W2.5d | TBD | TBD (forge --verify auto) | ~700K | solc 0.8.24 | Foundry + OZ Ownable2Step |
+| `CobrayaInvoiceCommitments` | TBD post-W2.5d | TBD | TBD (forge --verify auto) | ~700K | solc 0.8.24 | Foundry + OZ Ownable2Step |
 
-**Source code public** at: `wasiai-lendable/contracts/src/LendableInvoiceCommitments.sol`
+**Source code public** at: `wasiai-lendable/contracts/src/CobrayaInvoiceCommitments.sol`
 **Tests passing**: `forge test` → TBD (target 100% coverage)
 **Gas report**: `forge test --gas-report` → `commitInvoice` < 80K (CD-11)
 **Reference pattern**: alineado con `wasiai-v2/contracts/src/WasiEscrow.sol` (production-grade)
@@ -69,7 +69,7 @@
 
 ```
 | File                                       | % Lines | % Statements | % Branches | % Funcs |
-| src/LendableInvoiceCommitments.sol         | TBD     | TBD          | TBD        | TBD     |
+| src/CobrayaInvoiceCommitments.sol         | TBD     | TBD          | TBD        | TBD     |
 ```
 
 Target: 100% en todas las dimensiones (contract pequeño, completamente coverable).
@@ -79,12 +79,12 @@ Target: 100% en todas las dimensiones (contract pequeño, completamente coverabl
 ```
 wasiai-v2/contracts/                              wasiai-lendable/contracts/
 ├── foundry.toml (solc 0.8.24 + OZ + RPCs)   →   ├── foundry.toml (same template)
-├── src/WasiEscrow.sol (Ownable2Step + RG)   →   ├── src/LendableInvoiceCommitments.sol
+├── src/WasiEscrow.sol (Ownable2Step + RG)   →   ├── src/CobrayaInvoiceCommitments.sol
 ├── test/WasiEscrow.t.sol (forge-std)         →   ├── test/...t.sol (same patterns)
 └── script/Deploy.s.sol (vm.startBroadcast)   →   └── script/Deploy.s.sol (same workflow)
 ```
 
-Esto es **production signal** para el video: en lugar de "hackathon hack-and-ship", el smart contract de Lendable usa **el mismo stack productivo que wasiai-v2** (que lleva 5+ meses en mainnet). Verificable abriendo ambos repos.
+Esto es **production signal** para el video: en lugar de "hackathon hack-and-ship", el smart contract de Cobraya usa **el mismo stack productivo que wasiai-v2** (que lleva 5+ meses en mainnet). Verificable abriendo ambos repos.
 
 ---
 
@@ -187,7 +187,7 @@ Todas con `breakerState: CLOSED` y método `eip3009`.
 - **Live demo**: https://wasiai-agentshop.vercel.app/demo
 - **Status**: submitted 2026-05-14, pending judging
 
-Esto es el "first vertical" reference para narrative "Lendable es la segunda vertical".
+Esto es el "first vertical" reference para narrative "Cobraya es la segunda vertical".
 
 ---
 
@@ -197,11 +197,11 @@ Esto es el "first vertical" reference para narrative "Lendable es la segunda ver
 
 | # | Asset | Length | Source | Notes |
 |---|---|---|---|---|
-| 1 | Lendable landing page (wasiai-lendable.vercel.app) | 5s | OBS 1080p | Para Scene 2 intro |
+| 1 | Cobraya landing page (wasiai-lendable.vercel.app) | 5s | OBS 1080p | Para Scene 2 intro |
 | 2 | Marketplace panel con 4 agents | 5s | OBS | Para Scene 3.1 |
 | 3 | Demo flow happy path completo | 30s | OBS | Multiple takes |
 | 4 | Audit trail panel building up | 10s | OBS | Para Scene 3.5 |
-| 5 | Snowtrace tab con tx Lendable | 5s | OBS | Multiple takes para tener tx hash claro |
+| 5 | Snowtrace tab con tx Cobraya | 5s | OBS | Multiple takes para tener tx hash claro |
 | 6 | wasiai.io landing | 3s | OBS | Para Scene 5 |
 | 7 | GitHub repos browsing (wasiai-a2a) | 3s | OBS | Para Scene 5 |
 | 8 | KiteScan con tx WasiAgentShop anterior | 3s | OBS | Para Scene 5 |
@@ -244,19 +244,19 @@ Esto es el "first vertical" reference para narrative "Lendable es la segunda ver
 ### Circular 4/2024 (citable)
 
 - Pide "trazabilidad agéntica completa en operaciones automatizadas fintech"
-- Lendable la implementa via audit trail schema (ver `doc/AUDIT-TRAIL-SCHEMA.md`)
+- Cobraya la implementa via audit trail schema (ver `doc/AUDIT-TRAIL-SCHEMA.md`)
 - Citation en video: "Compliance angle: alineado con Circular 4/2024 de la CNBV sobre trazabilidad agéntica"
 
 ### Ley General de Títulos y Operaciones de Crédito (LGTOC)
 
 - Factoring es operación legal under LGTOC en MX
-- Lendable opera bajo este marco
+- Cobraya opera bajo este marco
 - Citation: "Operación legal under LGTOC; settle onchain es event de tax para el lender, no para la PyME"
 
 ### Doble cesión problem (CNBV historical concern)
 
 - CNBV ha emitido 4+ communications desde 2020 pidiendo solución
-- Lendable lo resuelve via `LendableInvoiceCommitments` contract on Avalanche
+- Cobraya lo resuelve via `CobrayaInvoiceCommitments` contract on Avalanche
 - Citation: "Resolvemos el problema #1 del factoring MX: doble cesión, on-chain commitment Avalanche"
 
 ---
@@ -265,11 +265,11 @@ Esto es el "first vertical" reference para narrative "Lendable es la segunda ver
 
 Marcar durante el hack para tener todo listo para el video Sábado:
 
-- [ ] Deploy LendableInvoiceCommitments contract → tx hash documentado
+- [ ] Deploy CobrayaInvoiceCommitments contract → tx hash documentado
 - [ ] Verify contract on Snowtrace → URL documentado
 - [ ] First end-to-end demo run → audit trail JSON saved as `evidence/audit-001.json`
 - [ ] Settle tx hash → Snowtrace screenshot saved
-- [ ] /discover from Lendable A2A_KEY → response saved con 4 agents listed
+- [ ] /discover from Cobraya A2A_KEY → response saved con 4 agents listed
 - [ ] /compose × 4 chain confirmed → request/response trace
 - [ ] Budget delta verified ($0.066 per run, no $4) → screenshot /auth/me before+after
 - [ ] All 4 agent endpoints respond 200 OK to invocation → screenshots
@@ -299,7 +299,7 @@ Probable list:
 | Date | Field | Update |
 |---|---|---|
 | 2026-05-15 | initial | Created pre-hack catalog |
-| TBD | section 3 Fuji | Add LendableInvoiceCommitments deploy tx |
+| TBD | section 3 Fuji | Add CobrayaInvoiceCommitments deploy tx |
 | TBD | section 3 Fuji | Add first commit tx |
 | TBD | section 3 Fuji | Add first settle tx |
 | TBD | section 4 | Update aggregate test count post-hack |

@@ -9,10 +9,10 @@
 
 ## 1. Propósito
 
-Cada `/compose` run de Lendable genera un **audit trail JSON** que es:
+Cada `/compose` run de Cobraya genera un **audit trail JSON** que es:
 - **Descargable** por el usuario (botón "Descargar audit trail" en UI)
 - **Firmado** por cada agente (EIP-712 typed data signatures)
-- **Verificable** offline (cualquier auditor puede checkear las signatures sin hablar con Lendable)
+- **Verificable** offline (cualquier auditor puede checkear las signatures sin hablar con Cobraya)
 - **Inmutable** post-settle (en V2: hash final también va onchain como audit anchor)
 
 Para el video: en el segundo 1:35 mostramos el JSON building en tiempo real, y a los 1:50 el usuario hace click "Descargar audit trail" → el JSON se descarga. **Esto es el momento "regulator-friendly" que ningún otro demo de hackathon tiene.**
@@ -28,7 +28,7 @@ interface AuditTrail {
   /** Version del schema (semver) — empieza en "1.0.0" */
   schemaVersion: string;
 
-  /** UUID v4 generado por Lendable al inicio del compose */
+  /** UUID v4 generado por Cobraya al inicio del compose */
   requestId: string;
 
   /** ISO-8601 con TZ del momento que arrancó el flow */
@@ -68,7 +68,7 @@ interface AuditStep {
   stepIndex: number;
 
   /** Agent slug as registered in wasiai-v2 marketplace */
-  agentSlug: string;          // e.g. "lendable-fraud-detector"
+  agentSlug: string;          // e.g. "cobraya-fraud-detector"
 
   /** Agent display name */
   agentName: string;
@@ -164,7 +164,7 @@ interface AuditSettlement {
   "steps": [
     {
       "stepIndex": 0,
-      "agentSlug": "lendable-cfdi-validator",
+      "agentSlug": "cobraya-cfdi-validator",
       "agentName": "AgentShop CFDI Validator",
       "priceUsdc": 0.001,
       "agentSigner": "0xVALIDATOR_HOT_KEY",
@@ -175,13 +175,13 @@ interface AuditSettlement {
       "startedAt": "2026-05-16T03:42:18.123-06:00",
       "endedAt": "2026-05-16T03:42:20.456-06:00",
       "latencyMs": 2333,
-      "receipt": { "domain": {"name":"Lendable","version":"1","chainId":43113}, "...": "..." },
+      "receipt": { "domain": {"name":"Cobraya","version":"1","chainId":43113}, "...": "..." },
       "onchain": null
     },
     {
       "stepIndex": 1,
-      "agentSlug": "lendable-fraud-detector",
-      "agentName": "Lendable Fraud Detector",
+      "agentSlug": "cobraya-fraud-detector",
+      "agentName": "Cobraya Fraud Detector",
       "priceUsdc": 0.005,
       "agentSigner": "0xFRAUD_HOT_KEY",
       "input": { "uuidCfdi": "...", "rfcEmisorMasked": "TLE850***", "amountMXN": 48500 },
@@ -205,8 +205,8 @@ interface AuditSettlement {
     },
     {
       "stepIndex": 2,
-      "agentSlug": "lendable-credit-scorer",
-      "agentName": "Lendable Credit Scorer",
+      "agentSlug": "cobraya-credit-scorer",
+      "agentName": "Cobraya Credit Scorer",
       "priceUsdc": 0.05,
       "agentSigner": "0xSCORER_HOT_KEY",
       "input": { "amountMXN": 48500, "anchorBuyer": "Walmart México", "paymentTermsDays": 60, "sector": "food retail" },
@@ -228,8 +228,8 @@ interface AuditSettlement {
     },
     {
       "stepIndex": 3,
-      "agentSlug": "lendable-lender-matcher",
-      "agentName": "Lendable Lender Matcher",
+      "agentSlug": "cobraya-lender-matcher",
+      "agentName": "Cobraya Lender Matcher",
       "priceUsdc": 0.01,
       "agentSigner": "0xMATCHER_HOT_KEY",
       "input": { "band": "B", "amountMXN": 48500, "anchorBuyer": "Walmart México", "sector": "food retail" },
@@ -287,7 +287,7 @@ Cada agent endpoint tiene una **hot key** dedicada para firmar receipts. Estas k
 **EIP-712 domain**:
 ```js
 {
-  name: "Lendable",
+  name: "Cobraya",
   version: "1",
   chainId: 43113  // Fuji
 }
@@ -311,7 +311,7 @@ Cada agent endpoint tiene una **hot key** dedicada para firmar receipts. Estas k
 
 - Hot keys rotation cada 24h
 - Cold key (per agent) firma policy delegating to hot key
-- Hash anchor: `keccak256(trail)` se publica al `LendableInvoiceCommitments` contract como tx con `metadataPointer`
+- Hash anchor: `keccak256(trail)` se publica al `CobrayaInvoiceCommitments` contract como tx con `metadataPointer`
 
 ---
 
@@ -352,14 +352,14 @@ Durante el demo, panel lateral (similar al TraceConsole de agentshop pero más e
 GET /api/audit-trail/[requestId]/route.ts (HACK-DAY)
 → returns: AuditTrail JSON con headers
   Content-Type: application/json
-  Content-Disposition: attachment; filename="lendable-audit-{requestId}.json"
+  Content-Disposition: attachment; filename="cobraya-audit-{requestId}.json"
 ```
 
 ---
 
 ## 6. Verification flow (offline, post-demo)
 
-Para mostrar que un auditor puede verificar sin hablar con Lendable:
+Para mostrar que un auditor puede verificar sin hablar con Cobraya:
 
 ```bash
 # 1. Download audit trail

@@ -1,11 +1,11 @@
-# Video Pitch — Lendable (Avalanche LATAM Fintech Build)
+# Video Pitch — Cobraya (Avalanche LATAM Fintech Build)
 
 > **Format**: 3-minute video (180 sec). Submission deliverable principal.
 > **Audience**: jurado del hackathon + product/risk officers de Bankaool, Arkangeles, y potencialmente CNBV.
 > **Goal**: que después del video, un institucional LATAM diga "este equipo entiende el problema real, hay que llamarlos".
 > **Idioma**: voiceover en **español neutro** (ElevenLabs Multilingual v2). Subtitles en español + inglés.
 > **Production**: ElevenLabs TTS + CapCut Pro + Artlist music + **Chrome DevTools mobile emulation (iPhone 14 Pro 393x852)** para screen recording + phone B-roll para Scene 1 + Snowtrace tabs.
-> **Mobile-first**: Lendable es PWA installable. 78% de PyMEs MX usan smartphone como dispositivo principal (INEGI ENDUTIH 2024). El demo se ve en phone, NO en laptop.
+> **Mobile-first**: Cobraya es PWA installable. 78% de PyMEs MX usan smartphone como dispositivo principal (INEGI ENDUTIH 2024). El demo se ve en phone, NO en laptop.
 
 ---
 
@@ -66,20 +66,20 @@ Música: low-tension ambient, builds slowly.
 ## SCENE 2 · SOLUTION REVEAL + ADD TO HOME SCREEN (0:35 → 0:55) — 20 sec
 
 **Visual (0:35 → 0:43, 8 sec)**:
-- Logo Lendable fade-in centrado
+- Logo Cobraya fade-in centrado
 - Tagline: "Factoraje agéntico · 30 segundos · settle en USDC sobre Avalanche · Instalable como app"
 - Cut to architecture diagram (animated): 4 agents in a pipeline, arrow flow visual
 
 **Visual (0:43 → 0:55, 12 sec) — INSTALL MOMENT**:
 - **Close-up phone screen**: Lupita abre Safari/Chrome → escribe "lendable.wasiai.io"
-- Browser muestra banner "Instalar Lendable" (Android automático) o Lupita hace tap en Share → "Add to Home Screen" (iOS)
-- Cut: app icon Lendable aparece en home screen del phone entre otros iconos (WhatsApp, etc)
+- Browser muestra banner "Instalar Cobraya" (Android automático) o Lupita hace tap en Share → "Add to Home Screen" (iOS)
+- Cut: app icon Cobraya aparece en home screen del phone entre otros iconos (WhatsApp, etc)
 - Lupita hace tap → app abre **standalone, sin browser chrome** — looks like native app
-- Splash screen Lendable verde aparece 1 sec → carga landing
+- Splash screen Cobraya verde aparece 1 sec → carga landing
 
 **Voiceover** (20 sec, ~70 words):
 
-> "Lendable hace lo mismo en menos de un minuto. Cuatro agentes de inteligencia artificial componibles. Validación del CFDI. Detección de fraude on-chain. Scoring crediticio con reglas auditables. Subasta entre múltiples inversores. Settlement gasless en USDC sobre Avalanche. Y Lendable funciona como app — Lupita la instala en su teléfono en dos tap-s. Sin papeleo. Sin oficinas. Sin intermediarios."
+> "Cobraya hace lo mismo en menos de un minuto. Cuatro agentes de inteligencia artificial componibles. Validación del CFDI. Detección de fraude on-chain. Scoring crediticio con reglas auditables. Subasta entre múltiples inversores. Settlement gasless en USDC sobre Avalanche. Y Cobraya funciona como app — Lupita la instala en su teléfono en dos tap-s. Sin papeleo. Sin oficinas. Sin intermediarios."
 
 ---
 
@@ -90,7 +90,7 @@ Música: low-tension ambient, builds slowly.
 ### Sub-scene 3.1: Marketplace + invoice pick (0:55 → 1:05) — 10s
 
 - Phone screen: usuario hace tap en "Iniciar demo" (button bottom-anchored, full-width)
-- Marketplace panel **vertical list** de los 4 agents: `lendable-cfdi-validator`, `lendable-fraud-detector`, `lendable-credit-scorer`, `lendable-lender-matcher` cada uno con su precio en USDC visible
+- Marketplace panel **vertical list** de los 4 agents: `cobraya-cfdi-validator`, `cobraya-fraud-detector`, `cobraya-credit-scorer`, `cobraya-lender-matcher` cada uno con su precio en USDC visible
 - **Tap** en CFDI card "Tortillería La Esperanza · Walmart · $48,500 MXN · 60d" (full-width tap area)
 
 **Voiceover**:
@@ -152,7 +152,7 @@ Música: low-tension ambient, builds slowly.
 2018 SISCEA propuesto    ━━━━ ❌ (CNBV no implementó)
 2019 Forum Indus         ━━━━ ❌ (bancos competition concerns)
 2022 CONDUSEF push       ━━━━ ❌ (sin avance)
-2026 Lendable            ━━━━ ✅ (smart contract Avalanche)
+2026 Cobraya            ━━━━ ✅ (smart contract Avalanche)
 ```
 
 **Voiceover** (10 sec, ~35 words):
@@ -169,9 +169,9 @@ TAM México factoring PyMEs        $24 B USD / año
 Tiempo promedio actual             4.7 días
 Costo promedio cobrado al SME     7.2% de la factura
 
-Lendable settle time              30 segundos
-Lendable costo al SME             $0.066 USDC en fees
-Lendable advance rate              92-95%
+Cobraya settle time              30 segundos
+Cobraya costo al SME             $0.066 USDC en fees
+Cobraya advance rate              92-95%
 
 Si 1% del mercado migra            $240 M USD / año en agent fees
 Si Bankaool integra                4 millones de PyMEs onboarded día 1
@@ -180,7 +180,7 @@ Si Bankaool integra                4 millones de PyMEs onboarded día 1
 Música: builds.
 
 **Voiceover** (20 sec, ~65 words):
-> "El mercado de factoraje para PyMEs en México son veinticuatro mil millones de dólares al año. Las PyMEs pagan en promedio siete coma dos por ciento del valor de sus facturas. Lendable cobra seis centavos. Si solo el uno por ciento del mercado migra a este rail, fluyen doscientos cuarenta millones de dólares anuales por agentes IA en LATAM."
+> "El mercado de factoraje para PyMEs en México son veinticuatro mil millones de dólares al año. Las PyMEs pagan en promedio siete coma dos por ciento del valor de sus facturas. Cobraya cobra seis centavos. Si solo el uno por ciento del mercado migra a este rail, fluyen doscientos cuarenta millones de dólares anuales por agentes IA en LATAM."
 
 ---
 
@@ -196,7 +196,7 @@ Música: builds.
 Música: peak.
 
 **Voiceover** (15 sec, ~50 words):
-> "Lendable no es vaporware. Corre sobre WasiAI A2A, infraestructura que llevamos cinco meses en producción, con mil seiscientos sesenta tests, transacciones onchain reales, y cuatro chains soportadas. Lendable es la segunda vertical en este rail. La primera fue WasiAgentShop, presentada al Kite Hackathon. La tercera, quien quiera."
+> "Cobraya no es vaporware. Corre sobre WasiAI A2A, infraestructura que llevamos cinco meses en producción, con mil seiscientos sesenta tests, transacciones onchain reales, y cuatro chains soportadas. Cobraya es la segunda vertical en este rail. La primera fue WasiAgentShop, presentada al Kite Hackathon. La tercera, quien quiera."
 
 ---
 
@@ -207,9 +207,9 @@ Música: peak.
 > - Cut 2: cortar 5s del install moment Scene 2 (mantener app icon visible pero no toda la flow)
 > - Cut 3 (último recurso): cortar Scene 3.6 regulatory hook — PERO pierde el institutional moment más fuerte. NO RECOMENDADO.
 
-**Visual**: Logo Lendable + WasiAI side by side. Tagline final:
+**Visual**: Logo Cobraya + WasiAI side by side. Tagline final:
 
-> **Lendable · La primera vertical de factoring agéntico sobre Avalanche.**
+> **Cobraya · La primera vertical de factoring agéntico sobre Avalanche.**
 > **WasiAI A2A · El rail abierto para que LATAM corra sus agentes.**
 
 URLs visibles: wasiai-lendable.vercel.app · github.com/ferrosasfp/wasiai-a2a · wasiai.io
@@ -217,7 +217,7 @@ URLs visibles: wasiai-lendable.vercel.app · github.com/ferrosasfp/wasiai-a2a ·
 Música: outro.
 
 **Voiceover** (5 sec, ~17 words):
-> "Lendable. Para que LATAM resuelva sus problemas de capital. Con código abierto. Y agentes que nos pagamos entre nosotros."
+> "Cobraya. Para que LATAM resuelva sus problemas de capital. Con código abierto. Y agentes que nos pagamos entre nosotros."
 
 ---
 
@@ -237,7 +237,7 @@ Música: outro.
 |---|---|---|---|
 | 0 | Bottom-right tiny | "Avalanche LATAM Fintech Build · May 2026" | full scene |
 | 1 | Bottom-left | "Lupita · Tortillería La Esperanza · CDMX" | 1.5s |
-| 2 | Center | "Lendable" (logo + tagline) | 2s |
+| 2 | Center | "Cobraya" (logo + tagline) | 2s |
 | 3.1 | Top-right | tx cost ticker "$0.001 → $0.005 → $0.05 → $0.01 = $0.066" | running |
 | 3.2 | Snowtrace popup | "✓ On-chain commitment · block 42500001" | 1.5s |
 | 3.3 | Bottom-left | "Score: rules · Rationale: LLM" | 2s |

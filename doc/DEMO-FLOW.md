@@ -1,4 +1,4 @@
-# Lendable · Demo flow (paso a paso) — v2
+# Cobraya · Demo flow (paso a paso) — v2
 
 > **Update 2026-05-15**: el pitch es **video submission** (no live). Tiempo total objetivo del flow visible en video: **90 segundos** del Scene 3 (de los 180 sec totales del video). Ver `doc/VIDEO-SCRIPT.md` para el script completo de 7 escenas.
 > **v2 flow** incluye 4 agentes (con fraud-detector onchain) y auction visible.
@@ -31,7 +31,7 @@
 
 ### 0:25 — Validator (Step 0)
 
-> "Primer agente: lendable-cfdi-validator. Verifica el shape del CFDI y confirma que Walmart está en nuestro registry de anchor buyers tier-1. Menos de 2 segundos."
+> "Primer agente: cobraya-cfdi-validator. Verifica el shape del CFDI y confirma que Walmart está en nuestro registry de anchor buyers tier-1. Menos de 2 segundos."
 
 [Punto verde · "DONE"]
 
@@ -47,7 +47,7 @@
 
 ### 0:50 — Matcher con auction (Step 3)
 
-> "Cuarto agente: lendable-lender-matcher. Devuelve la subasta entre los inversores que califican para este perfil de riesgo: Bankaool, Arkangeles Fund I, BBVA y Konfío Express. Cada uno con su tasa, advance rate, y velocidad de settle. El SME ve la subasta completa y elige; el sistema recomienda Arkangeles Fund I, 92% advance rate, 14.5% APR anual, por el mejor combined score."
+> "Cuarto agente: cobraya-lender-matcher. Devuelve la subasta entre los inversores que califican para este perfil de riesgo: Bankaool, Arkangeles Fund I, BBVA y Konfío Express. Cada uno con su tasa, advance rate, y velocidad de settle. El SME ve la subasta completa y elige; el sistema recomienda Arkangeles Fund I, 92% advance rate, 14.5% APR anual, por el mejor combined score."
 
 [Mostrar el panel auction con 4 lenders rankeados, star en Arkangeles]
 
@@ -69,7 +69,7 @@
 
 ### 1:20 — Audit trail download
 
-> "Cada paso del flow emite un recibo criptográficamente firmado con EIP-712. Lupita puede descargar el audit trail completo en JSON, verificable offline por cualquier auditor sin hablar con Lendable. Esto es lo que pide la Circular 4 del 2024 de la CNBV: trazabilidad agéntica completa."
+> "Cada paso del flow emite un recibo criptográficamente firmado con EIP-712. Lupita puede descargar el audit trail completo en JSON, verificable offline por cualquier auditor sin hablar con Cobraya. Esto es lo que pide la Circular 4 del 2024 de la CNBV: trazabilidad agéntica completa."
 
 [Click en "Descargar audit trail JSON" · file downloads]
 

@@ -1,7 +1,7 @@
 import { MOCK_INVOICES, MOCK_LENDERS } from "../src/lib/mock-data";
 import { mxnToUSDC } from "../src/core/settlement";
 
-console.log("=== Lendable · Mock data seed ===\n");
+console.log("=== Cobraya · Mock data seed ===\n");
 
 console.log("Mock invoices:");
 for (const inv of MOCK_INVOICES) {

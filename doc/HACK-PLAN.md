@@ -1,4 +1,4 @@
-# Lendable · 39h hack plan
+# Cobraya · 39h hack plan
 
 **Evento**: Build LATAM Fintech · Avalanche · online · solo
 **Inicio**: viernes 15 de mayo · 18:00 hora MX
@@ -15,11 +15,11 @@
 Lo hago antes de que arranque el cronómetro, no cuenta en las 39h.
 
 - [x] Repo scaffold con Next.js + agents skeleton + mock data
-- [x] Push inicial a github.com/ferrosasfp/wasiai-lendable
+- [x] Push inicial a github.com/ferrosasfp/wasiai-cobraya
 - [x] Vercel deploy preview activo (https://wasiai-lendable.vercel.app)
 - [x] Wallet de demo SME (OWNER) fondeada con AVAX testnet (Fuji) — 0.49 AVAX
 - [x] Lender wallet (TREASURY) fondeada con USDC mock Fuji — 20 USDC + 2.22 AVAX
-- [x] A2A_KEY Lendable creada en wasiai-a2a Supabase
+- [x] A2A_KEY Cobraya creada en wasiai-a2a Supabase
 - [x] wasiai-a2a multi-chain prod activo (kite-ozone-testnet + avalanche-fuji)
 - [x] BACKLOG.md + TRANSLATION-MATRIX.md + README + PITCH + DEMO-FLOW + HACK-PLAN documentados (sin código de negocio)
 - [ ] SQL Day-1: fondear A2A_KEY budget en chain 43113 con $10 USDC equivalent (ejecutar 18:00 sharp)
@@ -29,16 +29,16 @@ Lo hago antes de que arranque el cronómetro, no cuenta en las 39h.
 
 ## Día 1 — Viernes 15 (18:00 → 23:59) · 6h
 
-**Objetivo**: kickoff + lanzar `/nexus-auto WKH-LENDABLE-AGENTS` + completar W0-W5 (3 agentes + EIP-3009 + settle real).
+**Objetivo**: kickoff + lanzar `/nexus-auto WKH-COBRAYA-AGENTS` + completar W0-W5 (3 agentes + EIP-3009 + settle real).
 
-- [ ] 18:00 conectar al evento + lectura final del brief + git checkout -b feat/wkh-lendable-agents
+- [ ] 18:00 conectar al evento + lectura final del brief + git checkout -b feat/wkh-cobraya-agents
 - [ ] 18:15 SQL Day-1 ejecutar (`register_a2a_key_deposit('795415ba...', 43113, 10.0)`)
 - [ ] 18:20 cargar `.env.local` con OWNER_PRIVATE_KEY, TREASURY_PRIVATE_KEY, OWNER_ADDRESS, ANTHROPIC_API_KEY?
-- [ ] 18:30 lanzar `/nexus-auto WKH-LENDABLE-AGENTS` con BACKLOG.md como input
+- [ ] 18:30 lanzar `/nexus-auto WKH-COBRAYA-AGENTS` con BACKLOG.md como input
 - [ ] 19:00 W0 + W1 (bootstrap + mock data) done
-- [ ] 20:00 W2 lendable-cfdi-validator agent endpoint done
-- [ ] 21:30 W3 lendable-credit-scorer agent done (heurística + Claude rationale)
-- [ ] 22:15 W4 lendable-lender-matcher agent done
+- [ ] 20:00 W2 cobraya-cfdi-validator agent endpoint done
+- [ ] 21:30 W3 cobraya-credit-scorer agent done (heurística + Claude rationale)
+- [ ] 22:15 W4 cobraya-lender-matcher agent done
 - [ ] 23:15 W5 EIP-3009 signer + /settle wired
 - [ ] 23:45 smoke local: 3 compose calls + 1 settle contra Fuji
 - [ ] 23:59 commit + sleep
@@ -47,12 +47,12 @@ Lo hago antes de que arranque el cronómetro, no cuenta en las 39h.
 
 > El v2 agrega ~1.5h de trabajo el viernes para W2.5 (fraud-detector + contract deploy). Re-pivotear:
 
-- [ ] 18:00 SQL Day-1 + .env.local + git checkout -b feat/wkh-lendable-agents
-- [ ] 18:15 lanzar `/nexus-auto WKH-LENDABLE-AGENTS` con BACKLOG (v2)
+- [ ] 18:00 SQL Day-1 + .env.local + git checkout -b feat/wkh-cobraya-agents
+- [ ] 18:15 lanzar `/nexus-auto WKH-COBRAYA-AGENTS` con BACKLOG (v2)
 - [ ] 19:00 W0 + W1 done (bootstrap + mock data + types)
-- [ ] 19:45 W2 lendable-cfdi-validator done (45min)
-- [ ] 21:15 W2.5 lendable-fraud-detector + contract deploy + Snowtrace verify (1.5h)
-- [ ] 22:45 W3 lendable-credit-scorer + Claude integration (90min)
+- [ ] 19:45 W2 cobraya-cfdi-validator done (45min)
+- [ ] 21:15 W2.5 cobraya-fraud-detector + contract deploy + Snowtrace verify (1.5h)
+- [ ] 22:45 W3 cobraya-credit-scorer + Claude integration (90min)
 - [ ] 23:30 W4 lender-auction (60min) — push si tiempo aprieta
 - [ ] 23:59 commit + sleep
 
@@ -65,7 +65,7 @@ Lo hago antes de que arranque el cronómetro, no cuenta en las 39h.
 - [ ] 10:00 W5.5 audit trail panel + JSON download endpoint + signed receipts (45min)
 - [ ] 10:45 W6 UI translation con auction visual + 4 agents (90min)
 - [ ] 12:15 W7 SQL INSERT 4 agentes en v2 marketplace, deploy Vercel con env vars prod (60min)
-- [ ] 13:15 smoke E2E contra prod: /discover from Lendable → /compose × 4 (verificar debit $0.066 + commit tx) → /settle real tx Fuji → audit trail descargable
+- [ ] 13:15 smoke E2E contra prod: /discover from Cobraya → /compose × 4 (verificar debit $0.066 + commit tx) → /settle real tx Fuji → audit trail descargable
 - [ ] 13:45 capturar 3 tx hashes diferentes (3 runs) + audit JSON files → `doc/PRODUCTION-EVIDENCE.md`
 - [ ] 14:00 lunch
 - [ ] **Video production sprint** (14:00-22:00, 8h):
@@ -114,7 +114,7 @@ Lo hago antes de que arranque el cronómetro, no cuenta en las 39h.
 | wasiai-facilitator falla durante demo | baja | demo mode fallback con tx hash determinista |
 | wasiai-a2a tarda en validar agentes nuevos | baja | son míos, los registro directo en Supabase |
 | TREASURY wallet sin USDC en Fuji | baja | 20 USDC ya fondeado · faucet circle.com como backup |
-| Lendable A2A_KEY sin budget Avalanche | baja | SQL Day-1 a las 18:00 + cap $50/day |
+| Cobraya A2A_KEY sin budget Avalanche | baja | SQL Day-1 a las 18:00 + cap $50/day |
 | Cansancio domingo 04:00 | alta | dormir 23:00 a 02:00 sábado/domingo |
 | El pitch en vivo se cuelga | media | video backup de 90s grabado el sábado |
 

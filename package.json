@@ -2,7 +2,7 @@
   "name": "wasiai-lendable",
   "version": "0.1.0",
   "private": true,
-  "description": "Lendable — agéntico SmartFactoring para PyMEs mexicanas, settlement USDC en Avalanche",
+  "description": "Cobraya — agéntico SmartFactoring para PyMEs mexicanas, settlement USDC en Avalanche",
   "scripts": {
     "dev": "next dev -p 3010",
     "build": "next build",

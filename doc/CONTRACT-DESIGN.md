@@ -1,7 +1,7 @@
-# Smart Contract Design — `LendableInvoiceCommitments.sol`
+# Smart Contract Design — `CobrayaInvoiceCommitments.sol`
 
 > **Status**: planning doc (design only, no implementation).
-> Contract gets deployed during the hack (W2.5 of `WKH-LENDABLE-AGENTS` pipeline).
+> Contract gets deployed during the hack (W2.5 of `WKH-COBRAYA-AGENTS` pipeline).
 >
 > **Pattern**: alineado con `wasiai-v2/contracts/` (production reference).
 > Mismo stack: Foundry + Solidity 0.8.24 + OpenZeppelin (Ownable2Step + SafeERC20).
@@ -23,16 +23,16 @@
 
 ## 2. Propósito
 
-El contrato es el **anti-fraud layer onchain** del `lendable-fraud-detector` agent. Resuelve **doble-cesión de facturas** — el problema regulatorio #1 del factoring en MX (CNBV lleva 4+ años pidiendo solución).
+El contrato es el **anti-fraud layer onchain** del `cobraya-fraud-detector` agent. Resuelve **doble-cesión de facturas** — el problema regulatorio #1 del factoring en MX (CNBV lleva 4+ años pidiendo solución).
 
 **Flow**:
-1. PyME presenta CFDI a Lendable
-2. `lendable-fraud-detector` agent calcula `commitmentHash = keccak256(uuid_cfdi || rfc_emisor || amount_mxn)`
+1. PyME presenta CFDI a Cobraya
+2. `cobraya-fraud-detector` agent calcula `commitmentHash = keccak256(uuid_cfdi || rfc_emisor || amount_mxn)`
 3. Agent llama `isCommitted(hash)`:
    - Si `active == true` → REJECT 200 con `{ isUnique: false }` (ya fue cedida)
    - Si `active == false` → continuar al commit
 4. Agent llama `commitInvoice(hash, metadataPointer)` → storage write + event emit
-5. La factura queda "cesionada" a Lendable hasta que `releaseInvoice` la libere (post-repago)
+5. La factura queda "cesionada" a Cobraya hasta que `releaseInvoice` la libere (post-repago)
 
 ---
 
@@ -45,7 +45,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/access/Ownable2Step.sol";
 
 /**
- * @title  LendableInvoiceCommitments
+ * @title  CobrayaInvoiceCommitments
  * @notice Onchain registry de facturas cedidas — previene doble-cesión cross-platform.
  * @dev    Deploy en Avalanche Fuji (chainId 43113) para hackathon; mainnet-ready (43114).
  *         CNBV Circular 4/2024: implementa "trazabilidad agéntica" via commitment hash + event log.
@@ -63,7 +63,7 @@ import "@openzeppelin/contracts/access/Ownable2Step.sol";
  *         Anti-grief: NO public commit. Solo wallets pre-autorizadas para evitar
  *         storage bloat y front-running de hashes.
  */
-contract LendableInvoiceCommitments is Ownable2Step {
+contract CobrayaInvoiceCommitments is Ownable2Step {
 
     // ─── Types ────────────────────────────────────────────────────────────────
 
@@ -247,11 +247,11 @@ contracts/
 │   ├── forge-std/          # git submodule
 │   └── openzeppelin-contracts/   # git submodule
 ├── src/
-│   └── LendableInvoiceCommitments.sol
+│   └── CobrayaInvoiceCommitments.sol
 ├── script/
 │   └── Deploy.s.sol        # forge script deploy
 └── test/
-    └── LendableInvoiceCommitments.t.sol
+    └── CobrayaInvoiceCommitments.t.sol
 ```
 
 ### `foundry.toml`
@@ -279,17 +279,17 @@ avalanche = { key = "${SNOWTRACE_API_KEY}", url = "https://api.snowtrace.io/api"
 
 ---
 
-## 6. Foundry tests (`test/LendableInvoiceCommitments.t.sol`)
+## 6. Foundry tests (`test/CobrayaInvoiceCommitments.t.sol`)
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
-import "../src/LendableInvoiceCommitments.sol";
+import "../src/CobrayaInvoiceCommitments.sol";
 
-contract LendableInvoiceCommitmentsTest is Test {
-    LendableInvoiceCommitments internal commitments;
+contract CobrayaInvoiceCommitmentsTest is Test {
+    CobrayaInvoiceCommitments internal commitments;
 
     address internal owner   = address(0xA11CE);
     address internal agent   = address(0xB0B);
@@ -304,7 +304,7 @@ contract LendableInvoiceCommitmentsTest is Test {
 
     function setUp() public {
         vm.prank(owner);
-        commitments = new LendableInvoiceCommitments(agent);
+        commitments = new CobrayaInvoiceCommitments(agent);
     }
 
     // ─── Constructor ──────────────────────────────────────────────────────
@@ -315,8 +315,8 @@ contract LendableInvoiceCommitmentsTest is Test {
     }
 
     function test_Constructor_RevertsOnZeroAddress() public {
-        vm.expectRevert(LendableInvoiceCommitments.ZeroAddress.selector);
-        new LendableInvoiceCommitments(address(0));
+        vm.expectRevert(CobrayaInvoiceCommitments.ZeroAddress.selector);
+        new CobrayaInvoiceCommitments(address(0));
     }
 
     // ─── commitInvoice ────────────────────────────────────────────────────
@@ -341,7 +341,7 @@ contract LendableInvoiceCommitmentsTest is Test {
         vm.prank(agent);
         vm.expectRevert(
             abi.encodeWithSelector(
-                LendableInvoiceCommitments.AlreadyCommitted.selector,
+                CobrayaInvoiceCommitments.AlreadyCommitted.selector,
                 HASH_1,
                 uint64(block.timestamp),
                 agent
@@ -353,14 +353,14 @@ contract LendableInvoiceCommitmentsTest is Test {
     function test_CommitInvoice_RevertsWhenNotAuthorized() public {
         vm.prank(other);
         vm.expectRevert(
-            abi.encodeWithSelector(LendableInvoiceCommitments.NotAuthorized.selector, other)
+            abi.encodeWithSelector(CobrayaInvoiceCommitments.NotAuthorized.selector, other)
         );
         commitments.commitInvoice(HASH_1, META_0);
     }
 
     function test_CommitInvoice_RevertsOnZeroHash() public {
         vm.prank(agent);
-        vm.expectRevert(LendableInvoiceCommitments.ZeroHash.selector);
+        vm.expectRevert(CobrayaInvoiceCommitments.ZeroHash.selector);
         commitments.commitInvoice(bytes32(0), META_0);
     }
 
@@ -391,7 +391,7 @@ contract LendableInvoiceCommitmentsTest is Test {
     function test_ReleaseInvoice_RevertsWhenNotCommitted() public {
         vm.prank(agent);
         vm.expectRevert(
-            abi.encodeWithSelector(LendableInvoiceCommitments.NotCommitted.selector, HASH_1)
+            abi.encodeWithSelector(CobrayaInvoiceCommitments.NotCommitted.selector, HASH_1)
         );
         commitments.releaseInvoice(HASH_1);
     }
@@ -405,9 +405,9 @@ contract LendableInvoiceCommitmentsTest is Test {
         vm.prank(agent);
         vm.expectRevert(
             abi.encodeWithSelector(
-                LendableInvoiceCommitments.InvalidStatus.selector,
+                CobrayaInvoiceCommitments.InvalidStatus.selector,
                 HASH_1,
-                LendableInvoiceCommitments.CommitmentStatus.Released
+                CobrayaInvoiceCommitments.CommitmentStatus.Released
             )
         );
         commitments.releaseInvoice(HASH_1);
@@ -419,7 +419,7 @@ contract LendableInvoiceCommitmentsTest is Test {
 
         vm.prank(other);
         vm.expectRevert(
-            abi.encodeWithSelector(LendableInvoiceCommitments.NotCommitter.selector, other, agent)
+            abi.encodeWithSelector(CobrayaInvoiceCommitments.NotCommitter.selector, other, agent)
         );
         commitments.releaseInvoice(HASH_1);
 
@@ -465,7 +465,7 @@ contract LendableInvoiceCommitmentsTest is Test {
 forge coverage --report summary
 # Expected:
 # | File                                       | % Lines | % Statements | % Branches | % Funcs |
-# | src/LendableInvoiceCommitments.sol         | 100%    | 100%         | 100%       | 100%    |
+# | src/CobrayaInvoiceCommitments.sol         | 100%    | 100%         | 100%       | 100%    |
 ```
 
 ---
@@ -477,7 +477,7 @@ forge coverage --report summary
 pragma solidity ^0.8.24;
 
 import "forge-std/Script.sol";
-import "../src/LendableInvoiceCommitments.sol";
+import "../src/CobrayaInvoiceCommitments.sol";
 
 contract DeployCommitments is Script {
     function run() external returns (address deployedAddress) {
@@ -485,11 +485,11 @@ contract DeployCommitments is Script {
         address initialCommitter = vm.envAddress("FRAUD_DETECTOR_AGENT_WALLET");
 
         vm.startBroadcast(deployerKey);
-        LendableInvoiceCommitments commitments = new LendableInvoiceCommitments(initialCommitter);
+        CobrayaInvoiceCommitments commitments = new CobrayaInvoiceCommitments(initialCommitter);
         vm.stopBroadcast();
 
         deployedAddress = address(commitments);
-        console.log("LendableInvoiceCommitments deployed at:", deployedAddress);
+        console.log("CobrayaInvoiceCommitments deployed at:", deployedAddress);
         console.log("Initial committer authorized:", initialCommitter);
         console.log("Owner:", commitments.owner());
     }
@@ -509,8 +509,8 @@ forge install OpenZeppelin/openzeppelin-contracts --no-commit
 # (copy foundry.toml from wasiai-v2 template + adjust)
 
 # 2. Write contract + tests + deploy script (1h)
-# src/LendableInvoiceCommitments.sol
-# test/LendableInvoiceCommitments.t.sol
+# src/CobrayaInvoiceCommitments.sol
+# test/CobrayaInvoiceCommitments.t.sol
 # script/Deploy.s.sol
 
 # 3. Test (10 min)
@@ -535,7 +535,7 @@ forge script script/Deploy.s.sol:DeployCommitments \
 
 # Output:
 # == Logs ==
-#   LendableInvoiceCommitments deployed at: 0xABC...
+#   CobrayaInvoiceCommitments deployed at: 0xABC...
 #   Initial committer authorized: 0xDEF...
 #   Owner: 0x1d0...
 # == Transactions ==
@@ -543,7 +543,7 @@ forge script script/Deploy.s.sol:DeployCommitments \
 # ✓ Contract verified at https://testnet.snowtrace.io/address/0xABC...#code
 
 # 6. Save outputs
-echo "LENDABLE_COMMITMENTS_ADDRESS=0xABC..." >> ../.env.local
+echo "COBRAYA_COMMITMENTS_ADDRESS=0xABC..." >> ../.env.local
 # Update doc/PRODUCTION-EVIDENCE.md with deploy tx + Snowtrace links
 ```
 
@@ -627,9 +627,9 @@ Para `isCommitted(hash)`:
 | "Total de facturas activas en el sistema" | ✅ Sí — aggregate query | Iterar todo el set |
 | "Histórico de releases del último mes" | ✅ Sí — events query | Range |
 
-**Para Lendable V1 hackathon**: solo point queries → cero indexer, cero performance issue.
+**Para Cobraya V1 hackathon**: solo point queries → cero indexer, cero performance issue.
 
-**Para Lendable V2 production** (dashboards analíticos / risk reports): agregar **The Graph subgraph** → 1 día de trabajo, GraphQL queries instantáneas sobre eventos históricos.
+**Para Cobraya V2 production** (dashboards analíticos / risk reports): agregar **The Graph subgraph** → 1 día de trabajo, GraphQL queries instantáneas sobre eventos históricos.
 
 ### Defensa en profundidad (atomicidad on-chain)
 
@@ -661,14 +661,14 @@ Pero para hackathon V1: direct contract reads son suficientes.
 
 ---
 
-## 9. Integration con el agente `lendable-fraud-detector`
+## 9. Integration con el agente `cobraya-fraud-detector`
 
 ### Endpoint shape
 
 ```ts
-// src/app/api/agents/lendable-fraud-detector/invoke/route.ts (HACK-DAY)
+// src/app/api/agents/cobraya-fraud-detector/invoke/route.ts (HACK-DAY)
 
-POST /api/agents/lendable-fraud-detector/invoke
+POST /api/agents/cobraya-fraud-detector/invoke
 Input: {
   uuidCfdi: string;       // UUID format
   rfcEmisor: string;      // RFC del SAT
@@ -715,7 +715,7 @@ const commitmentHash = keccak256(
 
 // 1. Pre-check via view function (no gas)
 const [active, timestamp, committer] = await publicClient.readContract({
-  address: process.env.LENDABLE_COMMITMENTS_ADDRESS as `0x${string}`,
+  address: process.env.COBRAYA_COMMITMENTS_ADDRESS as `0x${string}`,
   abi: COMMITMENTS_ABI,
   functionName: 'isCommitted',
   args: [commitmentHash]
@@ -727,7 +727,7 @@ if (active) {
 
 // 2. Commit
 const txHash = await walletClient.writeContract({
-  address: process.env.LENDABLE_COMMITMENTS_ADDRESS as `0x${string}`,
+  address: process.env.COBRAYA_COMMITMENTS_ADDRESS as `0x${string}`,
   abi: COMMITMENTS_ABI,
   functionName: 'commitInvoice',
   args: [commitmentHash, '0x0000000000000000000000000000000000000000000000000000000000000000']
@@ -785,7 +785,7 @@ T+25s: SME signs settle → facilitator → tx confirms
 
 - **CD-11**: `commitInvoice` gas budget < 80K. Verified via `forge test --gas-report`.
 - **CD-12**: NO importar `ReentrancyGuard` para V1 (no token transfers). Documentar en código + comment.
-- **CD-13**: `forge coverage` debe retornar 100% lines + branches + funcs en `LendableInvoiceCommitments.sol`.
+- **CD-13**: `forge coverage` debe retornar 100% lines + branches + funcs en `CobrayaInvoiceCommitments.sol`.
 - **CD-14**: `forge script Deploy.s.sol --verify` DEBE completar verification en Snowtrace (no manual upload).
 - **CD-15** (heredado de v2): NO custom errors sin info útil — todos llevan params (`AlreadyCommitted(hash, ts, committer)`).
 
@@ -808,8 +808,8 @@ T+25s: SME signs settle → facilitator → tx confirms
 
 - **This file**: `/doc/CONTRACT-DESIGN.md` (planning)
 - **Implementation files** (hack-day):
-  - `contracts/src/LendableInvoiceCommitments.sol`
-  - `contracts/test/LendableInvoiceCommitments.t.sol`
+  - `contracts/src/CobrayaInvoiceCommitments.sol`
+  - `contracts/test/CobrayaInvoiceCommitments.t.sol`
   - `contracts/script/Deploy.s.sol`
   - `contracts/foundry.toml`
 - **Deploy artifacts** (post-W2.5): Snowtrace URLs + tx hashes → `doc/PRODUCTION-EVIDENCE.md` §3

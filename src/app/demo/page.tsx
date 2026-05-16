@@ -94,7 +94,7 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen px-6 py-12 md:px-16 md:py-16 max-w-4xl mx-auto">
       <Link href="/" className="text-xs mono uppercase tracking-widest text-muted hover:text-ink">
-        ← Lendable
+        ← Cobraya
       </Link>
 
       <h1 className="serif text-4xl md:text-5xl mt-8 mb-12 leading-tight">
