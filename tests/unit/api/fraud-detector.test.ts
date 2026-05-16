@@ -145,6 +145,59 @@ describe("/api/agents/cobraya-fraud-detector/invoke (W2.5)", () => {
     expect(stepInputJson).not.toContain("TLE850120ABC");
   });
 
+  it("T-FRAUD-METADATA-BOUND writeContract receives metadataPointer = keccak(requestId:commitmentHash) (BLQ-MED-2)", async () => {
+    vi.doUnmock("viem");
+    vi.resetModules();
+    vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "false");
+    vi.stubEnv("AVALANCHE_RPC_URL", "https://api.avax-test.network/ext/bc/C/rpc");
+    vi.stubEnv("COBRAYA_COMMITMENTS_ADDRESS", "0x5F8F8a31e51d8B2FEe0E0C2f1AffC3B4c6B12506");
+    vi.stubEnv(
+      "FRAUD_DETECTOR_PRIVATE_KEY",
+      "0x1111111111111111111111111111111111111111111111111111111111111111",
+    );
+
+    const writeCalls: Array<{ args: unknown }> = [];
+    const readContract = vi.fn(async () => [false, 0n, "0x0000000000000000000000000000000000000000"]);
+    const writeContract = vi.fn(async (cfg: { args: unknown }) => {
+      writeCalls.push({ args: cfg.args });
+      return "0xfeedbeef";
+    });
+    const waitForTransactionReceipt = vi.fn(async () => ({ blockNumber: 99n }));
+
+    vi.doMock("viem", async (orig) => {
+      const real = await (orig() as Promise<Record<string, unknown>>);
+      return {
+        ...real,
+        createPublicClient: () => ({ readContract, waitForTransactionReceipt }),
+        createWalletClient: () => ({ writeContract }),
+      };
+    });
+
+    const reqId = "abcdef12-3456-4789-89ab-cdef12345678";
+    const { POST } = await import("@/app/api/agents/cobraya-fraud-detector/invoke/route");
+    const res = await POST(
+      new NextRequest("http://localhost/api/agents/cobraya-fraud-detector/invoke", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-cobraya-request-id": reqId,
+        },
+        body: JSON.stringify({ uuidCfdi: "abc", rfcEmisor: "TLE850120ABC", amountMXN: 48500 }),
+      }),
+    );
+    expect(res.status).toBe(200);
+    expect(writeCalls.length).toBe(1);
+    const args = writeCalls[0]!.args as [string, string];
+    // metadataPointer is the 2nd arg of commitInvoice(commitmentHash, metadataPointer).
+    expect(args[1]).toMatch(/^0x[0-9a-f]{64}$/);
+    expect(args[1]).not.toBe(
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+    );
+    // Also verify the route surfaces metadataPointer in its JSON response.
+    const json = (await res.json()) as { metadataPointer?: string };
+    expect(json.metadataPointer).toBe(args[1]);
+  });
+
   it("T-REQID-INVALID-FRAUD malformed x-cobraya-request-id → 400 (BLQ-MED-1)", async () => {
     vi.stubEnv("NEXT_PUBLIC_DEMO_MODE", "true");
     const { POST } = await import("@/app/api/agents/cobraya-fraud-detector/invoke/route");

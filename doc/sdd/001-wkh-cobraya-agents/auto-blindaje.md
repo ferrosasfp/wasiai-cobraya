@@ -20,6 +20,12 @@ Catálogo de errores reales encontrados durante F3 + fix aplicado, para que futu
 - **Fix**: mover el state + helper a `src/lib/agent-state/validator-store.ts` (módulo separado). El route importa `isUuidSeen` / `markUuidSeen`. El test importa el reset helper directamente del módulo de state.
 - **Aplicar en**: cualquier futuro route handler que necesite state o test hooks → SIEMPRE colocar el state en `src/lib/agent-state/` o `src/infra/`. NO exportar nada extra desde `route.ts`.
 
+### [2026-05-16 00:00] FIX-PACK post-AR — BLQ-MED-2 metadataPointer cross-anchor
+- **Error**: el route `cobraya-fraud-detector/invoke` llamaba a `commitInvoice(commitmentHash, ZERO_BYTES32)` desperdiciando el segundo argumento `metadataPointer` del contrato. Resultado: el log onchain del commit no tenía manera de cross-referenciar el audit trail off-chain.
+- **Causa raíz**: durante W2.5 se priorizó "deployar el contrato + lograr el primer commit" — el `metadataPointer` quedó como TODO documentado y nadie lo retomó en W5.5 cuando aparecieron los `requestId`s.
+- **Fix**: `metadataPointer = keccak256(\`${requestId}:${commitmentHash}\`)` (caso normal) o `keccak256(\`anon:${commitmentHash}\`)` cuando no hay requestId. Surfaced en el output del agente para que verifiers offline puedan asserts: `assert(onchainEvent.metadataPointer == keccak256(audit.requestId + ":" + audit.step.commitmentHash))`. Test `T-FRAUD-METADATA-BOUND` captura los args de `writeContract` y confirma que (a) el campo no es ZERO_BYTES32, (b) la respuesta JSON expone el mismo valor que se mandó onchain.
+- **Aplicar en**: cualquier contrato con un campo `metadata` o `memo` opcional — usar siempre un keccak256 de los identificadores off-chain relevantes para anclar la audit chain. Nunca dejarlo en ZERO_BYTES32 — eso indica "missing audit anchor" que un attacker puede confundir con "ANON commit".
+
 ### [2026-05-15 23:58] FIX-PACK post-AR — BLQ-ALTO-2 audit-trail IDOR + RFC PII leak
 - **Error**: dos issues encadenados levantados por AR:
   - **A**: `/api/audit-trail/[requestId]` no validaba auth — cualquiera con un `requestId` UUID (logs, referrer, browser history) bajaba el JSON con `rfcEmisor` parcial, anchor buyer, monto, sector y un EIP-712 signed receipt — un dossier de financial PII.

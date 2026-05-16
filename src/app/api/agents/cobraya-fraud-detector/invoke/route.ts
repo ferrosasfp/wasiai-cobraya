@@ -1,7 +1,7 @@
 // src/app/api/agents/cobraya-fraud-detector/invoke/route.ts — W2.5 + W5.5 wiring
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { createPublicClient, createWalletClient, http, keccak256, encodePacked } from "viem";
+import { createPublicClient, createWalletClient, http, keccak256, encodePacked, stringToBytes } from "viem";
 import { avalancheFuji } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
 import { COMMITMENTS_ABI } from "@/lib/abis/cobraya-invoice-commitments";
@@ -33,9 +33,12 @@ interface FraudOutput {
   originalCommitTimestamp?: number;
   originalCommitter?: `0x${string}`;
   rejectReason?: string;
+  // BLQ-MED-2: keccak256(`${requestId}:${commitmentHash}`) — recorded in the
+  // onchain `metadataPointer` arg of `commitInvoice` so the audit trail JSON is
+  // cross-verifiable against the on-chain log. ZERO_BYTES32 had been a
+  // missed-opportunity attack vector (no audit anchor).
+  metadataPointer?: `0x${string}`;
 }
-
-const ZERO_BYTES32 = "0x0000000000000000000000000000000000000000000000000000000000000000" as const;
 
 async function maybePushAuditStep(
   requestId: string | null,
@@ -130,6 +133,19 @@ export async function POST(req: NextRequest) {
     encodePacked(["string", "string", "uint256"], [uuidCfdi, rfcEmisor, BigInt(amountMXN)]),
   ) as `0x${string}`;
 
+  // BLQ-MED-2: bind onchain commit ↔ off-chain audit trail via metadataPointer.
+  // The commit's primary key is `commitmentHash` (already unique); this field
+  // is the audit anchor: keccak256(`${requestId}:${commitmentHash}`) so a
+  // verifier holding the audit JSON can pull the onchain event and assert
+  // metadataPointer == keccak256(`${trail.requestId}:${step.commitmentHash}`).
+  // When no requestId is supplied (e.g., direct API consumers without audit
+  // tracking), we still emit a non-zero pointer (`anon:` prefix) — purely a
+  // defensive choice so the field never reverts to ZERO_BYTES32 (which would
+  // be indistinguishable from "audit anchor missing").
+  const metadataPointer = (requestId
+    ? keccak256(stringToBytes(`${requestId}:${commitmentHash}`))
+    : keccak256(stringToBytes(`anon:${commitmentHash}`))) as `0x${string}`;
+
   // BLQ-ALTO-2B: split raw (for receipt inputHash) vs masked (for audit JSON).
   const inputForReceipt = { uuidCfdi, rfcEmisor, amountMXN };
   const inputForAudit = { uuidCfdi, rfcEmisorMasked: maskRfc(rfcEmisor), amountMXN };
@@ -206,7 +222,7 @@ export async function POST(req: NextRequest) {
       address: contractAddress,
       abi: COMMITMENTS_ABI,
       functionName: "commitInvoice",
-      args: [commitmentHash, ZERO_BYTES32],
+      args: [commitmentHash, metadataPointer],
     });
 
     const receiptOnchain = await publicClient.waitForTransactionReceipt({
@@ -221,6 +237,7 @@ export async function POST(req: NextRequest) {
       snowtraceUrl: `https://testnet.snowtrace.io/tx/${txHash}`,
       blockNumber: Number(receiptOnchain.blockNumber),
       timestamp: Math.floor(Date.now() / 1000),
+      metadataPointer,
     };
     const receipt = await maybePushAuditStep(
       requestId,
