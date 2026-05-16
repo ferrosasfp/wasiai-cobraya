@@ -64,15 +64,15 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <StatCard
-          label="Facturas negociadas"
+          label="Facturas vendidas"
           value={String(stats.facturasNegociadas)}
         />
         <StatCard
-          label="Total USDC"
+          label="USDC recibidos"
           value={`$${stats.totalUsdc.toFixed(2)}`}
         />
         <StatCard
-          label="Ahorros estimados (MXN)"
+          label="Lo que ahorraste (MXN)"
           value={`$${stats.ahorrosFee.toFixed(0)}`}
         />
         <StatCard
@@ -128,14 +128,15 @@ function RecentesList({ items }: { items: RecentRow[] }) {
   return (
     <section>
       <h2 className="text-sm uppercase tracking-wide text-luma-450 mb-2">
-        Más recientes
+        Tus últimas facturas
       </h2>
       {items.length === 0 ? (
         <p className="text-sm text-luma-450">
-          Aún no has negociado ninguna factura.
+          Todavía no has vendido ninguna factura. Cuando lo hagas, va a
+          aparecer aquí.
         </p>
       ) : (
-        <ul className="space-y-3" aria-label="Facturas recientes">
+        <ul className="space-y-3" aria-label="Tus facturas más recientes">
           {items.map((r) => (
             <li key={r.id} className="bb-card p-4">
               <div className="flex justify-between items-baseline">

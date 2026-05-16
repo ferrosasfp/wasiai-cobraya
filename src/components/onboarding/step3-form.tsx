@@ -24,9 +24,10 @@ export function Step3Form({ defaults }: { defaults: ProfileRow | null }) {
   return (
     <div className="space-y-4">
       <header>
-        <h2 className="h1-serif text-luma-700 text-2xl mb-1">Compradores ancla</h2>
+        <h2 className="h1-serif text-luma-700 text-2xl mb-1">¿A quién le facturas?</h2>
         <p className="text-sm text-luma-450">
-          ¿A quién le facturas regularmente? Agrega al menos uno.
+          Tus clientes habituales. Agregá al menos uno (las cadenas grandes
+          ayudan a que te ofrezcamos mejor precio).
         </p>
       </header>
       <StepFormShell action={saveStep3}>

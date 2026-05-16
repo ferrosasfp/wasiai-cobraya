@@ -87,20 +87,20 @@ describe("DashboardPage (RSC) — WKH-COBRAYA-DAPP-SHELL W7 (AC-9)", () => {
     );
     const ui = await DashboardPage();
     render(ui);
-    expect(screen.getByText(/facturas negociadas/i)).toBeInTheDocument();
-    expect(screen.getByText(/total usdc/i)).toBeInTheDocument();
-    expect(screen.getByText(/ahorros estimados/i)).toBeInTheDocument();
+    expect(screen.getByText(/facturas vendidas/i)).toBeInTheDocument();
+    expect(screen.getByText(/usdc recibidos/i)).toBeInTheDocument();
+    expect(screen.getByText(/lo que ahorraste/i)).toBeInTheDocument();
     expect(screen.getByText(/días con cobraya/i)).toBeInTheDocument();
   });
 
-  it("shows the 'aún no has negociado' empty state when recents is empty", async () => {
+  it("shows the 'todavía no has vendido' empty state when recents is empty", async () => {
     (createClient as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       buildSupabase(null, [], []),
     );
     const ui = await DashboardPage();
     render(ui);
     expect(
-      screen.getByText(/aún no has negociado ninguna factura/i),
+      screen.getByText(/todavía no has vendido ninguna factura/i),
     ).toBeInTheDocument();
   });
 });

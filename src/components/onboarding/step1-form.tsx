@@ -9,7 +9,7 @@ export function Step1Form({ defaults }: { defaults: ProfileRow | null }) {
       <header>
         <h2 className="h1-serif text-luma-700 text-2xl mb-1">Tu RFC</h2>
         <p className="text-sm text-luma-450">
-          Lo necesitamos para emitir CFDIs y mover tus pagos.
+          Lo necesitamos para registrar tus facturas y pagarte.
         </p>
       </header>
       <StepFormShell action={saveStep1}>

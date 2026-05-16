@@ -262,9 +262,9 @@ export default function NegociarPage() {
       setValidator(vJson);
       setLatencies((m) => ({ ...m, 0: Date.now() - t0 }));
       if (!vJson.isCompliant) {
-        setError("CFDI no compliant — pipeline stopped");
+        setError("Tu factura no pasó la verificación inicial. Revisa los datos del comprador o el monto.");
         setCardState("failed");
-        setCardError("CFDI no compliant");
+        setCardError("Datos incompletos");
         return;
       }
 
@@ -307,9 +307,9 @@ export default function NegociarPage() {
       const parallelLatency = Date.now() - t1;
       setLatencies((m) => ({ ...m, 1: parallelLatency, 2: parallelLatency }));
       if (!fJson.isUnique) {
-        setError("Invoice already committed onchain");
+        setError("Esta factura ya fue cedida antes. Solo se puede vender una vez para evitar fraudes.");
         setCardState("failed");
-        setCardError("Factura ya cedida onchain");
+        setCardError("Ya fue vendida");
         return;
       }
 
