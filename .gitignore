@@ -32,3 +32,4 @@ contracts/broadcast/*/[0-9]*/dry-run/
 contracts/lib/
 lcov.info
 
+doc/evidence/
