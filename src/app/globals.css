@@ -7,6 +7,30 @@
 :root {
   --paper: #FAFAF8;
   --ink: #0A0A0A;
+
+  /* WKH-COBRAYA-DAPP-SHELL — luma palette tokens (DD-G coexists with ink/paper). */
+  --luma-bg: #5B0426;
+  --luma-card: #FCF7F3;
+  --luma-card-text: #5B0426;
+  --luma-card-border: #E8D2BB;
+  --luma-card-shadow: 0 20px 60px rgba(91, 4, 38, 0.18);
+  --luma-50: #FCF7F3;
+  --luma-100: #F5E9DD;
+  --luma-200: #E8D2BB;
+  --luma-300: #D6B498;
+  --luma-400: #B8896F;
+  --luma-450: #9C6F58;
+  --luma-500: #7E523F;
+  --luma-600: #651332;
+  --luma-650: #5F0F2D;
+  --luma-700: #5B0426;
+  --luma-hero-radial: radial-gradient(ellipse at 50% 30%, #7B1A3F 0%, #5B0426 60%, #3D0119 100%);
+  --luma-nav-gradient: linear-gradient(135deg, #5B0426 0%, #651332 100%);
+  --luma-btn-gradient: linear-gradient(138deg, #5B0426 19%, #9C6F58 100%);
+  --luma-logo-gradient: linear-gradient(144deg, #F5E9DD 0%, #9C6F58 100%);
+  --luma-pill-bg: rgba(245, 233, 221, 0.9);
+  --luma-pill-text: #5B0426;
+  --luma-cta-border: rgba(255, 255, 255, 0.3);
 }
 
 html,
@@ -24,4 +48,110 @@ body {
 
 .mono {
   font-family: "JetBrains Mono", monospace;
+}
+
+@layer components {
+  .hero-bg {
+    background: var(--luma-hero-radial);
+    position: relative;
+  }
+  .pill-btn {
+    background: var(--luma-pill-bg);
+    color: var(--luma-pill-text);
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: filter 0.15s, background 0.15s;
+    border: 1px solid var(--luma-cta-border);
+  }
+  .pill-btn:hover {
+    filter: brightness(1.05);
+  }
+  .pill-btn-primary {
+    background: var(--luma-btn-gradient);
+    color: #FCF7F3;
+    border: none;
+  }
+  .pill-btn-primary:hover {
+    filter: brightness(1.1);
+  }
+  .auth-card {
+    background: var(--luma-card);
+    color: var(--luma-card-text);
+    border-radius: 24px;
+    box-shadow: var(--luma-card-shadow);
+    padding: 40px 32px;
+    max-width: 420px;
+    width: 100%;
+  }
+  .auth-input {
+    width: 100%;
+    background: var(--luma-card);
+    border: 1px solid var(--luma-card-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--luma-card-text);
+    outline: none;
+    transition: border 0.15s;
+  }
+  .auth-input:focus {
+    border-color: var(--luma-700);
+    box-shadow: 0 0 0 3px rgba(91, 4, 38, 0.18);
+  }
+  .auth-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--luma-card-text);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .bb-card {
+    background: var(--luma-card);
+    color: var(--luma-card-text);
+    border-radius: 24px;
+    box-shadow: var(--luma-card-shadow);
+    padding: 24px;
+    width: 100%;
+  }
+  .bb-card-wide {
+    max-width: 960px;
+  }
+  .icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F5E9DD, #FCF7F3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid var(--luma-200);
+  }
+  .wordmark {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+  }
+  .wordmark-gradient {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    background: var(--luma-logo-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-right: 0.15em;
+  }
+  .h1-serif {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-size: 2rem;
+  }
 }
