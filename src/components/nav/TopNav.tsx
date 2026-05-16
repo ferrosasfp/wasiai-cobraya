@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { BrandMark, Wordmark } from '@/components/BrandIcon';
 
 const desktopTabs = [
   { href: '/dashboard', label: 'Inicio' },
@@ -31,10 +32,11 @@ export function TopNav() {
       <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
         <Link
           href="/dashboard"
-          className="wordmark text-2xl text-luma-50"
+          className="inline-flex items-center gap-2 text-luma-50"
           aria-label="Cobraya · inicio"
         >
-          Cobraya
+          <BrandMark className="w-7 h-7" />
+          <Wordmark className="text-2xl text-luma-50" />
         </Link>
         <nav
           aria-label="Navegación de escritorio"

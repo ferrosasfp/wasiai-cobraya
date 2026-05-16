@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark, Wordmark } from "@/components/BrandIcon";
 
 export default function SplashPage() {
   return (
@@ -6,9 +7,8 @@ export default function SplashPage() {
       className="min-h-screen flex flex-col items-center justify-center p-8 relative"
       style={{ background: "var(--luma-hero-radial)" }}
     >
-      <div className="wordmark-gradient text-5xl mb-4 px-6 text-center">
-        Cobraya
-      </div>
+      <BrandMark className="w-20 h-20 text-luma-50 mb-6" title="Cobraya" />
+      <Wordmark className="text-5xl text-luma-50 mb-4 px-6 text-center" />
       <p className="text-sm text-luma-200 text-center mb-12 max-w-sm leading-relaxed italic">
         Tu factura, líquida en 30 segundos. USDC en Avalanche.
       </p>

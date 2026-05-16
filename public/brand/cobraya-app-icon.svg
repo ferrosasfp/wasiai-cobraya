@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-label="Cobraya app icon">
+  <title>Cobraya</title>
+  <rect width="64" height="64" rx="14" fill="#7A1232"/>
+  <path d="M 38 24 A 14 14 0 1 0 24 38" stroke="#FFF7F2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 26 40 A 14 14 0 1 0 40 26" stroke="#FFC1CA" stroke-width="6" stroke-linecap="round"/>
+</svg>
