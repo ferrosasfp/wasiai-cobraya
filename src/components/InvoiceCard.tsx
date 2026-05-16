@@ -85,32 +85,55 @@ export function InvoiceCard({
         <StateBadge state={state} />
       </header>
 
-      <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs mono mb-2">
-        <div>
-          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
-            Monto
-          </dt>
-          <dd>${invoice.amountMXN.toLocaleString("es-MX")} MXN</dd>
+      {/* Primary metric — monto sale grande y serif. Reads as "this is the
+          number that matters" (the factoring amount). */}
+      <div className="mb-3">
+        <div className="text-luma-450 text-[10px] uppercase tracking-widest mb-1">
+          Monto facturado
         </div>
+        <div className="serif text-3xl text-luma-700 leading-none">
+          ${invoice.amountMXN.toLocaleString("es-MX")}
+          <span className="text-sm text-luma-450 ml-2 align-middle">MXN</span>
+        </div>
+      </div>
+
+      <dl className="grid grid-cols-3 gap-x-3 gap-y-3 text-xs mono mb-3 pt-3 border-t border-luma-200">
         <div>
-          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest mb-0.5">
             Vence
           </dt>
-          <dd>{invoice.paymentTermsDays} días</dd>
+          <dd className="text-luma-700">{invoice.paymentTermsDays} días</dd>
         </div>
         <div>
-          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest mb-0.5">
             RFC
           </dt>
-          <dd>{maskRfc(invoice.rfcEmisor)}</dd>
+          <dd className="text-luma-700">{maskRfc(invoice.rfcEmisor)}</dd>
         </div>
         <div>
-          <dt className="text-luma-450 text-[10px] uppercase tracking-widest">
+          <dt className="text-luma-450 text-[10px] uppercase tracking-widest mb-0.5">
             Sector
           </dt>
-          <dd className="truncate">{invoice.sector}</dd>
+          <dd className="text-luma-700 truncate">{invoice.sector}</dd>
         </div>
       </dl>
+
+      {/* Mini fiscal footer — communicates "this is a real CFDI 4.0" via
+          UUID prefix + SAT validation indicator. Same pattern that the
+          CfdiBackdrop uses at scan time, carried into the card to keep the
+          documentary feel coherent across the flow. */}
+      <div className="flex items-center justify-between gap-2 pt-3 border-t border-luma-200 text-[10px] mono text-luma-450">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="uppercase tracking-widest text-luma-450">UUID·</span>
+          <span className="text-luma-700 truncate">
+            {invoice.uuidCfdi.slice(0, 8)}…{invoice.uuidCfdi.slice(-4)}
+          </span>
+        </div>
+        <span className="inline-flex items-center gap-1 flex-shrink-0 text-emerald-700">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden />
+          CFDI 4.0
+        </span>
+      </div>
 
       {state === "negotiating" && (
         <div className="mt-3 flex items-center gap-2 text-xs text-amber-700 mono">

@@ -286,7 +286,7 @@ function Bracket({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
 function CfdiBackdrop({ blurred }: { blurred: boolean }) {
   return (
     <div
-      className={`absolute inset-0 pointer-events-none transition-[filter] duration-300 ${blurred ? "blur-sm" : "blur-[1px] opacity-70"}`}
+      className={`absolute inset-0 pointer-events-none transition-[filter] duration-300 ${blurred ? "blur-sm" : "blur-[1.5px] opacity-85"}`}
       aria-hidden="true"
     >
       <svg
@@ -294,26 +294,143 @@ function CfdiBackdrop({ blurred }: { blurred: boolean }) {
         preserveAspectRatio="xMidYMid slice"
         className="w-full h-full"
       >
-        <rect width="320" height="280" fill="#FAFAF8" />
-        <rect x="16" y="20" width="180" height="10" fill="#0A0A0A" opacity="0.85" />
-        <rect x="16" y="36" width="120" height="6" fill="#6B7280" opacity="0.5" />
-        <rect x="220" y="20" width="84" height="32" fill="#E84142" opacity="0.55" />
-        <rect x="16" y="62" width="288" height="1" fill="#0A0A0A" opacity="0.2" />
-        <rect x="16" y="74" width="60" height="6" fill="#6B7280" opacity="0.6" />
-        <rect x="16" y="86" width="200" height="6" fill="#0A0A0A" opacity="0.75" />
-        <rect x="16" y="100" width="80" height="6" fill="#6B7280" opacity="0.5" />
-        <rect x="16" y="112" width="180" height="6" fill="#0A0A0A" opacity="0.7" />
-        <rect x="16" y="132" width="288" height="1" fill="#0A0A0A" opacity="0.2" />
-        <rect x="16" y="146" width="40" height="6" fill="#6B7280" opacity="0.6" />
-        <rect x="16" y="158" width="80" height="14" fill="#0A0A0A" opacity="0.85" />
-        <rect x="200" y="146" width="40" height="6" fill="#6B7280" opacity="0.6" />
-        <rect x="200" y="158" width="100" height="14" fill="#0A0A0A" opacity="0.85" />
-        <rect x="16" y="184" width="288" height="1" fill="#0A0A0A" opacity="0.2" />
-        <rect x="16" y="196" width="50" height="6" fill="#6B7280" opacity="0.5" />
-        <rect x="16" y="208" width="160" height="6" fill="#0A0A0A" opacity="0.7" />
-        <rect x="16" y="220" width="140" height="6" fill="#0A0A0A" opacity="0.7" />
-        <rect x="16" y="232" width="100" height="6" fill="#6B7280" opacity="0.5" />
-        <rect x="220" y="232" width="84" height="32" fill="#0A0A0A" opacity="0.85" />
+        {/* Paper bg — cream tone matches the rest of the app shell. */}
+        <rect width="320" height="280" fill="#FFFAF5" />
+
+        {/* Guinda header band — reads as "Mexican CFDI 4.0 invoice header" */}
+        <rect x="0" y="0" width="320" height="44" fill="#4F0820" />
+        <text x="16" y="22" fontFamily="Inter, sans-serif" fontSize="11" fontWeight="700" fill="#FFF7F2" letterSpacing="0.06em">
+          FACTURA · CFDI 4.0
+        </text>
+        <text x="16" y="36" fontFamily="JetBrains Mono, monospace" fontSize="7" fill="#FFC1CA" letterSpacing="0.08em">
+          Folio A-1234 · Serie A · 2026-05-16
+        </text>
+        {/* SAT-style accent badge (top-right of header) */}
+        <rect x="240" y="10" width="64" height="24" rx="3" fill="#7A1232" />
+        <text x="248" y="25" fontFamily="JetBrains Mono, monospace" fontSize="8" fontWeight="700" fill="#FFE5E8" letterSpacing="0.1em">
+          SAT v4.0
+        </text>
+
+        {/* Emisor block — RFC + razón social */}
+        <text x="16" y="62" fontFamily="JetBrains Mono, monospace" fontSize="7" fill="#9B1B47" letterSpacing="0.08em" fontWeight="700">
+          EMISOR
+        </text>
+        <text x="16" y="76" fontFamily="Inter, sans-serif" fontSize="9" fontWeight="600" fill="#4F0820">
+          Tortillería La Esperanza S.A. de C.V.
+        </text>
+        <text x="16" y="88" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#7A1232">
+          RFC: TLE850120ABC · Régimen 601
+        </text>
+
+        {/* Divider */}
+        <line x1="16" y1="98" x2="304" y2="98" stroke="#FFC1CA" strokeWidth="0.6" />
+
+        {/* Receptor block */}
+        <text x="16" y="112" fontFamily="JetBrains Mono, monospace" fontSize="7" fill="#9B1B47" letterSpacing="0.08em" fontWeight="700">
+          RECEPTOR
+        </text>
+        <text x="16" y="126" fontFamily="Inter, sans-serif" fontSize="9" fontWeight="600" fill="#4F0820">
+          Walmart de México S.A.B. de C.V.
+        </text>
+        <text x="16" y="138" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#7A1232">
+          RFC: WAL9709244WS · Uso G03
+        </text>
+
+        {/* Conceptos table header */}
+        <line x1="16" y1="148" x2="304" y2="148" stroke="#FFC1CA" strokeWidth="0.6" />
+        <text x="16" y="160" fontFamily="JetBrains Mono, monospace" fontSize="7" fill="#9B1B47" letterSpacing="0.08em" fontWeight="700">
+          CANT  CLAVE      DESCRIPCIÓN                          IMPORTE
+        </text>
+        <line x1="16" y1="164" x2="304" y2="164" stroke="#FFC1CA" strokeWidth="0.4" />
+
+        {/* 3 concept rows */}
+        <text x="16" y="176" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#4F0820">
+          120   01010101   Tortillas maíz blanco 1 kg            $14,400.00
+        </text>
+        <text x="16" y="188" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#4F0820">
+          80    01010101   Tortillas harina trigo 1 kg           $11,200.00
+        </text>
+        <text x="16" y="200" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#4F0820">
+          200   90121502   Servicio reparto refrigerado          $16,200.00
+        </text>
+
+        {/* Totals — right aligned */}
+        <line x1="180" y1="208" x2="304" y2="208" stroke="#FFC1CA" strokeWidth="0.6" />
+        <text x="180" y="220" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#7A1232">
+          Subtotal:                             $41,800.00
+        </text>
+        <text x="180" y="232" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#7A1232">
+          IVA 16%:                               $6,688.00
+        </text>
+        <text x="180" y="246" fontFamily="JetBrains Mono, monospace" fontSize="10" fontWeight="700" fill="#4F0820">
+          TOTAL MXN:                            $48,488.00
+        </text>
+
+        {/* QR code stylized (grid of squares — looks QR-ish when blurred) */}
+        <rect x="16" y="212" width="56" height="56" fill="#FFF7F2" stroke="#7A1232" strokeWidth="1" rx="2" />
+        {/* QR pixel pattern — finder squares + random data dots */}
+        <g fill="#4F0820">
+          {/* Finder squares (top-left, top-right, bottom-left) */}
+          <rect x="20" y="216" width="12" height="12" />
+          <rect x="22" y="218" width="8" height="8" fill="#FFF7F2" />
+          <rect x="24" y="220" width="4" height="4" />
+          <rect x="56" y="216" width="12" height="12" />
+          <rect x="58" y="218" width="8" height="8" fill="#FFF7F2" />
+          <rect x="60" y="220" width="4" height="4" />
+          <rect x="20" y="252" width="12" height="12" />
+          <rect x="22" y="254" width="8" height="8" fill="#FFF7F2" />
+          <rect x="24" y="256" width="4" height="4" />
+          {/* Pseudo-random data modules */}
+          <rect x="36" y="218" width="2" height="2" />
+          <rect x="40" y="218" width="2" height="2" />
+          <rect x="44" y="218" width="2" height="2" />
+          <rect x="36" y="222" width="2" height="2" />
+          <rect x="44" y="222" width="2" height="2" />
+          <rect x="38" y="226" width="2" height="2" />
+          <rect x="42" y="226" width="2" height="2" />
+          <rect x="48" y="226" width="2" height="2" />
+          <rect x="36" y="230" width="2" height="2" />
+          <rect x="40" y="230" width="2" height="2" />
+          <rect x="46" y="230" width="2" height="2" />
+          <rect x="50" y="230" width="2" height="2" />
+          <rect x="36" y="234" width="2" height="2" />
+          <rect x="42" y="234" width="2" height="2" />
+          <rect x="48" y="234" width="2" height="2" />
+          <rect x="38" y="238" width="2" height="2" />
+          <rect x="46" y="238" width="2" height="2" />
+          <rect x="36" y="242" width="2" height="2" />
+          <rect x="40" y="242" width="2" height="2" />
+          <rect x="44" y="242" width="2" height="2" />
+          <rect x="48" y="242" width="2" height="2" />
+          <rect x="36" y="246" width="2" height="2" />
+          <rect x="42" y="246" width="2" height="2" />
+          <rect x="38" y="252" width="2" height="2" />
+          <rect x="44" y="252" width="2" height="2" />
+          <rect x="50" y="252" width="2" height="2" />
+          <rect x="36" y="256" width="2" height="2" />
+          <rect x="40" y="256" width="2" height="2" />
+          <rect x="46" y="256" width="2" height="2" />
+          <rect x="38" y="260" width="2" height="2" />
+          <rect x="44" y="260" width="2" height="2" />
+          <rect x="48" y="260" width="2" height="2" />
+        </g>
+
+        {/* Folio fiscal UUID (next to QR) */}
+        <text x="80" y="220" fontFamily="JetBrains Mono, monospace" fontSize="6" fill="#9B1B47" letterSpacing="0.05em" fontWeight="700">
+          FOLIO FISCAL (UUID)
+        </text>
+        <text x="80" y="232" fontFamily="JetBrains Mono, monospace" fontSize="6" fill="#4F0820" letterSpacing="0.04em">
+          0874853a-91bf-4643-a221
+        </text>
+        <text x="80" y="240" fontFamily="JetBrains Mono, monospace" fontSize="6" fill="#4F0820" letterSpacing="0.04em">
+          -92c79933f987
+        </text>
+        <text x="80" y="254" fontFamily="JetBrains Mono, monospace" fontSize="6" fill="#9B1B47" letterSpacing="0.05em" fontWeight="700">
+          SELLO DIGITAL DEL SAT
+        </text>
+        <text x="80" y="263" fontFamily="JetBrains Mono, monospace" fontSize="5" fill="#7A1232" letterSpacing="0.04em" opacity="0.7">
+          MEUCIQDx7BqL5Y0d9j8xK1mP3w7n2xz...
+        </text>
       </svg>
     </div>
   );
