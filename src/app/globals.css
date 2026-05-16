@@ -314,6 +314,71 @@ body {
 .pitch-dot-4 { animation: pitch-dot-pulse-4 4s ease-in-out infinite; }
 .pitch-dot-5 { animation: pitch-dot-pulse-5 4s ease-in-out infinite; }
 
+/* ─────────────────────────────────────────────────────────────────────────
+ * Pitch v2 — Phone mockup multi-screen carousel (6s loop).
+ * 4 screens slide horizontally: each visible 1.5s, slide-out to the left
+ * over 0.2s while next screen slides in from the right.
+ * ──────────────────────────────────────────────────────────────────────── */
+@keyframes pitch-screen-1 {
+  0%, 25%   { opacity: 1; transform: translateX(0); }
+  27%, 100% { opacity: 0; transform: translateX(-100%); }
+}
+@keyframes pitch-screen-2 {
+  0%, 23%   { opacity: 0; transform: translateX(100%); }
+  25%, 50%  { opacity: 1; transform: translateX(0); }
+  52%, 100% { opacity: 0; transform: translateX(-100%); }
+}
+@keyframes pitch-screen-3 {
+  0%, 48%   { opacity: 0; transform: translateX(100%); }
+  50%, 75%  { opacity: 1; transform: translateX(0); }
+  77%, 100% { opacity: 0; transform: translateX(-100%); }
+}
+@keyframes pitch-screen-4 {
+  0%, 73%   { opacity: 0; transform: translateX(100%); }
+  75%, 100% { opacity: 1; transform: translateX(0); }
+}
+.pitch-screen-1 { animation: pitch-screen-1 6s ease-in-out infinite; }
+.pitch-screen-2 { animation: pitch-screen-2 6s ease-in-out infinite; }
+.pitch-screen-3 { animation: pitch-screen-3 6s ease-in-out infinite; }
+.pitch-screen-4 { animation: pitch-screen-4 6s ease-in-out infinite; }
+
+/* Phone screen dots — match the 6s carousel. */
+@keyframes pitch-screen-dot-1 {
+  0%, 24%    { background: var(--luma-600); box-shadow: 0 0 0 4px rgba(122,18,50,0.18); }
+  26%, 100%  { background: rgba(255,229,232,0.4); box-shadow: none; }
+}
+@keyframes pitch-screen-dot-2 {
+  0%, 24%, 51%, 100% { background: rgba(255,229,232,0.4); box-shadow: none; }
+  25%, 50%           { background: var(--luma-600); box-shadow: 0 0 0 4px rgba(122,18,50,0.18); }
+}
+@keyframes pitch-screen-dot-3 {
+  0%, 49%, 76%, 100% { background: rgba(255,229,232,0.4); box-shadow: none; }
+  50%, 75%           { background: var(--luma-600); box-shadow: 0 0 0 4px rgba(122,18,50,0.18); }
+}
+@keyframes pitch-screen-dot-4 {
+  0%, 74%    { background: rgba(255,229,232,0.4); box-shadow: none; }
+  75%, 100%  { background: var(--luma-600); box-shadow: 0 0 0 4px rgba(122,18,50,0.18); }
+}
+.pitch-screen-dot-1 { animation: pitch-screen-dot-1 6s ease-in-out infinite; }
+.pitch-screen-dot-2 { animation: pitch-screen-dot-2 6s ease-in-out infinite; }
+.pitch-screen-dot-3 { animation: pitch-screen-dot-3 6s ease-in-out infinite; }
+.pitch-screen-dot-4 { animation: pitch-screen-dot-4 6s ease-in-out infinite; }
+
+/* Spinner for in-progress agent rows. */
+@keyframes pitch-spinner {
+  to { transform: rotate(360deg); }
+}
+.pitch-spinner { animation: pitch-spinner 1s linear infinite; transform-origin: center; }
+
+/* Fade-up on initial load. Stagger via inline style="animation-delay: ...ms". */
+@keyframes pitch-fade-up {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.fade-up-on-load {
+  animation: pitch-fade-up 700ms ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pitch-anim-invoice,
   .pitch-anim-check-1,
@@ -325,9 +390,25 @@ body {
   .pitch-dot-2,
   .pitch-dot-3,
   .pitch-dot-4,
-  .pitch-dot-5 {
+  .pitch-dot-5,
+  .pitch-screen-1,
+  .pitch-screen-2,
+  .pitch-screen-3,
+  .pitch-screen-4,
+  .pitch-screen-dot-1,
+  .pitch-screen-dot-2,
+  .pitch-screen-dot-3,
+  .pitch-screen-dot-4,
+  .pitch-spinner,
+  .fade-up-on-load {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  /* Without animation, keep only the first screen visible (others would overlap). */
+  .pitch-screen-2,
+  .pitch-screen-3,
+  .pitch-screen-4 {
+    opacity: 0;
   }
 }
