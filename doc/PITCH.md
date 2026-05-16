@@ -1,6 +1,6 @@
 # Cobraya · Pitch (versión texto — anchor del video)
 
-> El pitch del Avalanche LATAM Fintech Build es **video submission** (no en vivo).
+> El pitch del Hackathon: LatAm Institucional es **video submission** (no en vivo).
 > Este documento es el texto-ancla del que sale el voiceover del video.
 > Script de producción completo en `doc/VIDEO-SCRIPT.md` (3 min, 7 scenes).
 > Este pitch en texto se usa también para LinkedIn post + landing copy + slide deck PDF backup.

@@ -254,6 +254,6 @@ Comparado con build-from-scratch (estimación pre-translation matrix: 20-25h), e
 
 Antes de las 18:00, push a `wasiai-lendable/README.md` declarando explícitamente:
 
-> "Cobraya will be implemented during the Avalanche LATAM Fintech Build hackathon (May 15-17, 2026) following the architecture pattern already proven in [wasiai-agentshop](https://github.com/ferrosasfp/wasiai-agentshop) (a previous open-source project by the same team, submitted to Kite Hackathon). The pattern includes 3-agent pipeline, EIP-3009 settlement, hexagonal-light architecture. Implementation of Cobraya-specific business logic (CFDI validation, credit scoring, lender matching) begins May 15, 18:00 hora MX. Pre-hack state is limited to scaffold + planning docs (this BACKLOG, TRANSLATION-MATRIX, README, PITCH, DEMO-FLOW, HACK-PLAN)."
+> "Cobraya will be implemented during the Hackathon: LatAm Institucional hackathon (May 15-17, 2026) following the architecture pattern already proven in [wasiai-agentshop](https://github.com/ferrosasfp/wasiai-agentshop) (a previous open-source project by the same team, submitted to Kite Hackathon). The pattern includes 3-agent pipeline, EIP-3009 settlement, hexagonal-light architecture. Implementation of Cobraya-specific business logic (CFDI validation, credit scoring, lender matching) begins May 15, 18:00 hora MX. Pre-hack state is limited to scaffold + planning docs (this BACKLOG, TRANSLATION-MATRIX, README, PITCH, DEMO-FLOW, HACK-PLAN)."
 
 Esto es proof-of-honesty verificable contra git history.

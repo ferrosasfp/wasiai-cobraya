@@ -1,4 +1,4 @@
-# Video Pitch — Cobraya (Avalanche LATAM Fintech Build)
+# Video Pitch — Cobraya (Hackathon: LatAm Institucional)
 
 > **Format**: 3-minute video (180 sec). Submission deliverable principal.
 > **Audience**: jurado del hackathon + product/risk officers de Bankaool, Arkangeles, y potencialmente CNBV.
@@ -235,7 +235,7 @@ Música: outro.
 
 | Scene | Layer | Text | Duration |
 |---|---|---|---|
-| 0 | Bottom-right tiny | "Avalanche LATAM Fintech Build · May 2026" | full scene |
+| 0 | Bottom-right tiny | "Hackathon: LatAm Institucional · May 2026" | full scene |
 | 1 | Bottom-left | "Lupita · Tortillería La Esperanza · CDMX" | 1.5s |
 | 2 | Center | "Cobraya" (logo + tagline) | 2s |
 | 3.1 | Top-right | tx cost ticker "$0.001 → $0.005 → $0.05 → $0.01 = $0.066" | running |

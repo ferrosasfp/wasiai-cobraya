@@ -48,7 +48,7 @@ const COBRAYA_REPO = "https://github.com/ferrosasfp/wasiai-cobraya";
 const A2A_REPO = "https://github.com/ferrosasfp/wasiai-a2a";
 // TODO(audit): wire to /public/audit-example.json once a stable signed sample
 // is exposed. The design source uses this anchor as a placeholder too.
-const AUDIT_EXAMPLE_URL = "#audit-example";
+const AUDIT_EXAMPLE_URL = "/audit-example.json";
 const VIDEO_URL = "#video";
 
 export default function PitchPage() {

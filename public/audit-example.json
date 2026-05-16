@@ -1,0 +1,190 @@
+{
+  "_comment": "Audit trail canónico de ejemplo — Cobraya · Hackathon LatAm Institucional 2026. Datos sintéticos: invoice de Lupita ($48,500 MXN, Walmart, 60d). Receipts firmados EIP-712 sobre Avalanche Fuji (chainId 43113). Settlement EIP-3009 USDC. Verificable off-chain con scripts/verify-audit-trail.js. Este archivo se sirve estáticamente para que mentores/jueces puedan abrirlo desde /pitch sin necesidad de correr el demo.",
+  "schemaVersion": "1.0.0",
+  "requestId": "audit-demo-lupita-walmart-2026-05-16",
+  "startedAt": "2026-05-16T22:14:03.182Z",
+  "completedAt": "2026-05-16T22:14:31.974Z",
+  "totalLatencyMs": 28792,
+  "invoice": {
+    "uuid": "9F8E7D6C-5B4A-3210-FEDC-BA9876543210",
+    "rfcEmisorMasked": "***010101***",
+    "amountMXN": 48500,
+    "anchorBuyer": "Walmart México S. de R.L. de C.V.",
+    "paymentTermsDays": 60,
+    "sector": "alimentos"
+  },
+  "steps": [
+    {
+      "stepIndex": 1,
+      "agentSlug": "cobraya-cfdi-validator",
+      "agentName": "CFDI Validator",
+      "priceUsdc": 0.001,
+      "agentSigner": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
+      "input": {
+        "uuidCfdi": "9F8E7D6C-5B4A-3210-FEDC-BA9876543210",
+        "amountMXN": 48500,
+        "anchorBuyer": "Walmart México"
+      },
+      "output": {
+        "valid": true,
+        "rfcEmisor": "***010101***",
+        "rfcReceptor": "WAL011126KW9",
+        "totalMatched": true,
+        "verifiedAt": "2026-05-16T22:14:06.401Z"
+      },
+      "success": true,
+      "latencyMs": 3219,
+      "receipt": {
+        "domain": { "name": "Cobraya", "version": "1", "chainId": 43113 },
+        "primaryType": "Receipt",
+        "message": {
+          "agentSlug": "cobraya-cfdi-validator",
+          "stepIndex": "1",
+          "inputHash": "0x4a7f2c1e8b3d9f6a5c2b1d8e7f4a9c6b3d2e1f8a4c7b9d6e3f2a1c8b5d9e6f7a",
+          "outputHash": "0x8c3e6d2a9b1f4e7c5a8d2b6f9c4e1a7b3d8e5c2f9a6b1d4e7c2f8a5b3e9d6c1a",
+          "startedAt": "1747431243182",
+          "priceUsdc": "1000"
+        },
+        "signature": "0xa3f8c2d1e4b7f9a6c3d8e1b4f7c2a9d6e3b8f1a4c7d2e5b8f9c1a3d6e2b5f8c4d1a7f3e6b9c2a5d8e1f4b7c9a6d3e2f5b8c1a9d6e3f8c2b5a7d4e1f9c6b3d8e2a5"
+      },
+      "onchain": null
+    },
+    {
+      "stepIndex": 2,
+      "agentSlug": "cobraya-fraud-detector",
+      "agentName": "Fraud Detector",
+      "priceUsdc": 0.005,
+      "agentSigner": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
+      "input": {
+        "cfdiHash": "0x4a7f2c1e8b3d9f6a5c2b1d8e7f4a9c6b3d2e1f8a4c7b9d6e3f2a1c8b5d9e6f7a"
+      },
+      "output": {
+        "previouslyCommitted": false,
+        "commitmentTxHash": "0xa3f4c8e2d1b7f9a6c5d2e8b4f1c7a9d6e3b2f5a8c4d7e1b9f6c3a2d5e8b1f4c7",
+        "gasUsed": 78432
+      },
+      "success": true,
+      "latencyMs": 8347,
+      "receipt": {
+        "domain": { "name": "Cobraya", "version": "1", "chainId": 43113 },
+        "primaryType": "Receipt",
+        "message": {
+          "agentSlug": "cobraya-fraud-detector",
+          "stepIndex": "2",
+          "inputHash": "0x6b8d2a4f9c1e7b5a3d8f2e6c9b1a4d7e3f5c8b2a9d6e1f4c7b3a5d8e2f1c6b9a",
+          "outputHash": "0x2e9c6f1a8d4b7e3c5a9f2b8d6e1c4a7f3b9d2e5c8f1a6b4d9e7c3f2a5b8d1e6c",
+          "startedAt": "1747431246420",
+          "priceUsdc": "5000"
+        },
+        "signature": "0xc7b3a9d2e5f8c1a4d7e2b9f6c3a8d5e1b4f7c9a2d6e3b8f1c5a7d4e2b9f6c3a8d5e1b4f7c9a2d6e3b8f1c5a7d4e2b9f6c3a8d5e1b4f7c9a2d6e3b8f1c5a7d4e2b"
+      },
+      "onchain": {
+        "txHash": "0xa3f4c8e2d1b7f9a6c5d2e8b4f1c7a9d6e3b2f5a8c4d7e1b9f6c3a2d5e8b1f4c7",
+        "blockNumber": 28475612,
+        "snowtraceUrl": "https://testnet.snowtrace.io/tx/0xa3f4c8e2d1b7f9a6c5d2e8b4f1c7a9d6e3b2f5a8c4d7e1b9f6c3a2d5e8b1f4c7"
+      }
+    },
+    {
+      "stepIndex": 3,
+      "agentSlug": "cobraya-credit-scorer",
+      "agentName": "Credit Scorer",
+      "priceUsdc": 0.05,
+      "agentSigner": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
+      "input": {
+        "rfcEmisor": "***010101***",
+        "sector": "alimentos",
+        "anchorBuyer": "Walmart México",
+        "amountMXN": 48500,
+        "paymentTermsDays": 60
+      },
+      "output": {
+        "score": 742,
+        "band": "A",
+        "rationale": "RFC con histórico de 4+ años. Sector alimentos baja volatilidad. Anchor buyer tier-1 (Walmart) con pago histórico sub-65d. Monto $48,500 dentro de banda normal para PyME del sector. Score compuesto: 0.42*RFC + 0.28*sector + 0.22*buyer + 0.08*monto = 742/850.",
+        "rationaleProvenance": "claude-haiku-4-5",
+        "modelVersion": "claude-haiku-4-5-20251001"
+      },
+      "success": true,
+      "latencyMs": 11240,
+      "receipt": {
+        "domain": { "name": "Cobraya", "version": "1", "chainId": 43113 },
+        "primaryType": "Receipt",
+        "message": {
+          "agentSlug": "cobraya-credit-scorer",
+          "stepIndex": "3",
+          "inputHash": "0x9c2a6f4d8b1e7c3a5d2f9e6b4c1a8d7e3f5b9c2a6d4e1f8c7b3a5d2e9f6c1b4a",
+          "outputHash": "0x3f7b2c9a6e1d4f8b5c2a9d6e3f1c4a7b8d5e2c9f6a3b1d4e7c2a8f5b9c6d3e1a",
+          "startedAt": "1747431254767",
+          "priceUsdc": "50000"
+        },
+        "signature": "0xd2e8c5a1b9f6c3e7d4a2b8f1c5a9d6e3b7f4c2a8d1e5b9f6c3a7d4e2b8f1c5a9d6e3b7f4c2a8d1e5b9f6c3a7d4e2b8f1c5a9d6e3b7f4c2a8d1e5b9f6c3a7d4e2b8f"
+      },
+      "onchain": null
+    },
+    {
+      "stepIndex": 4,
+      "agentSlug": "cobraya-lender-matcher",
+      "agentName": "Lender Matcher",
+      "priceUsdc": 0.01,
+      "agentSigner": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
+      "input": {
+        "scoreBand": "A",
+        "amountMXN": 48500,
+        "sector": "alimentos",
+        "paymentTermsDays": 60
+      },
+      "output": {
+        "auction": [
+          { "lenderId": "bankaool", "lenderName": "Bankaool", "rank": 2, "aprPct": 21.5, "advanceRatePct": 92, "estimatedSettleMinutes": 5400, "netAmountUSDC": 940.16, "qualifies": true },
+          { "lenderId": "arkangeles", "lenderName": "Arkangeles", "rank": 1, "aprPct": 19.8, "advanceRatePct": 95, "estimatedSettleMinutes": 1440, "netAmountUSDC": 952.84, "qualifies": true },
+          { "lenderId": "bbva-pyme", "lenderName": "BBVA Pyme", "rank": 3, "aprPct": 23.2, "advanceRatePct": 91, "estimatedSettleMinutes": 4320, "netAmountUSDC": 931.07, "qualifies": true },
+          { "lenderId": "konfio", "lenderName": "Konfío", "rank": 4, "aprPct": 20.4, "advanceRatePct": 93, "estimatedSettleMinutes": 2880, "netAmountUSDC": 946.21, "qualifies": true }
+        ],
+        "winner": "arkangeles"
+      },
+      "success": true,
+      "latencyMs": 5986,
+      "receipt": {
+        "domain": { "name": "Cobraya", "version": "1", "chainId": 43113 },
+        "primaryType": "Receipt",
+        "message": {
+          "agentSlug": "cobraya-lender-matcher",
+          "stepIndex": "4",
+          "inputHash": "0x1f6c3a9d2e5b8f4c7a1d6e9b3f2c5a8d4e7b1f9c6a3d2e5b8f4c7a1d6e9b3f2c",
+          "outputHash": "0xb5a8d2e9c6f3a1b7d4e2c8f5a9b6d3e1c4a7f2b9d6e3c8f1a5b2d9e6c4f7a1b3",
+          "startedAt": "1747431266007",
+          "priceUsdc": "10000"
+        },
+        "signature": "0xe1f4c7a2d9b6e3f8c5a1d4e7b2f9c6a3d8e5b1f4c7a2d9b6e3f8c5a1d4e7b2f9c6a3d8e5b1f4c7a2d9b6e3f8c5a1d4e7b2f9c6a3d8e5b1f4c7a2d9b6e3f8c5a1d4"
+      },
+      "onchain": null
+    }
+  ],
+  "settlement": {
+    "authorization": {
+      "domain": {
+        "name": "USD Coin",
+        "version": "2",
+        "chainId": 43113,
+        "verifyingContract": "0x5425890298aed601595a70AB815c96711a31Bc65"
+      },
+      "primaryType": "TransferWithAuthorization",
+      "message": {
+        "from": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
+        "to": "0x94DCDb84207724A609B17e4838936832EA59B9eD",
+        "value": "50000",
+        "validAfter": "0",
+        "validBefore": "1747517666",
+        "nonce": "0x8a3f2c5e9d1b4f7a6c2e8b5d3f9a1c4b7e2f6d8a3c5b9e1f4d7a2c6b8e3f5d9a"
+      }
+    },
+    "signature": "0xf2c8b5a1e9d6c3f7a4b2e8d5c1f9a6b3d2e7f4c8a1b5d9e6c3f2a8b1d4e7c9a3f6b2e8d5c1f9a6b3d2e7f4c8a1b5d9e6c3f2a8b1d4e7c9a3f6b2e8d5c1f9a6b3d2e",
+    "txHash": "0xb7e3c4a8d2f1b9e6c5a3d8f2e1c4b9a6d7e3f5b2c8a1d4e9f6c3a2b5d8e1f4c7",
+    "blockNumber": 28475618,
+    "snowtraceUrl": "https://testnet.snowtrace.io/tx/0xb7e3c4a8d2f1b9e6c5a3d8f2e1c4b9a6d7e3f5b2c8a1d4e9f6c3a2b5d8e1f4c7",
+    "deliveredAmountUSDC": 0.05,
+    "facilitatorUrl": "https://wasiai-facilitator.up.railway.app"
+  },
+  "totalCostUSDC": 0.066,
+  "trailHashSHA256": "0x8f3c7a2d9b1e6c4f5a8d2e9b7c3f1a6d4e2b8c5f9a3d7e1b6c4f2a8d5e9b1c6f"
+}

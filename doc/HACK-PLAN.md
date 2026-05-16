@@ -1,6 +1,6 @@
 # Cobraya · 39h hack plan
 
-**Evento**: Build LATAM Fintech · Avalanche · online · solo
+**Evento**: Hackathon: LatAm Institucional · online · solo
 **Inicio**: viernes 15 de mayo · 18:00 hora MX
 **Cierre**: domingo 17 de mayo · 09:00 hora MX
 **Premio**: 5K USDC + viaje presencial para exponer
