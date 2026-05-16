@@ -8,28 +8,31 @@
   --paper: #FAFAF8;
   --ink: #0A0A0A;
 
-  /* WKH-COBRAYA-DAPP-SHELL — luma palette tokens (DD-G coexists with ink/paper). */
-  --luma-bg: #5B0426;
-  --luma-card: #FCF7F3;
-  --luma-card-text: #5B0426;
-  --luma-card-border: #E8D2BB;
-  --luma-card-shadow: 0 20px 60px rgba(91, 4, 38, 0.18);
-  --luma-50: #FCF7F3;
-  --luma-100: #F5E9DD;
-  --luma-200: #E8D2BB;
-  --luma-300: #D6B498;
-  --luma-400: #B8896F;
-  --luma-450: #9C6F58;
-  --luma-500: #7E523F;
-  --luma-600: #651332;
-  --luma-650: #5F0F2D;
-  --luma-700: #5B0426;
-  --luma-hero-radial: radial-gradient(ellipse at 50% 30%, #7B1A3F 0%, #5B0426 60%, #3D0119 100%);
-  --luma-nav-gradient: linear-gradient(135deg, #5B0426 0%, #651332 100%);
-  --luma-btn-gradient: linear-gradient(138deg, #5B0426 19%, #9C6F58 100%);
-  --luma-logo-gradient: linear-gradient(144deg, #F5E9DD 0%, #9C6F58 100%);
-  --luma-pill-bg: rgba(245, 233, 221, 0.9);
-  --luma-pill-text: #5B0426;
+  /* Guinda Vibrante palette — Cobraya fintech moderna.
+     Anchor stops match tailwind.config.ts (50,100,200,400,500,600,700);
+     intermediate 300/450/650 interpolated. Shadow uses the deepest wine. */
+  --luma-bg: #4F0820;
+  --luma-card: #FFF7F2;
+  --luma-card-text: #4F0820;
+  --luma-card-border: #FFC1CA;
+  --luma-card-shadow: 0 20px 60px rgba(79, 8, 32, 0.22);
+  --luma-50: #FFF7F2;
+  --luma-100: #FFE5E8;
+  --luma-200: #FFC1CA;
+  --luma-300: #E89AAA;
+  --luma-400: #D4567B;
+  --luma-450: #B73460;
+  --luma-500: #9B1B47;
+  --luma-600: #7A1232;
+  --luma-650: #650F27;
+  --luma-700: #4F0820;
+  /* Composed gradients — keep the same role but shift hues to Guinda Vibrante. */
+  --luma-hero-radial: radial-gradient(ellipse at 50% 30%, #B73460 0%, #7A1232 55%, #4F0820 100%);
+  --luma-nav-gradient: linear-gradient(135deg, #4F0820 0%, #7A1232 100%);
+  --luma-btn-gradient: linear-gradient(138deg, #7A1232 19%, #D4567B 100%);
+  --luma-logo-gradient: linear-gradient(144deg, #FFE5E8 0%, #D4567B 100%);
+  --luma-pill-bg: rgba(255, 229, 232, 0.9);
+  --luma-pill-text: #4F0820;
   --luma-cta-border: rgba(255, 255, 255, 0.3);
 }
 

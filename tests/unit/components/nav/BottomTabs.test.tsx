@@ -24,13 +24,24 @@ describe("<BottomTabs /> — WKH-COBRAYA-DAPP-SHELL W5 (AC-15)", () => {
     });
   });
 
-  it("each tab has min-h-[48px] (CD-23 touch target)", () => {
+  it("CD-23 touch targets: 3 regular tabs have min-h-[48px], FAB has w-14/h-14 (56px)", () => {
+    // After the FAB-central rewrite, "Negociar" became a raised circle FAB
+    // (Cash App / Mercado Pago pattern). The FAB's hit area is the inner
+    // 56×56 disc (w-14 h-14), not min-h-[48px] on the <Link> wrapper. We
+    // assert the three regular tabs keep the 48px floor and the FAB keeps a
+    // ≥48px disc — both satisfy CD-23.
     pathMock.mockReturnValue("/dashboard");
     render(<BottomTabs />);
-    ["Inicio", "Negociar", "Historial", "Perfil"].forEach((label) => {
+    ["Inicio", "Historial", "Perfil"].forEach((label) => {
       const link = screen.getByRole("link", { name: new RegExp(label, "i") });
       expect(link.className).toContain("min-h-[48px]");
     });
+    const fab = screen.getByRole("link", { name: /negociar.*acci[oó]n principal/i });
+    // FAB's button-shaped child carries the size class; ensure it exists.
+    const disc = fab.querySelector("div");
+    expect(disc).not.toBeNull();
+    expect(disc!.className).toContain("w-14");
+    expect(disc!.className).toContain("h-14");
   });
 
   it("self-hides on /", () => {
