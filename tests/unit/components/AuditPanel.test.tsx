@@ -19,7 +19,7 @@ describe("AuditPanel (T-UI-AUDIT-1)", () => {
         auditDownloadFilename="cobraya-audit-abc.json"
       />,
     );
-    expect(container.textContent).toContain("1 step");
+    expect(container.textContent).toContain("1 paso");
     const anchor = container.querySelector("a[download]");
     expect(anchor).not.toBeNull();
     expect(anchor?.getAttribute("href")).toBe("blob:fake-url");
@@ -36,7 +36,7 @@ describe("AuditPanel (T-UI-AUDIT-1)", () => {
         auditDownloadHref="blob:other"
       />,
     );
-    expect(container.textContent).toContain("2 steps");
+    expect(container.textContent).toContain("2 pasos");
   });
 
   it("hides download anchor when auditDownloadHref is null", () => {

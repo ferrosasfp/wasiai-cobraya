@@ -29,7 +29,7 @@ export function AuditPanel({ steps, auditDownloadHref, auditDownloadFilename }: 
       className="relative mt-6 border-t border-luma-200 pt-4 bg-luma-50"
     >
       <summary className="px-4 py-3 mono text-xs uppercase tracking-widest cursor-pointer min-h-[44px] flex items-center text-luma-700">
-        Audit trail · {steps.length} step{steps.length === 1 ? "" : "s"}
+        Comprobante de la operación · {steps.length} paso{steps.length === 1 ? "" : "s"}
       </summary>
       <ul className="px-4 py-3 max-h-[60vh] overflow-y-auto">
         {steps.map((s) => (
@@ -45,7 +45,7 @@ export function AuditPanel({ steps, auditDownloadHref, auditDownloadFilename }: 
           download={auditDownloadFilename ?? "cobraya-audit.json"}
           className="cta-primary"
         >
-          Descargar audit trail JSON
+          Descargar comprobante
         </a>
       )}
     </details>

@@ -41,7 +41,7 @@ describe("InvoiceCard", () => {
     );
     expect(negotiatingArticle).not.toBeNull();
     expect(negotiatingArticle?.textContent ?? "").toContain("Negociando");
-    expect(negotiatingArticle?.textContent ?? "").toContain("Pipeline en curso");
+    expect(negotiatingArticle?.textContent ?? "").toContain("Cobraya está revisando");
     negotiating.unmount();
 
     // sold — uses real tx hash + audit trail blob URL.

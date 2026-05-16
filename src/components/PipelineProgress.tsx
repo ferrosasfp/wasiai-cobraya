@@ -24,27 +24,27 @@ interface StepDef {
 
 const STEPS: StepDef[] = [
   {
-    label: "Validar CFDI",
+    label: "Verificamos tu factura",
     agentSlug: "cobraya-cfdi-validator",
-    hint: "Validando CFDI + anchor buyer",
+    hint: "Confirmamos los datos con el SAT y tu comprador",
     tag: "$0.001 USDC",
   },
   {
-    label: "Anti-fraude onchain",
+    label: "Confirmamos que es única",
     agentSlug: "cobraya-fraud-detector",
-    hint: "Anti-doble-cesión onchain (Fuji)",
+    hint: "Registramos tu factura en blockchain para que nadie más pueda cobrarla",
     tag: "$0.005 USDC",
   },
   {
-    label: "Score de crédito",
+    label: "Evaluamos el riesgo",
     agentSlug: "cobraya-credit-scorer",
-    hint: "Scoring + Claude Haiku rationale",
+    hint: "Analizamos con inteligencia artificial qué precio podemos ofrecerte",
     tag: "$0.050 USDC",
   },
   {
-    label: "Subasta de lenders",
+    label: "Buscamos el mejor comprador",
     agentSlug: "cobraya-lender-matcher",
-    hint: "Auction de lenders",
+    hint: "4 compradores compitiendo por darte el mejor precio en USDC",
     tag: "$0.010 USDC",
   },
 ];
@@ -76,8 +76,8 @@ export function PipelineProgress({ validator, fraud, score, auction, isRunning }
 
   return (
     <div>
-      <div className="text-xs mono uppercase tracking-widest text-muted mb-4">
-        02 · Pipeline agéntico
+      <div className="text-xs mono uppercase tracking-widest text-luma-450 mb-4">
+        02 · Cobraya está trabajando
       </div>
       <ol className="space-y-3">
         {STEPS.map((s, i) => (
@@ -93,15 +93,15 @@ export function PipelineProgress({ validator, fraud, score, auction, isRunning }
       </ol>
 
       {score && (
-        <div className="mt-6 border border-ink/30 p-4 text-sm">
-          <div className="text-xs mono uppercase tracking-widest text-muted mb-2">
-            Score · provenance {score.rationaleProvenance}
+        <div className="mt-6 border border-luma-200 bg-luma-50 rounded-2xl p-4 text-sm">
+          <div className="text-xs mono uppercase tracking-widest text-luma-450 mb-2">
+            Análisis · {score.rationaleProvenance === 'anthropic-claude-haiku-4-5' ? 'IA' : 'Local'}
           </div>
           <div className="flex items-baseline gap-3 mb-3">
-            <div className="serif text-4xl">{score.score}</div>
-            <div className="mono text-base">Band {score.band}</div>
+            <div className="serif text-4xl text-luma-700">{score.score}</div>
+            <div className="mono text-base text-luma-450">Categoría {score.band}</div>
           </div>
-          <div className="text-xs leading-relaxed text-muted">{score.rationale}</div>
+          <div className="text-xs leading-relaxed text-luma-700">{score.rationale}</div>
         </div>
       )}
     </div>
