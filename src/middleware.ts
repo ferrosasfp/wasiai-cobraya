@@ -3,7 +3,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
-const AUTH_EXEMPT_PREFIXES = ['/login', '/signup', '/auth', '/~offline'];
+const AUTH_EXEMPT_PREFIXES = ['/login', '/signup', '/auth', '/~offline', '/pitch', '/demo'];
 const ONBOARDING_PATH = '/onboarding';
 
 export async function middleware(request: NextRequest) {
