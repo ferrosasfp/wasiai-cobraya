@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 type BIPEvent = Event & {
   prompt: () => Promise<void>;
@@ -9,7 +10,15 @@ type BIPEvent = Event & {
 
 const DISMISS_KEY = "cobraya:install-dismissed";
 
+// Routes where the install prompt should NOT interrupt — the onboarding wizard
+// requires focused single-task flow + the iOS dialog's role="dialog" can cause
+// assistive tech to set aria-hidden on the rest of the page (which then conflicts
+// with focused inputs inside the wizard, breaking screen-reader semantics).
+const HIDE_PREFIXES = ["/onboarding", "/login", "/signup"];
+
 export function InstallPrompt() {
+  const pathname = usePathname() ?? "";
+  const hidden = HIDE_PREFIXES.some((p) => pathname.startsWith(p));
   const [mounted, setMounted] = useState(false);
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
   const [isIOS, setIsIOS] = useState(false);
@@ -43,6 +52,7 @@ export function InstallPrompt() {
   }, []);
 
   if (!mounted) return null;
+  if (hidden) return null;
   if (isStandalone || dismissed) return null;
 
   const dismiss = () => {

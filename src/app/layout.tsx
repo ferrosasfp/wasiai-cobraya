@@ -15,6 +15,12 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/icons/apple-touch-icon-180.png", sizes: "180x180" }],
   },
+  // Next.js `appleWebApp.capable: true` emits the deprecated
+  // `<meta name="apple-mobile-web-app-capable">`. The W3C-standardized
+  // replacement is `mobile-web-app-capable`. Emit both so:
+  //   - iOS Safari (Apple-only) keeps recognizing the install affordance, AND
+  //   - Chromium/Firefox stop emitting deprecation warnings.
+  other: { "mobile-web-app-capable": "yes" },
 };
 
 export const viewport: Viewport = {

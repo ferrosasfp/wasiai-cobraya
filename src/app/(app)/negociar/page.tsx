@@ -255,6 +255,15 @@ export default function NegociarPage() {
         return;
       }
 
+      // Sector — single source of truth post-validator. Background: the scan
+      // generator picks `anchorBuyer` and `sector` independently at random, so
+      // sometimes the combo is incoherent with the buyer's canonical sector in
+      // BUYERS_TIER_1 (e.g., Bimbo arrives tagged as "food retail" by the scan
+      // even though mock-data lists it as "apparel"). The validator does the
+      // authoritative buyer-to-sector lookup; we use that downstream so the
+      // scorer + matcher + audit-trail all agree.
+      const authoritativeSector = vJson.sector ?? inv.sector;
+
       // Steps 2 + 3 parallel (DT-J).
       const t1 = Date.now();
       const [fRes, sRes] = await Promise.all([
@@ -274,7 +283,7 @@ export default function NegociarPage() {
             amountMXN: inv.amount,
             anchorBuyer: inv.anchorBuyer,
             paymentTermsDays: inv.paymentTermsDays,
-            sector: inv.sector,
+            sector: authoritativeSector,
           }),
         }),
       ]);
@@ -300,7 +309,7 @@ export default function NegociarPage() {
           band: sJson.band,
           amountMXN: inv.amount,
           anchorBuyer: inv.anchorBuyer,
-          sector: inv.sector,
+          sector: authoritativeSector,
         }),
       });
       const aJson = (await mRes.json()) as MatcherResponse;
@@ -410,7 +419,7 @@ export default function NegociarPage() {
               amountMXN: inv.amount,
               anchorBuyer: inv.anchorBuyer,
               paymentTermsDays: inv.paymentTermsDays,
-              sector: inv.sector,
+              sector: validator.sector ?? inv.sector,
             },
             output: {
               score: score.score,
@@ -429,7 +438,7 @@ export default function NegociarPage() {
               band: score.band,
               amountMXN: inv.amount,
               anchorBuyer: inv.anchorBuyer,
-              sector: inv.sector,
+              sector: validator.sector ?? inv.sector,
             },
             output: {
               auction: auction.auction,
