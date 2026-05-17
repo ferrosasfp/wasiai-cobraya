@@ -335,30 +335,21 @@ export default function PitchPage() {
                 <span className="price">$0.001 USDC · por llamada</span>
                 <span className="idx">01</span>
               </div>
-              <h3>CFDI Validator</h3>
+              <h3>Valida la factura</h3>
               <div className="slug mono">agentshop-cfdi-validator</div>
               <p>
-                Parsea el XML del CFDI 4.0, verifica firma del SAT, valida
-                emisor y receptor contra el RFC. Sin esto, todo se cae.
+                Confirma que la factura existe en el SAT y que los datos son
+                auténticos. Sin este chequeo, cualquiera podría factorar una
+                factura falsa o ya cancelada.
               </p>
               <div className="verif">
-                <b>Verifica:</b> Hash del CFDI commiteado on-chain antes del
-                settlement
+                <b>Te garantiza:</b> que el SAT validó la factura — emisor,
+                receptor, monto y plazo son reales y vigentes.
               </div>
               <pre>
-                {"{\n  "}
-                <span className="k">{'"uuid"'}</span>
-                {": "}
-                <span className="s">{'"9F8E…A21"'}</span>
-                {",\n  "}
-                <span className="k">{'"total"'}</span>
-                {": "}
-                <span className="n">{"48500"}</span>
-                {",\n  "}
-                <span className="k">{'"verified"'}</span>
-                {": "}
-                <span className="n">{"true"}</span>
-                {"\n}"}
+                {"✓ Firma del SAT verificada\n"}
+                {"✓ Emisor y receptor confirmados (RFC)\n"}
+                {"✓ Monto $48,500 MXN registrado"}
               </pre>
             </article>
 
@@ -367,26 +358,21 @@ export default function PitchPage() {
                 <span className="price">$0.005 USDC · por llamada</span>
                 <span className="idx">02</span>
               </div>
-              <h3>Fraud Detector</h3>
+              <h3>Previene el fraude</h3>
               <div className="slug mono">agentshop-fraud-detector</div>
               <p>
-                Detecta doble-cesión consultando el commitment contract en
-                Avalanche Fuji. Anti-fraude regulatorio MX nativo.
+                Verifica en Avalanche que esta factura no haya sido vendida
+                antes a otro lender. Resuelve el problema #1 del factoring
+                mexicano: la doble cesión.
               </p>
               <div className="verif">
-                <b>Verifica:</b> Lookup en CobrayaInvoiceCommitments.sol — gas
-                &lt; 80K
+                <b>Te garantiza:</b> que es imposible que la misma factura se
+                cobre dos veces — el smart contract lo previene por arquitectura.
               </div>
               <pre>
-                {"{\n  "}
-                <span className="k">{'"hash"'}</span>
-                {": "}
-                <span className="s">{'"0x7d3…"'}</span>
-                {",\n  "}
-                <span className="k">{'"previouslyCommitted"'}</span>
-                {": "}
-                <span className="n">{"false"}</span>
-                {"\n}"}
+                {"✓ Hash de la factura buscado on-chain\n"}
+                {"✓ Confirmado: nunca vendida antes\n"}
+                {"✓ Registrada para futuras verificaciones"}
               </pre>
             </article>
 
@@ -395,30 +381,21 @@ export default function PitchPage() {
                 <span className="price">$0.05 USDC · por llamada</span>
                 <span className="idx">03</span>
               </div>
-              <h3>Credit Scorer</h3>
+              <h3>Calcula tu calificación crediticia</h3>
               <div className="slug mono">agentshop-credit-scorer</div>
               <p>
-                Calcula score 300–850 con multi-factor (RFC, sector, historial,
-                buyer). Rationale generado por Claude Haiku.
+                Asigna una calificación de 300 a 850 según historial fiscal,
+                sector económico y el comprador. La explicación la genera IA
+                y queda firmada para auditoría.
               </p>
               <div className="verif">
-                <b>Verifica:</b> Receipt EIP-712 firmado, rationale provenance
-                trackeado
+                <b>Te garantiza:</b> que el score es reproducible, la
+                explicación es auditable y la decisión queda firmada.
               </div>
               <pre>
-                {"{\n  "}
-                <span className="k">{'"score"'}</span>
-                {": "}
-                <span className="n">{"742"}</span>
-                {",\n  "}
-                <span className="k">{'"band"'}</span>
-                {": "}
-                <span className="s">{'"A"'}</span>
-                {",\n  "}
-                <span className="k">{'"rationale"'}</span>
-                {": "}
-                <span className="s">{'"…"'}</span>
-                {"\n}"}
+                {"✓ Score 742 / Banda A\n"}
+                {"✓ Explicación generada por IA\n"}
+                {"✓ Receipt firmado para auditoría"}
               </pre>
             </article>
 
@@ -427,30 +404,21 @@ export default function PitchPage() {
                 <span className="price">$0.01 USDC · por llamada</span>
                 <span className="idx">04</span>
               </div>
-              <h3>Lender Matcher</h3>
+              <h3>Encuentra el mejor lender</h3>
               <div className="slug mono">agentshop-lender-matcher</div>
               <p>
-                Lanza subasta entre 4 lenders, evalúa APR + advance rate +
-                speed. Gana la mejor oferta para el SME.
+                Lanza una subasta entre 4 lenders. Cada uno responde con su
+                mejor oferta en tiempo real. Gana la que más USDC le deja a
+                la PyME — no la que más comisión le da a Cobraya.
               </p>
               <div className="verif">
-                <b>Verifica:</b> Subasta transparente, 4 ofertas firmadas
-                EIP-712
+                <b>Te garantiza:</b> transparencia total — la PyME ve las
+                4 ofertas firmadas y elige la mejor.
               </div>
               <pre>
-                {"{\n  "}
-                <span className="k">{'"winner"'}</span>
-                {": "}
-                <span className="s">{'"arkangeles"'}</span>
-                {",\n  "}
-                <span className="k">{'"apr"'}</span>
-                {": "}
-                <span className="n">{"19.8"}</span>
-                {",\n  "}
-                <span className="k">{'"net"'}</span>
-                {": "}
-                <span className="n">{"952"}</span>
-                {"\n}"}
+                {"✓ 4 ofertas firmadas recibidas\n"}
+                {"✓ Ganador: Arkangeles · 19.8% APR\n"}
+                {"✓ Lupita recibe $952 USDC netos"}
               </pre>
             </article>
           </div>
