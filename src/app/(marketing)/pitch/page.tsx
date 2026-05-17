@@ -927,6 +927,19 @@ export default function PitchPage() {
                 <span style={{ color: "var(--wine-soft)" }}>◆</span>{" "}
                 Hackathon: LatAm Institucional
               </div>
+              <div
+                className="mono"
+                style={{
+                  fontSize: 10.5,
+                  color: "var(--fg-3)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  marginTop: 6,
+                }}
+              >
+                <span style={{ color: "var(--gold)" }}>★</span> Tracks: RWA IFC
+                · Inclusión Financiera Digital
+              </div>
             </div>
             <div>
               <h5>Producto</h5>

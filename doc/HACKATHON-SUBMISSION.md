@@ -5,6 +5,36 @@
 
 ---
 
+## Tracks postulados
+
+| Track | Prioridad | Argumento de 1 línea |
+|---|---|---|
+| **RWA IFC** (Real World Assets · Inclusión Financiera y Crédito) | 🥇 Primario | Factoring agéntico convierte el CFDI mexicano en RWA accesible para PyMEs subatendidas. Combina los 3 ejes — RWA + crédito + inclusión — en un solo producto. |
+| **Inclusión Financiera Digital** | 🥈 Secundario | PWA mobile-first que liquida facturas en 30 segundos, accesible desde el celular de cualquier PyME mexicana sin requerir conocimiento crypto (roadmap V1 incluye off-ramp MXN directo a cuenta bancaria). |
+| **RWA** (general) | 🥉 Terciario | El CFDI hash commiteado on-chain con anti-doble-cesión por arquitectura. Roadmap V2: tokenización ERC-721 completa. |
+
+### Por qué Cobraya encaja en RWA IFC (track primario)
+
+El CFDI (Comprobante Fiscal Digital por Internet) es el **Real World Asset mexicano por excelencia**: firmado criptográficamente por SAT, identificable inequívocamente por UUID, legalmente endosable bajo Ley General de Títulos y Operaciones de Crédito. Cualquier sistema serio de RWA en México pasa por el CFDI.
+
+Cobraya hace de ese CFDI un instrumento financiero accesible:
+
+1. **RWA**: el hash del CFDI queda commiteado on-chain (`CobrayaInvoiceCommitments.sol` en Avalanche Fuji). Roadmap V2: tokenización ERC-721 completa con lifecycle (emitido → cedido → cobrado → settled).
+2. **Inclusión**: target = PyMEs subatendidas por el factoring tradicional (papeleo, comités, costos del 4-8% mensual). 4.5 millones de PyMEs en México, mayoría sin acceso fácil a liquidez de capital de trabajo.
+3. **Crédito**: el factoring ES crédito de corto plazo respaldado por una receivable. Los 4 lenders (Bankaool, Arkangeles, BBVA Pyme, Konfío) compiten por proveer ese crédito; gana quien ofrezca el mejor APR para la PyME.
+
+Es el track más alineado conceptualmente — Cobraya no fue construido pensando "vamos a hacer un proyecto RWA"; fue construido pensando "vamos a resolver el problema de liquidez de Lupita usando los rieles más adecuados". Esos rieles resultan ser RWA + crédito agéntico + inclusión digital.
+
+### Por qué Cobraya encaja en Inclusión Financiera Digital (track secundario)
+
+- **Mobile-first PWA installable**: Lupita instala Cobraya desde Safari/Chrome en su iPhone en 2 taps. No app store, no descargas de 100MB.
+- **Sin barrera crypto** (post roadmap V1): la PyME ve el monto en pesos mexicanos, recibe pesos en su cuenta CLABE. La capa USDC + Avalanche queda invisible para el usuario, visible solo para el regulador.
+- **Sin papeleo**: el flujo completo se hace desde el celular, sin presencialidad bancaria.
+- **30 segundos vs 7-30 días**: la diferencia entre "pagar nómina el viernes" y "perder a un empleado por falta de cash".
+- **Audit trail bulletproof**: cada decisión queda registrada para que cualquier regulador, auditor o auditor interno de banco pueda verificar.
+
+---
+
 ## Short description (≤140 chars)
 
 > Factoraje agéntico para PyMEs mexicanas. 4 agentes IA + smart contract en Avalanche liquidan tu factura en 30 segundos.
