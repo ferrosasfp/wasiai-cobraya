@@ -85,7 +85,7 @@ export function PhoneCycle() {
               <div className="agent-row">
                 <div className="ico">✓</div>
                 <div className="nm">Credit Scorer</div>
-                <div className="st">742 / A</div>
+                <div className="st">80 / A</div>
               </div>
               <div className="agent-row pending">
                 <div className="ico" style={{ color: "var(--gold)" }}>
@@ -122,7 +122,7 @@ export function PhoneCycle() {
                   <div className="sub">advance · 5–7d</div>
                 </div>
                 <div className="apr">
-                  21.5%<span className="small">$940</span>
+                  14.5%<span className="small">92%</span>
                 </div>
               </div>
               <div className="bid win">
@@ -134,7 +134,7 @@ export function PhoneCycle() {
                   <div className="sub">advance · 24h</div>
                 </div>
                 <div className="apr">
-                  19.8%<span className="small">$952</span>
+                  12.0%<span className="small">95%</span>
                 </div>
               </div>
               <div className="bid">
@@ -144,7 +144,7 @@ export function PhoneCycle() {
                   <div className="sub">advance · 3d</div>
                 </div>
                 <div className="apr">
-                  23.2%<span className="small">$931</span>
+                  13.2%<span className="small">93%</span>
                 </div>
               </div>
               <div className="bid">
@@ -154,7 +154,7 @@ export function PhoneCycle() {
                   <div className="sub">advance · 48h</div>
                 </div>
                 <div className="apr">
-                  20.4%<span className="small">$946</span>
+                  13.5%<span className="small">93%</span>
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@ export function PhoneCycle() {
               </div>
               <div className="done-row">
                 <span className="k">apr</span>
-                <span className="v">19.8%</span>
+                <span className="v">12.0%</span>
               </div>
               <div className="done-row">
                 <span className="k">tx</span>

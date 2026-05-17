@@ -234,7 +234,7 @@ En el MVP testnet, la wallet TREASURY (operada por el equipo) funciona como cust
 Diseño preferido: (c) — minimiza compliance y reduce surface de ataque.
 
 ### ¿Qué pasa si la factura no se paga?
-Riesgo de crédito 100% del lender, no de Cobraya. El lender hace su due diligence (con el score 742/A de Cobraya como input). Si el comprador (Walmart) no paga la factura cedida, el lender tiene los mismos remedios legales que en factoring tradicional: cobro judicial, registro en buró, etc. Cobraya no asegura el riesgo — facilita el matching y la trazabilidad.
+Riesgo de crédito 100% del lender, no de Cobraya. El lender hace su due diligence (con el score 0-100 + banda A-D de Cobraya como input). Si el comprador (Walmart) no paga la factura cedida, el lender tiene los mismos remedios legales que en factoring tradicional: cobro judicial, registro en buró, etc. Cobraya no asegura el riesgo — facilita el matching y la trazabilidad.
 
 ### ¿Por qué Avalanche y no Ethereum, Solana, Base?
 - **Costos**: tx en Avalanche ~$0.13 vs Ethereum L1 ~$5-15. Solana cae ocasionalmente; Base es razonable pero Avalanche LATAM tiene comunidad e integraciones (Bitso, Bitso Card, Avalanche Card)

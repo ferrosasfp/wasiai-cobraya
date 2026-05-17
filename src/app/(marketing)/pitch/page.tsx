@@ -384,18 +384,19 @@ export default function PitchPage() {
               <h3>Calcula tu calificación crediticia</h3>
               <div className="slug mono">agentshop-credit-scorer</div>
               <p>
-                Asigna una calificación de 300 a 850 según historial fiscal,
-                sector económico y el comprador. La explicación la genera IA
-                y queda firmada para auditoría.
+                Asigna una calificación de 0 a 100 (con 4 bandas: A, B, C, D)
+                según comprador, monto, plazo y sector. La explicación la
+                genera IA y la decisión queda registrada en el comprobante.
               </p>
               <div className="verif">
-                <b>Te garantiza:</b> que el score es reproducible, la
-                explicación es auditable y la decisión queda firmada.
+                <b>Te garantiza:</b> que el score es reproducible y la
+                explicación queda guardada — descargable como JSON firmado
+                EIP-712 al final del flujo.
               </div>
               <pre>
-                {"✓ Score 742 / Banda A\n"}
+                {"✓ Score 80 / Banda A\n"}
                 {"✓ Explicación generada por IA\n"}
-                {"✓ Receipt firmado para auditoría"}
+                {"✓ Incluido en el comprobante descargable"}
               </pre>
             </article>
 
@@ -417,8 +418,8 @@ export default function PitchPage() {
               </div>
               <pre>
                 {"✓ 4 ofertas firmadas recibidas\n"}
-                {"✓ Ganador: Arkangeles · 19.8% APR\n"}
-                {"✓ Lupita recibe $952 USDC netos"}
+                {"✓ Ganador: Arkangeles · 12% APR · 95% adelanto\n"}
+                {"✓ USDC neto liquidado a la PyME"}
               </pre>
             </article>
           </div>
