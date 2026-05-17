@@ -829,6 +829,70 @@ export default function PitchPage() {
         </div>
       </section>
 
+      {/* ─────────── FOUNDER ─────────── */}
+      <section className="sec" id="founder">
+        <div className="wrap">
+          <div className="sec-head">
+            <div className="kicker" data-rev>
+              Quién está detrás
+            </div>
+          </div>
+          <div className="founder-grid" data-rev data-d="1">
+            <div className="founder-photo-wrap">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/team-fernando.jpg"
+                alt="Fernando Rosas"
+                className="founder-photo"
+                width={160}
+                height={160}
+              />
+            </div>
+            <div className="founder-body">
+              <h3 className="founder-name">Fernando Rosas</h3>
+              <div className="founder-title">
+                Co-founder &amp; CEO ·{" "}
+                <span style={{ color: "var(--wine-soft)" }}>
+                  Blockchain / DeFi
+                </span>
+              </div>
+              <p className="founder-bio">
+                25+ years building technology from enterprise systems to
+                decentralized protocols. Solidity smart contracts, distributed
+                architecture, and AI products shipped to production on
+                Avalanche.
+              </p>
+              <a
+                className="founder-link"
+                href="https://www.linkedin.com/in/fernando-rosas/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ↗ LinkedIn
+              </a>
+              <details className="founder-details">
+                <summary>Full background</summary>
+                <p>
+                  Serial builder with 25+ years shipping technology across
+                  enterprise systems, decentralized protocols, and AI products.
+                  Deep expertise in Solidity smart contracts, distributed
+                  systems architecture, data science, and product strategy.
+                  Focused on building real products that work in production.
+                </p>
+                <p>
+                  Co-founder of Troker, a digital barter platform exploring
+                  new models of collaborative economy. Community builder in
+                  LATAM: organized &quot;La Mañanera&quot;, a Web3 education
+                  initiative for the Spanish-speaking blockchain community.
+                  Driving AI and Web3 infrastructure for builders and startups
+                  across the region.
+                </p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─────────── FOOTER ─────────── */}
       <footer className="footer">
         <div className="wrap">
