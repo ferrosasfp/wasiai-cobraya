@@ -66,11 +66,11 @@ Audio voice-over grabado por separado (Audacity / móvil con micro decente, sin 
 
 *🎯 Punto clave del video: el tx hash aparece. Subrayalo con el cursor. Si el juez se va a convencer de algo, es acá.*
 
-> "El tercer agente calcula el score crediticio: setecientos cuarenta y dos, banda A. El rationale lo genera Claude Haiku, firmado con EIP-712 para auditoría."
+> "El tercer agente calcula el score crediticio: ochenta sobre cien, banda A. La explicación la genera Claude Haiku y queda en el comprobante descargable firmado EIP-712."
 
-*Score + rationale visible.*
+*Score 80 / A + rationale visible.*
 
-> "Y el cuarto agente abre la subasta. Cuatro lenders compitiendo en vivo: Bankaool, Arkangeles, BBVA Pyme y Konfío. Gana Arkangeles, con diecinueve punto ocho por ciento APR y novecientos cincuenta y dos USDC netos para Lupita."
+> "Y el cuarto agente abre la subasta. Cuatro lenders compitiendo en vivo: Bankaool, Arkangeles, BBVA Pyme y Konfío. Gana Arkangeles, con doce por ciento APR y noventa y cinco por ciento de adelanto para Lupita."
 
 *4 lender cards visibles, Arkangeles destaca en gold.*
 

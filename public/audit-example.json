@@ -11,7 +11,7 @@
     "amountMXN": 48500,
     "anchorBuyer": "Walmart México S. de R.L. de C.V.",
     "paymentTermsDays": 60,
-    "sector": "alimentos"
+    "sector": "food retail"
   },
   "steps": [
     {
@@ -92,15 +92,15 @@
       "agentSigner": "0x1d024Bdb20B4c3E139B8516ed6d834a9654F21cF",
       "input": {
         "rfcEmisor": "***010101***",
-        "sector": "alimentos",
+        "sector": "food retail",
         "anchorBuyer": "Walmart México",
         "amountMXN": 48500,
         "paymentTermsDays": 60
       },
       "output": {
-        "score": 742,
+        "score": 80,
         "band": "A",
-        "rationale": "RFC con histórico de 4+ años. Sector alimentos baja volatilidad. Anchor buyer tier-1 (Walmart) con pago histórico sub-65d. Monto $48,500 dentro de banda normal para PyME del sector. Score compuesto: 0.42*RFC + 0.28*sector + 0.22*buyer + 0.08*monto = 742/850.",
+        "rationale": "Anchor buyer tier-1 (Walmart) aporta 70 puntos base. Monto $48,500 MXN (sub-50K) suma 5 puntos por riesgo bajo. Plazo 60 días: neutral. Sector food retail: +5 por estabilidad histórica. Score final: 80/100 → banda A. Implica advance rate 95% y APR objetivo 12%.",
         "rationaleProvenance": "claude-haiku-4-5",
         "modelVersion": "claude-haiku-4-5-20251001"
       },
@@ -130,15 +130,15 @@
       "input": {
         "scoreBand": "A",
         "amountMXN": 48500,
-        "sector": "alimentos",
+        "sector": "food retail",
         "paymentTermsDays": 60
       },
       "output": {
         "auction": [
-          { "lenderId": "bankaool", "lenderName": "Bankaool", "rank": 2, "aprPct": 21.5, "advanceRatePct": 92, "estimatedSettleMinutes": 5400, "netAmountUSDC": 940.16, "qualifies": true },
-          { "lenderId": "arkangeles", "lenderName": "Arkangeles", "rank": 1, "aprPct": 19.8, "advanceRatePct": 95, "estimatedSettleMinutes": 1440, "netAmountUSDC": 952.84, "qualifies": true },
-          { "lenderId": "bbva-pyme", "lenderName": "BBVA Pyme", "rank": 3, "aprPct": 23.2, "advanceRatePct": 91, "estimatedSettleMinutes": 4320, "netAmountUSDC": 931.07, "qualifies": true },
-          { "lenderId": "konfio", "lenderName": "Konfío", "rank": 4, "aprPct": 20.4, "advanceRatePct": 93, "estimatedSettleMinutes": 2880, "netAmountUSDC": 946.21, "qualifies": true }
+          { "lenderId": "bankaool", "lenderName": "Bankaool", "rank": 2, "aprPct": 14.5, "advanceRatePct": 92, "estimatedSettleMinutes": 5400, "netAmountUSDC": 932.42, "qualifies": true },
+          { "lenderId": "arkangeles", "lenderName": "Arkangeles", "rank": 1, "aprPct": 12.0, "advanceRatePct": 95, "estimatedSettleMinutes": 1440, "netAmountUSDC": 947.81, "qualifies": true },
+          { "lenderId": "bbva-pyme", "lenderName": "BBVA Pyme", "rank": 3, "aprPct": 13.2, "advanceRatePct": 93, "estimatedSettleMinutes": 4320, "netAmountUSDC": 938.55, "qualifies": true },
+          { "lenderId": "konfio", "lenderName": "Konfío", "rank": 4, "aprPct": 13.5, "advanceRatePct": 93, "estimatedSettleMinutes": 2880, "netAmountUSDC": 935.20, "qualifies": true }
         ],
         "winner": "arkangeles"
       },
